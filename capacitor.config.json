@@ -1,0 +1,10 @@
+{
+  "appId": "com.hoanggiavip.royalsun.taixiu",
+  "appName": "Hoàng Gia VIP",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "ios": {
+    "contentInset": "always",
+    "backgroundColor": "#0a0604"
+  }
+}

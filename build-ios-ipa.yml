@@ -1,0 +1,94 @@
+name: Build iOS Unsigned IPA (iOS 16.2)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-unsigned-ipa:
+    name: Compile Capacitor iOS 16.2 & Package IPA
+    runs-on: macos-14
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 3. Install Dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: 4. Verify Web Assets Integrity
+        run: node scripts/check-web.mjs
+
+      - name: 5. Create & Sync Capacitor iOS Project
+        run: |
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
+          npx cap sync ios
+
+      - name: 6. Configure iOS Deployment Target 16.2 & Info.plist
+        run: |
+          cd ios/App
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*;/IPHONEOS_DEPLOYMENT_TARGET = 16.2;/g' App.xcodeproj/project.pbxproj
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Hoàng Gia VIP" App/Info.plist || true
+          /usr/libexec/PlistBuddy -c "Add :UIStatusBarHidden bool true" App/Info.plist || true
+          /usr/libexec/PlistBuddy -c "Add :UIViewControllerBasedStatusBarAppearance bool false" App/Info.plist || true
+
+      - name: 7. Build iOS App via Xcode (Unsigned for iOS 16.2 / TrollStore / Sideloadly)
+        run: |
+          cd ios/App
+          if [ -f "Podfile" ]; then
+            pod install || true
+          fi
+          if [ -d "App.xcworkspace" ]; then
+            xcodebuild -workspace App.xcworkspace \
+              -scheme App \
+              -configuration Release \
+              -sdk iphoneos \
+              -derivedDataPath build \
+              IPHONEOS_DEPLOYMENT_TARGET=16.2 \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO \
+              clean build
+          else
+            xcodebuild -project App.xcodeproj \
+              -scheme App \
+              -configuration Release \
+              -sdk iphoneos \
+              -derivedDataPath build \
+              IPHONEOS_DEPLOYMENT_TARGET=16.2 \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO \
+              clean build
+          fi
+
+      - name: 8. Package .app Bundle into Unsigned .IPA
+        run: |
+          mkdir -p build_ipa/Payload
+          APP_PATH=$(find ios/App/build -name "App.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: App.app not found!"
+            exit 1
+          fi
+          cp -R "$APP_PATH" build_ipa/Payload/App.app
+          cd build_ipa
+          zip -r9 ../HoangGiaVIP-iOS16.2-unsigned.ipa Payload
+          cd ..
+          ls -lh HoangGiaVIP-iOS16.2-unsigned.ipa
+
+      - name: 9. Upload IPA Artifact to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: HoangGiaVIP-iOS16.2-IPA
+          path: HoangGiaVIP-iOS16.2-unsigned.ipa
+          if-no-files-found: error

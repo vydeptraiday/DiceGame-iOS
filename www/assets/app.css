@@ -1,0 +1,272 @@
+
+    :root {
+      --gold-light: #fff3a8;
+      --gold-mid: #ffd700;
+      --gold-dark: #b8860b;
+      --gold-deep: #6b4701;
+      --crimson-bright: #e51c23;
+      --crimson-mid: #8b0000;
+      --crimson-dark: #380202;
+      --obsidian: #0a0604;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--obsidian);
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(184, 134, 11, 0.25) 0%, transparent 55%),
+        radial-gradient(circle at 50% 100%, rgba(139, 0, 0, 0.35) 0%, transparent 60%),
+        repeating-linear-gradient(45deg, rgba(255, 215, 0, 0.015) 0px, rgba(255, 215, 0, 0.015) 2px, transparent 2px, transparent 10px);
+      color: #fff8e7;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+    }
+
+    /* Royal Sunwin Metallic Gold Text */
+    .text-gold-gradient {
+      background: linear-gradient(180deg, #ffffff 0%, #fff293 25%, #ffd700 50%, #c88a14 85%, #fff293 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.85));
+    }
+
+    .text-silver-gradient {
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 40%, #94a3b8 85%, #f8fafc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.85));
+    }
+
+    .font-royal {
+      font-family: 'Cinzel Decorative', serif;
+    }
+
+    .font-digital {
+      font-family: 'Orbitron', monospace;
+    }
+
+    /* Luxury Borders & Frames */
+    .sun-frame {
+      background: linear-gradient(145deg, #270907 0%, #120504 55%, #1d0c06 100%);
+      border: 2px solid #d4af37;
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.9),
+        inset 0 0 18px rgba(255, 215, 0, 0.18),
+        0 0 12px rgba(218, 165, 32, 0.35);
+    }
+
+    .sun-table-oval {
+      background:
+        radial-gradient(ellipse at center, #5e0808 0%, #330303 55%, #160202 100%);
+      border: 5px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      box-shadow:
+        0 16px 50px rgba(0, 0, 0, 0.95),
+        inset 0 0 40px rgba(0, 0, 0, 0.85),
+        inset 0 2px 15px rgba(255, 215, 0, 0.35),
+        0 0 25px rgba(255, 180, 0, 0.3);
+    }
+
+    .sun-table-oval::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: inherit;
+      padding: 6px;
+      background: linear-gradient(180deg, #fff3a8 0%, #d4af37 30%, #7a5002 50%, #ffd700 75%, #fff5b8 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* Glossy Gold Button */
+    .btn-gold {
+      background: linear-gradient(180deg, #ffe97d 0%, #f5b700 45%, #b87700 90%, #ffdb58 100%);
+      color: #2b0900;
+      font-weight: 800;
+      border: 1.5px solid #fff6c2;
+      box-shadow: 0 4px 14px rgba(255, 187, 0, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+      transition: all 0.16s ease;
+    }
+    .btn-gold:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.7), inset 0 1px 3px rgba(255, 255, 255, 0.9);
+    }
+    .btn-gold:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    /* Glossy Crimson Button */
+    .btn-crimson {
+      background: linear-gradient(180deg, #ff4b4b 0%, #c60f16 50%, #750206 100%);
+      color: #fff8dc;
+      font-weight: 800;
+      border: 1.5px solid #ff9e80;
+      box-shadow: 0 4px 14px rgba(220, 20, 60, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      transition: all 0.16s ease;
+    }
+    .btn-crimson:hover {
+      transform: translateY(-1px) scale(1.02);
+      filter: brightness(1.1);
+    }
+    .btn-crimson:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    /* Wing Winner Pulse Effect */
+    @keyframes wingWinnerPulse {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.85), inset 0 0 30px rgba(255, 215, 0, 0.65);
+        transform: scale(1.03);
+      }
+      50% {
+        box-shadow: 0 0 45px rgba(255, 235, 100, 1), inset 0 0 50px rgba(255, 215, 0, 0.9);
+        transform: scale(1.06);
+      }
+    }
+    .wing-winner {
+      animation: wingWinnerPulse 0.75s infinite ease-in-out !important;
+      border-color: #fff6a9 !important;
+    }
+
+    /* Center Dish (Đĩa Ngọc Hoàng Gia) */
+    .center-dish-outer {
+      background: conic-gradient(from 0deg, #b8860b, #fff3a8, #b8860b, #694602, #ffd700, #fff3a8, #b8860b);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.9),
+        0 0 25px rgba(255, 215, 0, 0.35);
+    }
+    .center-dish-inner {
+      background: radial-gradient(circle at 40% 35%, #3c140e 0%, #1d0705 65%, #0c0201 100%);
+      box-shadow: inset 0 8px 22px rgba(0, 0, 0, 0.95), inset 0 0 12px rgba(255, 215, 0, 0.25);
+    }
+
+    /* 3D Dice Cube */
+    .dice-scene {
+      width: 54px;
+      height: 54px;
+      perspective: 300px;
+    }
+    .dice-cube {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .dice-cube.shaking {
+      animation: diceShake3D 0.28s infinite linear;
+    }
+    @keyframes diceShake3D {
+      0%   { transform: translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+      25%  { transform: translate3d(-8px, -10px, 12px) rotateX(140deg) rotateY(80deg) rotateZ(45deg); }
+      50%  { transform: translate3d(9px, 7px, -8px) rotateX(260deg) rotateY(210deg) rotateZ(130deg); }
+      75%  { transform: translate3d(-7px, 9px, 10px) rotateX(95deg) rotateY(310deg) rotateZ(255deg); }
+      100% { transform: translate3d(0px, 0px, 0px) rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+    }
+    .dice-face {
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f5f0e6 70%, #d8cbb8 100%);
+      border: 1.5px solid #cbbba0;
+      border-radius: 11px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.18), 0 2px 5px rgba(0,0,0,0.45);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      padding: 6px;
+      backface-visibility: hidden;
+    }
+    .dice-face.face-1 { transform: rotateY(0deg) translateZ(27px); }
+    .dice-face.face-2 { transform: rotateY(180deg) translateZ(27px); }
+    .dice-face.face-3 { transform: rotateY(90deg) translateZ(27px); }
+    .dice-face.face-4 { transform: rotateY(-90deg) translateZ(27px); }
+    .dice-face.face-5 { transform: rotateX(90deg) translateZ(27px); }
+    .dice-face.face-6 { transform: rotateX(-90deg) translateZ(27px); }
+
+    .pip {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #334155, #0f172a);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
+      align-self: center;
+      justify-self: center;
+    }
+    .pip.pip-red {
+      background: radial-gradient(circle at 35% 35%, #ff3b3b, #b91c1c);
+      box-shadow: inset 0 1px 2px rgba(80,0,0,0.8), 0 0 3px rgba(220,38,38,0.4);
+    }
+    .pip.pip-center-1 {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Interactive Nặn Bát (Porcelain Dragon Bowl Lid) */
+    .nan-bowl-lid {
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 30%, #ffe680 0%, #c88a14 38%, #6e0808 72%, #2b0202 100%);
+      border: 4px solid #ffd700;
+      box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.9),
+        inset 0 0 25px rgba(255, 230, 128, 0.55);
+      cursor: grab;
+      z-index: 30;
+      touch-action: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.25s ease;
+    }
+    .nan-bowl-lid:active {
+      cursor: grabbing;
+    }
+
+    /* Casino Chip Button */
+    .chip-btn {
+      position: relative;
+      border-radius: 9999px;
+      border: 2.5px dashed rgba(255, 255, 255, 0.85);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.75), inset 0 0 8px rgba(0, 0, 0, 0.5);
+      transition: all 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .chip-btn.active {
+      transform: translateY(-6px) scale(1.12);
+      border-style: solid;
+      border-color: #fff59d;
+      box-shadow: 0 0 18px #ffd700, 0 8px 16px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #120604;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #d4af37, #8b6508);
+      border-radius: 3px;
+    }
+  

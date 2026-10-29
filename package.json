@@ -1,0 +1,17 @@
+{
+  "name": "hoang-gia-vip-ios",
+  "version": "1.0.0",
+  "description": "Hoàng Gia VIP - Cổng Game Tài Xỉu 3D MD5 Giải Trí trên iOS 16.2",
+  "private": true,
+  "scripts": {
+    "check": "node scripts/check-web.mjs",
+    "sync:ios": "npx cap sync ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  }
+}
