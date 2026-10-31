@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="assets/app.css" />
 </head>
 <body>
-  <div id="landscape-wrapper">
+  <div id="viewport-stage">
     <div id="app-shell">
 
       <!-- ==================== MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ / QUÊN MK ==================== -->
@@ -25,29 +25,26 @@
             <button class="auth-tab" data-authtab="forgot">QUÊN MK</button>
           </div>
 
-          <!-- ĐĂNG NHẬP -->
           <form id="form-login" class="auth-form">
             <input type="text" id="login-user" placeholder="Tên đăng nhập..." required autocomplete="off" />
             <input type="password" id="login-pass" placeholder="Mật khẩu..." required />
             <button type="submit" class="sun-gold-btn">VÀO GAME NGAY</button>
           </form>
 
-          <!-- ĐĂNG KÝ -->
           <form id="form-register" class="auth-form hidden">
             <div class="auth-grid-2">
               <input type="text" id="reg-user" placeholder="Tên tài khoản (viết liền)..." required autocomplete="off" />
               <input type="text" id="reg-nick" placeholder="Tên hiển thị trong bàn..." required autocomplete="off" />
               <input type="password" id="reg-pass" placeholder="Mật khẩu..." required />
-              <input type="text" id="reg-pin" placeholder="Mã bảo mật 4 số (khôi phục MK)..." maxlength="6" required />
+              <input type="text" id="reg-pin" placeholder="Mã bảo mật 4 số..." maxlength="6" required />
             </div>
             <button type="submit" class="sun-gold-btn">ĐĂNG KÝ (+25,000,000 VÀNG)</button>
           </form>
 
-          <!-- QUÊN MẬT KHẨU -->
           <form id="form-forgot" class="auth-form hidden">
             <div class="auth-grid-2">
-              <input type="text" id="fg-user" placeholder="Tên tài khoản đã đăng ký..." required autocomplete="off" />
-              <input type="text" id="fg-pin" placeholder="Mã bảo mật 4 số của bạn..." required />
+              <input type="text" id="fg-user" placeholder="Tên tài khoản..." required autocomplete="off" />
+              <input type="text" id="fg-pin" placeholder="Mã bảo mật 4 số..." required />
             </div>
             <input type="password" id="fg-newpass" placeholder="Nhập mật khẩu mới..." required />
             <button type="submit" class="sun-gold-btn">ĐỔI MẬT KHẨU MỚI</button>
@@ -73,10 +70,10 @@
           <div class="sun-avatar" id="ui-avatar">🐉</div>
           <div class="sun-user-info">
             <div class="sun-nick-row">
-              <span id="ui-username">DaiGiaSun</span>
-              <span class="sun-vip-badge" id="ui-vip">VIP 1</span>
+              <span id="ui-username">ChuTichSun</span>
+              <span class="sun-vip-badge" id="ui-vip">VIP 10</span>
             </div>
-            <div class="sun-uid">ID: <span id="ui-uid">882910</span></div>
+            <div class="sun-uid">ID: <span id="ui-uid">888888</span></div>
           </div>
         </div>
 
@@ -93,7 +90,7 @@
         </div>
 
         <nav class="sun-Quick-tabs">
-          <button class="sq-tab active" data-tab="taixiu">🎲 Tài Xỉu MD5</button>
+          <button class="sq-tab active" data-tab="taixiu">🎲 Tài Xỉu</button>
           <button class="sq-tab" data-tab="xocdia">⚪ Xóc Đĩa</button>
           <button class="sq-tab" data-tab="nohu">🎰 Nổ Hũ</button>
           <button class="sq-tab" data-tab="gacha">💎 Kho Báu</button>
@@ -102,7 +99,6 @@
         </nav>
 
         <div class="sun-sys-btns">
-          <!-- NÚT ADMIN ẨN HOÀN TOÀN, CHỈ HIỆN KHI ĐĂNG NHẬP TÀI KHOẢN ADMIN -->
           <button class="sun-icon-btn admin-only-btn hidden" id="btn-open-admin" title="Quản Trị">⚙️</button>
           <button class="sun-icon-btn" id="btn-sound" title="Âm thanh">🔊</button>
           <button class="sun-icon-btn logout-ic" id="btn-logout" title="Đăng xuất">🚪</button>
@@ -141,7 +137,7 @@
               <!-- THANH PHIÊN & CHẾ ĐỘ NẶN -->
               <div class="sun-tx-subbar">
                 <span class="sun-session-id" id="tx-session">#908214</span>
-                <span class="sun-flow-status" id="ui-hu-flow">Đang nhận cược phiên mới...</span>
+                <span class="sun-flow-status" id="ui-hu-flow">Tiền bên thua tự động chảy vào Hũ</span>
                 <button class="sun-nan-toggle" id="btn-toggle-nan">🖐 Nặn bát: BẬT</button>
               </div>
 
@@ -156,11 +152,11 @@
                   <button class="wing-bet-btn tai" data-door="TAI">ĐẶT CƯỢC</button>
                 </div>
 
-                <!-- ĐĨA TRUNG TÂM -->
+                <!-- ĐĨA TRUNG TÂM (KHÔNG BỊ ĐÈ SỐ LÊN XÚC XẮC) -->
                 <div class="sun-center-bowl-zone">
                   <div class="sun-plate-ring" id="tx-plate">
                     <div class="sun-countdown" id="tx-timer">20</div>
-                    <div class="sun-dice-wrap" id="tx-dice-group">
+                    <div class="sun-dice-wrap hidden" id="tx-dice-group">
                       <div class="die3d" id="tx-d1"></div>
                       <div class="die3d" id="tx-d2"></div>
                       <div class="die3d" id="tx-d3"></div>
@@ -169,7 +165,7 @@
                     <!-- BÁT NẶN RỒNG VÀNG -->
                     <div class="sun-dragon-cover hidden" id="tx-bowl">
                       <div class="cover-emblem">🐉</div>
-                      <div class="cover-txt">Kéo để nặn</div>
+                      <div class="cover-txt">Kéo bát để nặn</div>
                     </div>
                   </div>
                 </div>
@@ -184,21 +180,21 @@
                 </div>
               </div>
 
-              <!-- HÀNG ĐÁNH SÁP & SĂN NỔ HŨ X CAO -->
+              <!-- HÀNG ĐÁNH SÁP & SĂN NỔ HŨ (1 DÒNG GỌN GÀNG) -->
               <div class="sun-sap-strip">
                 <div class="sun-sap-cell" data-sap="HU_XIU">
                   <span class="s-title">⚀⚀⚀ SÁP 1 (HŨ XỈU)</span>
-                  <span class="s-mult">x120 + Hũ</span>
+                  <span class="s-mult">x120+Hũ</span>
                   <b id="tx-my-huxiu">0</b>
                 </div>
                 <div class="sun-sap-cell center-sap" data-sap="SAP_ANY">
-                  <span class="s-title">🎲 SÁP BẤT KỲ (111-666)</span>
+                  <span class="s-title">🎲 SÁP BẤT KỲ</span>
                   <span class="s-mult">Ăn x30</span>
                   <b id="tx-my-sap">0</b>
                 </div>
                 <div class="sun-sap-cell" data-sap="HU_TAI">
                   <span class="s-title">⚅⚅⚅ SÁP 6 (HŨ TÀI)</span>
-                  <span class="s-mult">x120 + Hũ</span>
+                  <span class="s-mult">x120+Hũ</span>
                   <b id="tx-my-hutai">0</b>
                 </div>
               </div>
@@ -208,7 +204,7 @@
                 <div class="sun-bead-road">
                   <div class="bead-list" id="tx-cau-dots"></div>
                   <button class="sun-soicau-btn" id="btn-open-soicau">📊 Soi Cầu</button>
-                  <button class="sun-md5-copy" id="btn-copy-md5" title="Copy chuỗi MD5">🔒 MD5</button>
+                  <button class="sun-md5-copy" id="btn-copy-md5">🔒 MD5</button>
                   <code id="tx-md5-str" class="hidden"></code>
                 </div>
 
@@ -233,7 +229,7 @@
               </div>
               <div class="sun-chat-feed" id="chat-box"></div>
               <form class="sun-chat-form" id="chat-form">
-                <input type="text" id="chat-input" placeholder="Nhập nội dung chat..." maxlength="85" autocomplete="off" />
+                <input type="text" id="chat-input" placeholder="Nhập chat..." maxlength="75" autocomplete="off" />
                 <button type="submit">Gửi</button>
               </form>
             </div>
@@ -335,7 +331,7 @@
               </div>
               <div class="pity-label">Bảo hiểm nổ UR: <b id="gacha-pity-cnt">0</b>/30 lượt</div>
               <div class="pity-track"><div class="pity-fill" id="gacha-pity-fill"></div></div>
-              <div style="margin:8px 0">
+              <div style="margin:6px 0">
                 <select id="gacha-base-cost" class="gold-select">
                   <option value="100000">Mức: 100,000 / Lượt</option>
                   <option value="500000">Mức: 500,000 / Lượt</option>
