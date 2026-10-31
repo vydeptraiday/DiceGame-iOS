@@ -1,18 +1,19 @@
-const ACC_DB_KEY = 'royal_accounts_db_v4';
-const SESSION_USER_KEY = 'royal_current_user_v4';
-const GLOBAL_STATE_KEY = 'royal_global_state_v4';
+const ACC_DB_KEY = 'sunwin_accounts_db_v5';
+const SESSION_USER_KEY = 'sunwin_current_user_v5';
+const GLOBAL_STATE_KEY = 'sunwin_global_state_v5';
 
-// TÀI KHOẢN MẪU BAN ĐẦU
+// TÀI KHOẢN KHỞI TẠO (CHỈ TÀI KHOẢN 'admin' MỚI THẤY NÚT QUẢN TRỊ)
 const INITIAL_ACCOUNTS = [
   {
     username: 'admin',
     password: '123',
     pin: '8888',
-    nickname: 'TrùmNhàCáiVIP',
+    uid: '888888',
+    nickname: 'ChuTichSun',
     avatar: '🐉',
-    balance: 100000000,
+    balance: 150000000,
     vault: 50000000,
-    totalWagered: 500000000,
+    totalWagered: 600000000,
     gachaPity: 0,
     usedCodes: [],
     locked: false
@@ -21,7 +22,8 @@ const INITIAL_ACCOUNTS = [
     username: 'vip88',
     password: '123',
     pin: '1111',
-    nickname: 'ĐạiGiaPhốNúi',
+    uid: '686868',
+    nickname: 'tuan_bds99',
     avatar: '👑',
     balance: 35000000,
     vault: 0,
@@ -54,14 +56,13 @@ function saveAccountsDB(list) {
 let accountsDB = loadAccountsDB();
 let currentUser = null;
 
-// TRẠNG THÁI CHUNG CỦA BÀN CHƠI & HŨ
 const DEFAULT_GLOBAL = {
   sound: true,
   nanBat: true,
   chip: 100000,
-  jackpot: 50000000,
-  txSession: 88901,
-  txHistory: ['T', 'X', 'T', 'T', 'X', 'H', 'T', 'T', 'X', 'T', 'X', 'T'],
+  jackpot: 58420000,
+  txSession: 908214,
+  txHistory: ['T', 'X', 'T', 'T', 'X', 'H', 'T', 'T', 'X', 'T', 'X', 'T', 'T', 'X'],
   txDetailLog: [],
   xdSession: 55201,
   xdHistory: ['C', 'L', 'C', 'C', 'L', 'C', 'L', 'C'],
@@ -95,7 +96,7 @@ function fmt(n) {
   return Math.floor(Number(n) || 0).toLocaleString('en-US');
 }
 
-// SOUND ENGINE
+// ÂM THANH
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let actx = null;
 function playTone(freq = 600, dur = 0.08, type = 'sine') {
@@ -120,10 +121,10 @@ function showToast(msg) {
   box.textContent = msg;
   box.classList.remove('hidden');
   clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => box.classList.add('hidden'), 2600);
+  window._toastTimer = setTimeout(() => box.classList.add('hidden'), 2500);
 }
 
-// ==================== HỆ THỐNG ĐĂNG NHẬP / ĐĂNG KÝ / QUÊN MẬT KHẨU ====================
+// ==================== ĐĂNG NHẬP / ĐĂNG KÝ / QUÊN MK & PHÂN QUYỀN ADMIN ẨN ====================
 document.querySelectorAll('.auth-tab').forEach((tab) => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.auth-tab').forEach((t) => t.classList.remove('active'));
@@ -135,15 +136,28 @@ document.querySelectorAll('.auth-tab').forEach((tab) => {
   });
 });
 
+function isCurrentUserAdmin() {
+  return Boolean(currentUser && currentUser.username.toLowerCase() === 'admin');
+}
+
 function loginSuccess(acc) {
   currentUser = acc;
   localStorage.setItem(SESSION_USER_KEY, acc.username);
   document.getElementById('auth-screen').classList.add('hidden');
+
+  // CHỈ HIỆN NÚT ADMIN KHI ĐĂNG NHẬP ĐÚNG TÀI KHOẢN 'admin'
+  const adminBtn = document.getElementById('btn-open-admin');
+  if (isCurrentUserAdmin()) {
+    adminBtn.classList.remove('hidden');
+  } else {
+    adminBtn.classList.add('hidden');
+    document.getElementById('modal-admin').classList.add('hidden');
+  }
+
   updateHeaderUI();
-  showToast(`👑 Chào mừng đại gia ${acc.nickname}!`);
+  showToast(`☀️ Chào mừng ${acc.nickname} vào sảnh Sunwin!`);
 }
 
-// Tự động đăng nhập nếu đã có phiên
 (function checkSavedSession() {
   const savedU = localStorage.getItem(SESSION_USER_KEY);
   if (savedU) {
@@ -152,7 +166,6 @@ function loginSuccess(acc) {
   }
 })();
 
-// Xử lý Đăng nhập
 document.getElementById('form-login').addEventListener('submit', (e) => {
   e.preventDefault();
   accountsDB = loadAccountsDB();
@@ -160,12 +173,11 @@ document.getElementById('form-login').addEventListener('submit', (e) => {
   const p = document.getElementById('login-pass').value.trim();
   const acc = accountsDB.find((a) => a.username.toLowerCase() === u);
   if (!acc) return showToast('❌ Tài khoản không tồn tại!');
-  if (acc.locked) return showToast('🔒 Tài khoản này đã bị Admin khóa!');
+  if (acc.locked) return showToast('🔒 Tài khoản đã bị khóa!');
   if (acc.password !== p) return showToast('❌ Mật khẩu không chính xác!');
   loginSuccess(acc);
 });
 
-// Xử lý Đăng ký
 document.getElementById('form-register').addEventListener('submit', (e) => {
   e.preventDefault();
   accountsDB = loadAccountsDB();
@@ -174,14 +186,15 @@ document.getElementById('form-register').addEventListener('submit', (e) => {
   const p = document.getElementById('reg-pass').value.trim();
   const pin = document.getElementById('reg-pin').value.trim();
 
-  if (accountsDB.some((a) => a.username.toLowerCase() === u)) {
-    return showToast('⚠️ Tên đăng nhập này đã có người sử dụng!');
+  if (u === 'admin' || accountsDB.some((a) => a.username.toLowerCase() === u)) {
+    return showToast('⚠️ Tên tài khoản này đã tồn tại!');
   }
 
   const newAcc = {
     username: u,
     password: p,
     pin: pin || '1234',
+    uid: String(Math.floor(100000 + Math.random() * 899999)),
     nickname: nick || u,
     avatar: '🐉',
     balance: 25000000,
@@ -196,7 +209,6 @@ document.getElementById('form-register').addEventListener('submit', (e) => {
   loginSuccess(newAcc);
 });
 
-// Xử lý Quên & Cấp lại mật khẩu
 document.getElementById('form-forgot').addEventListener('submit', (e) => {
   e.preventDefault();
   accountsDB = loadAccountsDB();
@@ -205,24 +217,25 @@ document.getElementById('form-forgot').addEventListener('submit', (e) => {
   const newPass = document.getElementById('fg-newpass').value.trim();
 
   const acc = accountsDB.find((a) => a.username.toLowerCase() === u);
-  if (!acc) return showToast('❌ Không tìm thấy tên tài khoản này!');
+  if (!acc) return showToast('❌ Không tìm thấy tài khoản!');
   if (acc.pin !== pin && pin !== '8888') {
-    return showToast('❌ Mã khôi phục không đúng! (Hoặc liên hệ Admin cấp lại)');
+    return showToast('❌ Mã bảo mật không chính xác!');
   }
   acc.password = newPass;
   saveAccountsDB(accountsDB);
-  showToast('✅ Đã cấp lại mật khẩu mới thành công! Hãy đăng nhập.');
+  showToast('✅ Đã cấp lại mật khẩu mới thành công!');
   document.querySelector('.auth-tab[data-authtab="login"]').click();
   document.getElementById('login-user').value = acc.username;
 });
 
-// Nút Đăng xuất
 document.getElementById('btn-logout').addEventListener('click', () => {
   saveState();
   currentUser = null;
   localStorage.removeItem(SESSION_USER_KEY);
+  document.getElementById('btn-open-admin').classList.add('hidden');
+  document.getElementById('modal-admin').classList.add('hidden');
   document.getElementById('auth-screen').classList.remove('hidden');
-  showToast('👋 Đã đăng xuất tài khoản!');
+  showToast('👋 Đã đăng xuất!');
 });
 
 function getVipLevel() {
@@ -235,7 +248,6 @@ function getVipLevel() {
   if (w >= 10000000) return 5;
   if (w >= 5000000) return 4;
   if (w >= 2000000) return 3;
-  if (w >= 500000) return 2;
   return 1;
 }
 
@@ -244,7 +256,9 @@ function updateHeaderUI() {
   document.getElementById('ui-username').textContent = currentUser.nickname;
   document.getElementById('ui-avatar').textContent = currentUser.avatar;
   document.getElementById('ui-vip').textContent = 'VIP ' + getVipLevel();
+  document.getElementById('ui-uid').textContent = currentUser.uid || '882910';
   document.getElementById('ui-balance').textContent = fmt(currentUser.balance);
+  document.getElementById('ui-top-vault').textContent = fmt(currentUser.vault);
   document.getElementById('ui-tx-jackpot').textContent = fmt(state.jackpot);
   document.getElementById('slot-jp-val').textContent = fmt(state.jackpot);
   document.getElementById('vault-cur-bal').textContent = fmt(currentUser.balance);
@@ -252,91 +266,112 @@ function updateHeaderUI() {
   saveState();
 }
 
-// ==================== CAO THỦ & BOT CHAT THỜI GIAN THỰC ====================
-const PRO_PLAYERS = [
-  { name: 'LongThiếuGia', vip: 9 },
-  { name: 'VuaBẻCầu88', vip: 10 },
-  { name: 'HùngBáThiênHạ', vip: 8 },
-  { name: 'ĐạiGiaPhốNúi', vip: 9 },
-  { name: 'ThánhSănSáp', vip: 9 },
-  { name: 'ThánhNặnBát', vip: 8 },
-  { name: 'KẻHủyDiệtCầu', vip: 10 },
-  { name: 'BốGiàHàThành', vip: 9 },
-  { name: 'TrùmSănHũ666', vip: 10 }
+// ==================== HỆ THỐNG NGƯỜI CHƠI THẬT & CHAT TỰ NHIÊN SUNWIN ====================
+const REAL_PLAYERS = [
+  'tuan_bds99', 'hung_camap', 'nam_becau88', 'linh_xinh2k3', 'duc_allin',
+  'hoang_audi', 'minh_nhua_hn', 'thanh_nan_bat', 'khanh_sky99', 'binh_gold_vn',
+  'phuong_luxury', 'cuong_do_la', 'long_thieu_gia', 'vua_san_hu', 'hai_banh_tx',
+  'son_tung_fake', 'dat_villa_88', 'hieu_pc_pro', 'quang_rambo', 'thang_ngot_tx',
+  'dung_troc_ha_dong', 'toan_shinoda', 'kiet_sai_gon', 'phong_bui_98', 'tuan_hung_79',
+  'ngoc_trinh_vip', 'ba_tan_vlog', 'loc_fuho_68', 'xuan_bac_88', 'cong_ly_tx'
 ];
 
-function appendChatMessage(user, vip, text, isMe = false) {
+function appendChatMessage(user, text, isMe = false) {
   const box = document.getElementById('chat-box');
   if (!box) return;
   const line = document.createElement('div');
   line.className = 'chat-line';
-  line.innerHTML = `<span class="chat-vip">VIP ${vip}</span><span class="chat-user ${isMe ? 'me' : ''}">${user}:</span><span>${text}</span>`;
+  line.innerHTML = `<span class="chat-user ${isMe ? 'me' : ''}">${user}:</span><span>${text}</span>`;
   box.appendChild(line);
-  while (box.children.length > 40) box.removeChild(box.firstChild);
+  while (box.children.length > 45) box.removeChild(box.firstChild);
   box.scrollTop = box.scrollHeight;
 }
 
-function triggerBotContextChat(phase, extra = '') {
-  const bot = PRO_PLAYERS[Math.floor(Math.random() * PRO_PLAYERS.length)];
-  const msgsBet = [
-    `Hũ lên ${fmt(state.jackpot)} rồi anh em ơi, lót nhẹ Sáp 1 với Sáp 6 săn nổ hũ!`,
-    'Cầu đang đẹp quá, tay này đập 20M Tài lót thêm 1M Sáp bất kỳ!',
-    'Vừa vào 15 củ Xỉu kèm Sáp 111, nổ hũ phát là đổi đời luôn ae!',
-    'Tiền bên thua dồn vào Hũ to kỷ lục rồi kìa, sắp nổ 666 hoặc 111 đấy!'
-  ];
-  const msgsSqueeze = [
-    'Nặn từ từ thôi anh em ơi, thấy 2 con lục rồi nặn nốt con lục nữa nổ hũ nào!',
-    'Lên 1-1-1 hoặc 6-6-6 nổ banh hũ đi nào!',
-    'Run tay quá anh em ơi mở bát lẹ đi!'
-  ];
-  const msgsResult = [
-    `Về ${extra} chuẩn đét! Lại húp ngọt nước rồi hahaha!`,
-    `Tiền bên thua lại dồn thêm vào Hũ kìa, tay sau nuôi Sáp tiếp anh em!`,
-    'Đỏ quên đi, làm thêm vài chục củ tay tới nào!'
-  ];
-  const list = phase === 'BET' ? msgsBet : phase === 'SQUEEZE' ? msgsSqueeze : msgsResult;
-  appendChatMessage(bot.name, bot.vip, list[Math.floor(Math.random() * list.length)]);
+function triggerRealisticPlayerChat(phase, extra = '') {
+  const p = REAL_PLAYERS[Math.floor(Math.random() * REAL_PLAYERS.length)];
+  const last4 = state.txHistory.slice(-4).join('');
+
+  let pool = [];
+  if (phase === 'BET_EARLY') {
+    pool = [
+      'tay này đánh gì anh em ơi',
+      'vừa nạp 20 củ vào gỡ gạc đây',
+      'hũ lên to vãi, lót nhẹ 200k sáp 1 với sáp 6 biết đâu bất ngờ',
+      'cầu đang đẹp đừng ai bẻ nhé',
+      'theo tài 5m kiếm cốc cafe sáng',
+      'xỉu đi ae ơi cầu đang nghiêng xỉu',
+      'mới rút 50m xong giờ vào văn nghệ 2m tài'
+    ];
+    if (last4 === 'TTTT') pool.push('bệt tài 4 tay rồi kìa, còn chạy tiếp không ae?', 'cầu bệt tài cứ thế mà nuôi thôi');
+    if (last4 === 'XXXX') pool.push('xỉu bệt dài thế nhỉ, tay này bẻ tài được chưa ae?');
+  } else if (phase === 'BET_LATE') {
+    pool = [
+      'vừa nhồi thêm 15m tài giây cuối',
+      'tất tay xỉu 30 củ rồi khấn hộ phát ae',
+      'tiền bên tài nhảy kinh thế, cá mập nào vừa vào lệnh à',
+      'lót 500k sáp bất kỳ rồi, ra tam hoa là ấm',
+      'khóa sổ lẹ mở bát đi hồi hộp quá'
+    ];
+  } else if (phase === 'SQUEEZE') {
+    pool = [
+      'nặn từ từ thôi ông ơi đau tim vãi',
+      'thấy bóng 2 con lục rồi nặn nốt con 6 nổ hũ đi!!',
+      'mở bát mát tay hộ cái nào',
+      'không có chân chạy rồi, tài chặt!',
+      'xỉu đi mà năn nỉ đấy huhu'
+    ];
+  } else if (phase === 'RESULT') {
+    pool = [
+      `húp trọn ${extra} ngọt nước luôn haha`,
+      'má ơi lệch đúng 1 nút cay thế nhỉ',
+      'tiền bên thua lại dồn vào hũ kìa, hũ sắp nổ rồi',
+      'ăn thông 4 tay liên tiếp ấm quá ae ơi',
+      'gãy cầu rồi tay sau gấp thếp x2 lấy lại',
+      'chuẩn đét luôn cảm ơn anh em hô cầu nhé'
+    ];
+  }
+
+  const msg = pool[Math.floor(Math.random() * pool.length)];
+  appendChatMessage(p, msg);
 }
 
+// KHI NGƯỜI CHƠI CHAT -> NGƯỜI CHƠI TRONG BÀN TRẢ LỜI TỰ NHIÊN
 document.getElementById('chat-form').addEventListener('submit', (e) => {
   e.preventDefault();
   if (!currentUser) return;
   const inp = document.getElementById('chat-input');
   const txt = inp.value.trim();
   if (!txt) return;
-  appendChatMessage(currentUser.nickname, getVipLevel(), txt, true);
+  appendChatMessage(currentUser.nickname, txt, true);
   inp.value = '';
   playTone(720, 0.05);
 
+  const lower = txt.toLowerCase();
   setTimeout(() => {
-    const responder = PRO_PLAYERS[Math.floor(Math.random() * PRO_PLAYERS.length)];
-    const replies = [
-      `Chuẩn bài luôn đại gia @${currentUser.nickname} ơi, lót thêm Sáp săn Hũ đi!`,
-      `Trùng máu với @${currentUser.nickname} tay này nhé, chúc nổ hũ rực rỡ!`,
-      `Ok @${currentUser.nickname}, theo bạn 20M tay này kiếm lộc!`
-    ];
-    appendChatMessage(responder.name, responder.vip, replies[Math.floor(Math.random() * replies.length)]);
-  }, 1300);
+    const bot = REAL_PLAYERS[Math.floor(Math.random() * REAL_PLAYERS.length)];
+    let reply = `ok bạn ${currentUser.nickname} nhé, tay này mình theo bạn 5m!`;
+    if (lower.includes('tài') || lower.includes('tai')) {
+      reply = `${currentUser.nickname} hô tài kìa ae, vừa nhồi thêm 10m tài theo bạn!`;
+    } else if (lower.includes('xỉu') || lower.includes('xiu')) {
+      reply = `trùng máu xỉu với ${currentUser.nickname} rồi, bú chặt tay này!`;
+    } else if (lower.includes('hũ') || lower.includes('sáp') || lower.includes('hu')) {
+      reply = `hũ đang căng đét ${currentUser.nickname} ơi, lót sáp 111 với 666 đi!`;
+    } else if (lower.includes('xin') || lower.includes('lộc')) {
+      reply = `cứ theo cầu mình hô là có lộc ngay ${currentUser.nickname} ơi!`;
+    }
+    appendChatMessage(bot, reply);
+  }, 1100);
 });
 
-// ==================== 1. TÀI XỈU NỔ HŨ (111 / 666) & SÁP X CAO ====================
+// ==================== 1. HỆ THỐNG TÀI XỈU NỔ HŨ (111 / 666) & SÁP ====================
 let txPhase = 'BETTING';
 let txTimeLeft = 20;
-let txPoolTai = 14000000;
-let txPoolXiu = 13500000;
-let txUsersTai = 128;
-let txUsersXiu = 124;
-
-let txMyBets = {
-  TAI: 0,
-  XIU: 0,
-  SAP_ANY: 0,
-  HU_XIU: 0,
-  HU_TAI: 0
-};
-
+let txPoolTai = 18500000;
+let txPoolXiu = 17200000;
+let txUsersTai = 240;
+let txUsersXiu = 235;
+let txMyBets = { TAI: 0, XIU: 0, SAP_ANY: 0, HU_XIU: 0, HU_TAI: 0 };
 let currentDice = [6, 6, 6];
-let naturalJackpotFlag = false;
 
 const PIP_MAP = {
   1: [4],
@@ -359,7 +394,7 @@ function renderDie3D(el, val) {
 }
 
 function generateMD5String(session, d1, d2, d3) {
-  const raw = `ROYAL_${session}_${d1}-${d2}-${d3}_${Math.random().toString(36).slice(2, 8)}`;
+  const raw = `SUNWIN_${session}_${d1}-${d2}-${d3}_${Math.random().toString(36).slice(2, 8)}`;
   let hash = '';
   for (let i = 0; i < 32; i++) {
     const code = (raw.charCodeAt(i % raw.length) * (i + 17) + session) % 16;
@@ -368,36 +403,22 @@ function generateMD5String(session, d1, d2, d3) {
   return hash;
 }
 
-// QUYẾT ĐỊNH KẾT QUẢ XÚC XẮC (HỖ TRỢ NỔ HŨ TỰ NHIÊN & ADMIN GIAN LẬN TROLL BẠN BÈ)
 function computeFinalDiceAtLock() {
-  naturalJackpotFlag = false;
   const mode = state.adminForceTX;
-
-  if (mode === 'CUSTOM_DICE') {
-    return [...state.adminCustomDice];
-  }
-  if (mode === 'HU_TAI_666') {
-    return [6, 6, 6];
-  }
-  if (mode === 'HU_XIU_111') {
-    return [1, 1, 1];
-  }
+  if (mode === 'CUSTOM_DICE') return [...state.adminCustomDice];
+  if (mode === 'HU_TAI_666') return [6, 6, 6];
+  if (mode === 'HU_XIU_111') return [1, 1, 1];
   if (mode === 'SAP_RANDOM') {
-    const v = Math.floor(Math.random() * 4) + 2; // 222, 333, 444, 555
+    const v = Math.floor(Math.random() * 4) + 2;
     return [v, v, v];
   }
   if (mode === 'FORCE_WIN_JACKPOT') {
-    // Người chơi đặt bên nào nổ hũ đúng bên đó
     if (txMyBets.XIU > txMyBets.TAI || txMyBets.HU_XIU > 0) return [1, 1, 1];
     return [6, 6, 6];
   }
   if (mode === 'TROLL_OPPOSITE') {
-    // Bạn bè đặt Tài -> ép về Xỉu 10 nút (4-3-3); đặt Xỉu -> ép về Tài 11 nút (4-4-3)
-    if (txMyBets.TAI >= txMyBets.XIU) {
-      return [4, 3, 3]; // 10 điểm Xỉu sát nút
-    } else {
-      return [4, 4, 3]; // 11 điểm Tài sát nút
-    }
+    if (txMyBets.TAI >= txMyBets.XIU) return [4, 3, 3]; // 10 nút Xỉu
+    return [4, 4, 3]; // 11 nút Tài
   }
   if (mode === 'TAI') {
     while (true) {
@@ -412,15 +433,10 @@ function computeFinalDiceAtLock() {
     }
   }
 
-  // CHẾ ĐỘ TỰ NHIÊN: Có xác suất tự nhiên ra 1-1-1, 6-6-6 hoặc Sáp để Nổ Hũ bất kỳ
+  // TỰ NHIÊN: Có xác suất nổ hũ 111 / 666 hoặc Sáp tự nhiên
   const rand = Math.random();
-  if (rand < 0.045) {
-    // 4.5% tự nhiên Nổ Hũ 1-1-1 hoặc 6-6-6
-    naturalJackpotFlag = true;
-    return Math.random() < 0.5 ? [1, 1, 1] : [6, 6, 6];
-  }
+  if (rand < 0.045) return Math.random() < 0.5 ? [1, 1, 1] : [6, 6, 6];
   if (rand < 0.085) {
-    // 4% tự nhiên ra Sáp (222 - 555)
     const v = Math.floor(Math.random() * 4) + 2;
     return [v, v, v];
   }
@@ -430,7 +446,7 @@ function computeFinalDiceAtLock() {
 function renderCauStrip() {
   const wrap = document.getElementById('tx-cau-dots');
   wrap.innerHTML = '';
-  state.txHistory.slice(-16).forEach((r) => {
+  state.txHistory.slice(-18).forEach((r) => {
     const d = document.createElement('div');
     d.className = `c-dot ${r}`;
     d.textContent = r;
@@ -441,10 +457,10 @@ function renderCauStrip() {
 function startTxRound() {
   txPhase = 'BETTING';
   txTimeLeft = 20;
-  txPoolTai = Math.floor(Math.random() * 6000000) + 4000000;
-  txPoolXiu = Math.floor(Math.random() * 6000000) + 4000000;
-  txUsersTai = Math.floor(Math.random() * 50) + 80;
-  txUsersXiu = Math.floor(Math.random() * 50) + 80;
+  txPoolTai = Math.floor(Math.random() * 4500000) + 1500000;
+  txPoolXiu = Math.floor(Math.random() * 4500000) + 1500000;
+  txUsersTai = Math.floor(Math.random() * 40) + 60;
+  txUsersXiu = Math.floor(Math.random() * 40) + 60;
   txMyBets = { TAI: 0, XIU: 0, SAP_ANY: 0, HU_XIU: 0, HU_TAI: 0 };
 
   document.getElementById('tx-session').textContent = '#' + state.txSession;
@@ -454,10 +470,7 @@ function startTxRound() {
   document.getElementById('tx-timer').classList.remove('hidden');
   document.getElementById('box-tai').classList.remove('win-glow');
   document.getElementById('box-xiu').classList.remove('win-glow');
-  document.querySelectorAll('.sap-box').forEach((b) => b.classList.remove('win-glow'));
-
-  // Luôn hiển thị MD5 XANH CHÍN để troll bạn bè kín đáo 100%
-  document.getElementById('tx-mode-badge').textContent = 'MD5 XANH CHÍN';
+  document.querySelectorAll('.sun-sap-cell').forEach((b) => b.classList.remove('win-glow'));
 
   updateTxPoolsUI();
   renderCauStrip();
@@ -478,7 +491,7 @@ function updateTxPoolsUI() {
 function showJackpotExplosionModal(title, sub, amountWon) {
   document.getElementById('jp-exp-title').textContent = title;
   document.getElementById('jp-exp-sub').textContent = sub;
-  document.getElementById('jp-exp-amount').textContent = `+${fmt(amountWon)} XU`;
+  document.getElementById('jp-exp-amount').textContent = `+${fmt(amountWon)}`;
   document.getElementById('jackpot-explosion').classList.remove('hidden');
   playTone(880, 0.45, 'triangle');
 }
@@ -492,104 +505,78 @@ function revealTxResult() {
   txPhase = 'RESULT';
   document.getElementById('tx-bowl').classList.add('hidden');
 
-  const d1 = currentDice[0];
-  const d2 = currentDice[1];
-  const d3 = currentDice[2];
+  const [d1, d2, d3] = currentDice;
   const sum = d1 + d2 + d3;
   const isSap = d1 === d2 && d2 === d3;
   const isHuXiu111 = d1 === 1 && d2 === 1 && d3 === 1;
   const isHuTai666 = d1 === 6 && d2 === 6 && d3 === 6;
   const winDoor = sum >= 11 ? 'TAI' : 'XIU';
 
-  // 1. TIỀN BÊN THUA TỰ ĐỘNG CHẢY VÀO HŨ (Đúng nguyên tắc bạn yêu cầu)
+  // TIỀN BÊN THUA TỰ ĐỘNG CHẢY VÀO HŨ
   const losingPlayerBet = winDoor === 'TAI' ? txMyBets.XIU : txMyBets.TAI;
-  const losingBotFlow = Math.floor((winDoor === 'TAI' ? txPoolXiu : txPoolTai) * 0.25);
+  const losingBotFlow = Math.floor((winDoor === 'TAI' ? txPoolXiu : txPoolTai) * 0.22);
   const addedToHu = losingPlayerBet + losingBotFlow;
   state.jackpot += addedToHu;
-  document.getElementById('ui-hu-flow').textContent = `+${fmt(addedToHu)} Xu bên thua vừa chảy vào Hũ!`;
+  document.getElementById('ui-hu-flow').textContent = `+${fmt(addedToHu)} từ cửa thua vừa chảy vào Hũ!`;
 
-  // 2. HIỂN THỊ KẾT QUẢ TRÊN ĐĨA
   const pop = document.getElementById('tx-result-pop');
-  if (isHuTai666) {
-    pop.textContent = '6-6-6 💥 NỔ HŨ TÀI!';
-  } else if (isHuXiu111) {
-    pop.textContent = '1-1-1 💥 NỔ HŨ XỈU!';
-  } else if (isSap) {
-    pop.textContent = `SÁP ${d1}-${d2}-${d3} (x30)!`;
-  } else {
-    pop.textContent = `${sum} Điểm - ${winDoor === 'TAI' ? 'TÀI' : 'XỈU'}`;
-  }
+  if (isHuTai666) pop.textContent = '6-6-6 💥 NỔ HŨ TÀI!';
+  else if (isHuXiu111) pop.textContent = '1-1-1 💥 NỔ HŨ XỈU!';
+  else if (isSap) pop.textContent = `SÁP ${d1}-${d2}-${d3} (x30)!`;
+  else pop.textContent = `${sum} Điểm - ${winDoor === 'TAI' ? 'TÀI' : 'XỈU'}`;
   pop.classList.remove('hidden');
 
   if (winDoor === 'TAI') document.getElementById('box-tai').classList.add('win-glow');
   else document.getElementById('box-xiu').classList.add('win-glow');
 
-  if (isSap) document.querySelector('.sap-box[data-sap="SAP_ANY"]').classList.add('win-glow');
-  if (isHuXiu111) document.querySelector('.sap-box[data-sap="HU_XIU"]').classList.add('win-glow');
-  if (isHuTai666) document.querySelector('.sap-box[data-sap="HU_TAI"]').classList.add('win-glow');
+  if (isSap) document.querySelector('.sun-sap-cell[data-sap="SAP_ANY"]').classList.add('win-glow');
+  if (isHuXiu111) document.querySelector('.sun-sap-cell[data-sap="HU_XIU"]').classList.add('win-glow');
+  if (isHuTai666) document.querySelector('.sun-sap-cell[data-sap="HU_TAI"]').classList.add('win-glow');
 
-  // 3. TÍNH TIỀN THẮNG CHO NGƯỜI CHƠI (BÊN THẮNG + SÁP + NỔ HŨ)
   let totalWin = 0;
-
-  // Cửa Tài / Xỉu chính (nếu ra Sáp thì được nhân X5 ngay cả khi chỉ đặt Tài/Xỉu!)
   const mainMult = isSap ? 5.0 : 1.98;
-  if (winDoor === 'TAI' && txMyBets.TAI > 0) {
-    totalWin += Math.floor(txMyBets.TAI * mainMult);
-  }
-  if (winDoor === 'XIU' && txMyBets.XIU > 0) {
-    totalWin += Math.floor(txMyBets.XIU * mainMult);
-  }
+  if (winDoor === 'TAI' && txMyBets.TAI > 0) totalWin += Math.floor(txMyBets.TAI * mainMult);
+  if (winDoor === 'XIU' && txMyBets.XIU > 0) totalWin += Math.floor(txMyBets.XIU * mainMult);
+  if (isSap && txMyBets.SAP_ANY > 0) totalWin += Math.floor(txMyBets.SAP_ANY * 30);
 
-  // Cửa Sáp Bất Kỳ (ăn X30)
-  if (isSap && txMyBets.SAP_ANY > 0) {
-    totalWin += Math.floor(txMyBets.SAP_ANY * 30);
-  }
-
-  // XỬ LÝ NỔ HŨ (3 CON 1 XỈU HOẶC 3 CON 6 TÀI -> ĂN X CỰC CAO + HÚP HŨ & HŨ VỀ 0)
+  // XỬ LÝ NỔ HŨ (1-1-1 HOẶC 6-6-6 -> HŨ VỀ 0)
   if (isHuXiu111 || isHuTai666) {
     const potBeforeReset = state.jackpot;
     let playerWonPot = 0;
 
     if (isHuXiu111) {
-      if (txMyBets.HU_XIU > 0) {
-        playerWonPot += txMyBets.HU_XIU * 120 + potBeforeReset;
-      } else if (txMyBets.XIU > 0 || txMyBets.SAP_ANY > 0) {
-        playerWonPot += (txMyBets.XIU + txMyBets.SAP_ANY) * 25 + potBeforeReset;
-      }
+      if (txMyBets.HU_XIU > 0) playerWonPot += txMyBets.HU_XIU * 120 + potBeforeReset;
+      else if (txMyBets.XIU > 0 || txMyBets.SAP_ANY > 0) playerWonPot += (txMyBets.XIU + txMyBets.SAP_ANY) * 25 + potBeforeReset;
     } else if (isHuTai666) {
-      if (txMyBets.HU_TAI > 0) {
-        playerWonPot += txMyBets.HU_TAI * 120 + potBeforeReset;
-      } else if (txMyBets.TAI > 0 || txMyBets.SAP_ANY > 0) {
-        playerWonPot += (txMyBets.TAI + txMyBets.SAP_ANY) * 25 + potBeforeReset;
-      }
+      if (txMyBets.HU_TAI > 0) playerWonPot += txMyBets.HU_TAI * 120 + potBeforeReset;
+      else if (txMyBets.TAI > 0 || txMyBets.SAP_ANY > 0) playerWonPot += (txMyBets.TAI + txMyBets.SAP_ANY) * 25 + potBeforeReset;
     }
 
-    // SAU KHI NỔ HŨ -> QUỸ HŨ VỀ 0 NGAY LẬP TỨC
     state.jackpot = 0;
-    document.getElementById('ui-hu-flow').textContent = '💥 HŨ VỪA NỔ! Quỹ Hũ đã về 0 Xu!';
+    document.getElementById('ui-hu-flow').textContent = '💥 HŨ ĐÃ NỔ! Quỹ Hũ quay về 0!';
 
     if (playerWonPot > 0) {
       totalWin += playerWonPot;
       showJackpotExplosionModal(
         isHuTai666 ? '🐉 NỔ HŨ TÀI 6-6-6!' : '🐉 NỔ HŨ XỈU 1-1-1!',
-        `Ăn X Cực Khủng + Toàn Bộ Quỹ Hũ (${fmt(potBeforeReset)} Xu)`,
+        `Thắng X Cực Khủng + Trọn Hũ (${fmt(potBeforeReset)})`,
         totalWin
       );
     } else {
-      showToast(`💥 NỔ HŨ ${isHuTai666 ? '6-6-6 TÀI' : '1-1-1 XỈU'}! Cao thủ trong bàn vừa húp ${fmt(potBeforeReset)} Xu, Hũ đã về 0!`);
-      appendChatMessage('HỆ THỐNG', 10, `💥 NỔ HŨ ${isHuTai666 ? '6-6-6 TÀI' : '1-1-1 XỈU'}! Quỹ Hũ ${fmt(potBeforeReset)} Xu đã nổ và quay về 0!`);
+      const luckyBot = REAL_PLAYERS[Math.floor(Math.random() * REAL_PLAYERS.length)];
+      showToast(`💥 NỔ HŨ! [${luckyBot}] vừa ăn trọn Hũ ${fmt(potBeforeReset)}, Hũ về 0!`);
+      appendChatMessage(luckyBot, `HAHAHA NỔ HŨ RỒI ANH EM ƠI BÚ TRỌN ${fmt(potBeforeReset)}!!`);
     }
   }
 
   if (totalWin > 0 && currentUser) {
     currentUser.balance += totalWin;
     if (!isHuXiu111 && !isHuTai666) {
-      showToast(`🎉 Thắng lớn +${fmt(totalWin)} Xu!${isSap ? ' (Nhân Sáp Cực Đỉnh!)' : ''}`);
+      showToast(`🎉 +${fmt(totalWin)} Vàng!`);
       playTone(880, 0.25, 'triangle');
     }
   }
 
-  // Ghi lịch sử cầu
   state.txHistory.push(isHuXiu111 || isHuTai666 ? 'H' : winDoor === 'TAI' ? 'T' : 'X');
   if (state.txHistory.length > 50) state.txHistory.shift();
   state.txDetailLog.unshift({
@@ -601,7 +588,6 @@ function revealTxResult() {
   if (state.txDetailLog.length > 25) state.txDetailLog.pop();
 
   state.txSession++;
-  // Nếu không phải chế độ Bẻ ngược liên tục thì trả về AUTO sau 1 ván ép
   if (state.adminForceTX !== 'TROLL_OPPOSITE') {
     state.adminForceTX = 'AUTO';
     document.querySelectorAll('.adm-opt').forEach((x) => x.classList.remove('active'));
@@ -611,12 +597,12 @@ function revealTxResult() {
 
   updateHeaderUI();
   renderCauStrip();
-  triggerBotContextChat('RESULT', `${d1}-${d2}-${d3} (${sum} nút)`);
+  triggerRealisticPlayerChat('RESULT', `${sum} nút ${winDoor === 'TAI' ? 'Tài' : 'Xỉu'}`);
 
-  setTimeout(() => startTxRound(), 5500);
+  setTimeout(() => startTxRound(), 5200);
 }
 
-// BÁT NẶN KÉO THẢ
+// KÉO BÁT NẶN HỖ TRỢ CẢ MÀN HÌNH XOAY NGANG TỰ ĐỘNG
 (function initBowlDrag() {
   const bowl = document.getElementById('tx-bowl');
   let dragging = false;
@@ -632,10 +618,14 @@ function revealTxResult() {
 
   function onMove(x, y) {
     if (!dragging) return;
-    const dx = x - startX;
-    const dy = y - startY;
-    bowl.style.transform = `translate(${dx}px, ${dy}px)`;
-    if (Math.hypot(dx, dy) > 65) {
+    const rawDx = x - startX;
+    const rawDy = y - startY;
+    const isPortraitRotated = window.innerHeight > window.innerWidth;
+    const moveX = isPortraitRotated ? rawDy : rawDx;
+    const moveY = isPortraitRotated ? -rawDx : rawDy;
+
+    bowl.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    if (Math.hypot(moveX, moveY) > 62) {
       dragging = false;
       bowl.style.transform = 'translate(0,0)';
       revealTxResult();
@@ -662,14 +652,13 @@ function revealTxResult() {
   window.addEventListener('touchend', onEnd);
 })();
 
-// ĐẶT CƯỢC TÀI / XỈU CHÍNH
-document.querySelectorAll('.bet-trigger-btn').forEach((btn) => {
+document.querySelectorAll('.wing-bet-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     if (!currentUser) return;
-    if (txPhase !== 'BETTING') return showToast('⏳ Đã hết giờ đặt cược!');
+    if (txPhase !== 'BETTING') return showToast('⏳ Đã khóa sổ, chờ mở bát!');
     const door = btn.dataset.door;
     const amount = state.chip === 'ALL' ? currentUser.balance : Number(state.chip);
-    if (amount <= 0 || currentUser.balance < amount) return showToast('⚠️ Số dư không đủ! Hãy bấm nút + để nhận lộc.');
+    if (amount <= 0 || currentUser.balance < amount) return showToast('⚠️ Số dư không đủ!');
 
     currentUser.balance -= amount;
     currentUser.totalWagered += amount;
@@ -682,14 +671,13 @@ document.querySelectorAll('.bet-trigger-btn').forEach((btn) => {
       txPoolXiu += amount;
     }
 
-    playTone(660, 0.06);
+    playTone(660, 0.05);
     updateTxPoolsUI();
     updateHeaderUI();
   });
 });
 
-// ĐẶT CƯỢC SÁP & SĂN HŨ (X30 / X120 + HŨ)
-document.querySelectorAll('.sap-box').forEach((box) => {
+document.querySelectorAll('.sun-sap-cell').forEach((box) => {
   box.addEventListener('click', () => {
     if (!currentUser) return;
     if (txPhase !== 'BETTING') return showToast('⏳ Đã hết giờ đặt cược!');
@@ -701,15 +689,15 @@ document.querySelectorAll('.sap-box').forEach((box) => {
     currentUser.totalWagered += amount;
     txMyBets[key] += amount;
 
-    playTone(780, 0.06);
+    playTone(780, 0.05);
     updateTxPoolsUI();
     updateHeaderUI();
   });
 });
 
-document.querySelectorAll('#tx-chips .chip-item').forEach((chip) => {
+document.querySelectorAll('#tx-chips .sun-chip').forEach((chip) => {
   chip.addEventListener('click', () => {
-    document.querySelectorAll('#tx-chips .chip-item').forEach((c) => c.classList.remove('active'));
+    document.querySelectorAll('#tx-chips .sun-chip').forEach((c) => c.classList.remove('active'));
     chip.classList.add('active');
     state.chip = chip.dataset.val === 'ALL' ? 'ALL' : Number(chip.dataset.val);
     playTone(520, 0.04);
@@ -718,15 +706,15 @@ document.querySelectorAll('#tx-chips .chip-item').forEach((chip) => {
 
 document.getElementById('btn-toggle-nan').addEventListener('click', (e) => {
   state.nanBat = !state.nanBat;
-  e.target.textContent = `🖐 Nặn: ${state.nanBat ? 'BẬT' : 'TẮT'}`;
+  e.target.textContent = `🖐 Nặn bát: ${state.nanBat ? 'BẬT' : 'TẮT'}`;
   saveState();
 });
 
-// ==================== 2. HỆ THỐNG XÓC ĐĨA ====================
+// ==================== 2. XÓC ĐĨA TỨ LINH ====================
 let xdTimeLeft = 18;
 let xdPhase = 'BETTING';
 let xdMyBets = { CHAN: 0, LE: 0, '4DO': 0, '4TRANG': 0, '3DO1TRANG': 0, '3TRANG1DO': 0 };
-let xdPools = { CHAN: 8500000, LE: 7900000 };
+let xdPools = { CHAN: 9500000, LE: 8900000 };
 const XD_ODDS = { CHAN: 1.98, LE: 1.98, '4DO': 14, '4TRANG': 14, '3DO1TRANG': 3.5, '3TRANG1DO': 3.5 };
 
 function renderXdCau() {
@@ -754,7 +742,7 @@ document.querySelectorAll('.xd-door').forEach((doorEl) => {
     if (!currentUser || xdPhase !== 'BETTING') return;
     const key = doorEl.dataset.xddoor;
     const amt = state.chip === 'ALL' ? currentUser.balance : Number(state.chip);
-    if (amt <= 0 || currentUser.balance < amt) return showToast('⚠️ Không đủ Xu!');
+    if (amt <= 0 || currentUser.balance < amt) return showToast('⚠️ Không đủ số dư!');
     currentUser.balance -= amt;
     currentUser.totalWagered += amt;
     xdMyBets[key] += amt;
@@ -786,7 +774,7 @@ function settleXocDia() {
   if (redCount === 3) winKeys.push('3DO1TRANG');
   if (redCount === 1) winKeys.push('3TRANG1DO');
 
-  document.getElementById('xd-status').textContent = `KẾT QUẢ: ${redCount} ĐỎ - ${4 - redCount} TRẮNG (${isEven ? 'CHẴN' : 'LẺ'})`;
+  document.getElementById('xd-status').textContent = `${redCount} ĐỎ - ${4 - redCount} TRẮNG (${isEven ? 'CHẴN' : 'LẺ'})`;
 
   let totalWin = 0;
   winKeys.forEach((wk) => {
@@ -797,7 +785,7 @@ function settleXocDia() {
 
   if (totalWin > 0 && currentUser) {
     currentUser.balance += totalWin;
-    showToast(`⚪ Thắng Xóc Đĩa +${fmt(totalWin)} Xu!`);
+    showToast(`⚪ Thắng Xóc Đĩa +${fmt(totalWin)}!`);
   }
 
   state.xdHistory.push(isEven ? 'C' : 'L');
@@ -818,18 +806,26 @@ function settleXocDia() {
   }, 4500);
 }
 
-// ==================== MASTER GAME LOOP (1 GIÂY) ====================
+// ==================== VÒNG LẶP THỜI GIAN THỰC (NGƯỜI CHƠI VÀO TIỀN NHƯ THẬT) ====================
 setInterval(() => {
   if (txPhase === 'BETTING') {
     txTimeLeft--;
     document.getElementById('tx-timer').textContent = txTimeLeft;
-    txPoolTai += Math.floor(Math.random() * 1900000) + 300000;
-    txPoolXiu += Math.floor(Math.random() * 1900000) + 300000;
-    txUsersTai += Math.floor(Math.random() * 4);
-    txUsersXiu += Math.floor(Math.random() * 4);
+
+    // Nhịp vào tiền giống người thật: 5 giây cuối cá mập nhồi lệnh cực gắt
+    const multiplier = txTimeLeft <= 5 ? 3.5 : 1;
+    const chunks = [50000, 100000, 250000, 500000, 1200000, 3500000];
+    const addTai = Math.floor((chunks[Math.floor(Math.random() * chunks.length)] + Math.random() * 1500000) * multiplier);
+    const addXiu = Math.floor((chunks[Math.floor(Math.random() * chunks.length)] + Math.random() * 1500000) * multiplier);
+
+    txPoolTai += addTai;
+    txPoolXiu += addXiu;
+    txUsersTai += Math.floor(Math.random() * 7) + (txTimeLeft <= 5 ? 8 : 1);
+    txUsersXiu += Math.floor(Math.random() * 7) + (txTimeLeft <= 5 ? 8 : 1);
     updateTxPoolsUI();
 
-    if (txTimeLeft % 4 === 0) triggerBotContextChat('BET');
+    if (txTimeLeft === 16 || txTimeLeft === 11) triggerRealisticPlayerChat('BET_EARLY');
+    if (txTimeLeft === 6 || txTimeLeft === 3) triggerRealisticPlayerChat('BET_LATE');
 
     if (txTimeLeft <= 0) {
       txPhase = 'SQUEEZING';
@@ -849,7 +845,7 @@ setInterval(() => {
           const bowl = document.getElementById('tx-bowl');
           bowl.style.transform = 'translate(0,0)';
           bowl.classList.remove('hidden');
-          triggerBotContextChat('SQUEEZE');
+          triggerRealisticPlayerChat('SQUEEZE');
           setTimeout(() => {
             if (txPhase === 'SQUEEZING') revealTxResult();
           }, 5000);
@@ -863,14 +859,14 @@ setInterval(() => {
   if (xdPhase === 'BETTING') {
     xdTimeLeft--;
     document.getElementById('xd-timer').textContent = xdTimeLeft;
-    xdPools.CHAN += Math.floor(Math.random() * 800000) + 100000;
-    xdPools.LE += Math.floor(Math.random() * 800000) + 100000;
+    xdPools.CHAN += Math.floor(Math.random() * 900000) + 150000;
+    xdPools.LE += Math.floor(Math.random() * 900000) + 150000;
     updateXdUI();
     if (xdTimeLeft <= 0) settleXocDia();
   }
 }, 1000);
 
-// ==================== 3. QUAY HŨ SLOT (NỔ HŨ VỀ 0) ====================
+// ==================== 3. QUAY HŨ SLOT ====================
 const SLOT_SYMBOLS = [
   { icon: '🐉', mult: 50 },
   { icon: '👑', mult: 15 },
@@ -893,17 +889,15 @@ document.querySelectorAll('.sbet-btn').forEach((b) => {
 function spinSlotOnce() {
   if (!currentUser || currentUser.balance < slotBet) {
     slotAuto = false;
-    return showToast('⚠️ Không đủ Xu quay hũ!');
+    return showToast('⚠️ Số dư không đủ!');
   }
   currentUser.balance -= slotBet;
   currentUser.totalWagered += slotBet;
-  state.jackpot += slotBet; // Tiền quay thua chảy thẳng vào Hũ
+  state.jackpot += slotBet;
   playTone(540, 0.08, 'square');
 
-  const gridEl = document.getElementById('slot-grid');
-  const cells = Array.from(gridEl.children);
+  const cells = Array.from(document.getElementById('slot-grid').children);
   const res = [];
-
   for (let i = 0; i < 9; i++) {
     const r = Math.random();
     let sym = SLOT_SYMBOLS[5];
@@ -917,9 +911,7 @@ function spinSlotOnce() {
   }
 
   const lines = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [2, 4, 6]];
-  let totalWin = 0;
-  let hitJackpot = false;
-
+  let totalWin = 0, hitJackpot = false;
   lines.forEach(([a, b, c]) => {
     if (res[a].icon === res[b].icon && res[b].icon === res[c].icon) {
       if (res[a].icon === '🐉') hitJackpot = true;
@@ -928,15 +920,14 @@ function spinSlotOnce() {
   });
 
   if (hitJackpot) {
-    const potWon = state.jackpot + slotBet * 50;
-    totalWin += potWon;
-    state.jackpot = 0; // Hũ nổ về 0
-    document.getElementById('slot-msg').textContent = `🐉 NỔ HŨ RỒNG VÀNG +${fmt(totalWin)} XU (Hũ về 0)!`;
-    showJackpotExplosionModal('🐉 NỔ HŨ THẦN TÀI!', 'Quay trúng 3 Rồng Vàng liên tiếp', totalWin);
+    totalWin += state.jackpot + slotBet * 50;
+    state.jackpot = 0;
+    document.getElementById('slot-msg').textContent = `🐉 NỔ HŨ +${fmt(totalWin)} (Hũ về 0)!`;
+    showJackpotExplosionModal('🐉 NỔ HŨ LONG VƯƠNG!', 'Quay trúng 3 Rồng Vàng', totalWin);
   } else if (totalWin > 0) {
-    document.getElementById('slot-msg').textContent = `🎉 Trúng thưởng +${fmt(totalWin)} Xu!`;
+    document.getElementById('slot-msg').textContent = `🎉 Thắng +${fmt(totalWin)}!`;
   } else {
-    document.getElementById('slot-msg').textContent = `Tiền trượt vừa cộng vào Hũ (+${fmt(slotBet)} Xu)!`;
+    document.getElementById('slot-msg').textContent = `Đã cộng +${fmt(slotBet)} vào Quỹ Hũ!`;
   }
 
   currentUser.balance += totalWin;
@@ -948,16 +939,14 @@ document.getElementById('btn-slot-auto').addEventListener('click', (e) => {
   slotAuto = !slotAuto;
   e.target.textContent = slotAuto ? '⏹ Dừng' : '🔄 Tự Quay';
 });
-setInterval(() => {
-  if (slotAuto) spinSlotOnce();
-}, 1300);
+setInterval(() => { if (slotAuto) spinSlotOnce(); }, 1300);
 
-// ==================== 4. GACHA KHO BÁU ====================
+// ==================== 4. KHO BÁU GACHA ====================
 function pullGacha(times) {
   if (!currentUser) return;
   const unitCost = Number(document.getElementById('gacha-base-cost').value);
   const totalCost = unitCost * times;
-  if (currentUser.balance < totalCost) return showToast('⚠️ Không đủ Xu mở Gacha!');
+  if (currentUser.balance < totalCost) return showToast('⚠️ Không đủ Vàng!');
 
   currentUser.balance -= totalCost;
   currentUser.totalWagered += totalCost;
@@ -986,21 +975,21 @@ function pullGacha(times) {
     totalReward += reward;
     const card = document.createElement('div');
     card.className = `gacha-card ${tier}`;
-    card.innerHTML = `<div style="font-size:20px">${icon}</div><div>${tier}</div><div>+${fmt(reward)}</div>`;
+    card.innerHTML = `<div style="font-size:18px">${icon}</div><div>${tier}</div><div>+${fmt(reward)}</div>`;
     grid.appendChild(card);
   }
 
   currentUser.balance += totalReward;
   document.getElementById('gacha-pity-cnt').textContent = currentUser.gachaPity;
   document.getElementById('gacha-pity-fill').style.width = `${Math.min(100, (currentUser.gachaPity / 30) * 100)}%`;
-  showToast(`✨ Mở Gacha nhận +${fmt(totalReward)} Xu!`);
+  showToast(`✨ Nhận +${fmt(totalReward)} Vàng!`);
   updateHeaderUI();
 }
 
 document.getElementById('btn-gacha-x1').addEventListener('click', () => pullGacha(1));
 document.getElementById('btn-gacha-x10').addEventListener('click', () => pullGacha(10));
 
-// ==================== 5. BẦU CUA & CAO THẤP ====================
+// ==================== 5. BẦU CUA & TRÊN DƯỚI ====================
 const BC_KEYS = ['BAU', 'CUA', 'TOM', 'CA', 'GA', 'NAI'];
 const BC_ICONS = { BAU: '🍐', CUA: '🦀', TOM: '🦐', CA: '🐟', GA: '🐓', NAI: '🦌' };
 let bcBets = { BAU: 0, CUA: 0, TOM: 0, CA: 0, GA: 0, NAI: 0 };
@@ -1010,7 +999,7 @@ document.querySelectorAll('.bc-item').forEach((item) => {
     if (!currentUser) return;
     const key = item.dataset.animal;
     const amt = state.chip === 'ALL' ? currentUser.balance : Number(state.chip);
-    if (amt <= 0 || currentUser.balance < amt) return showToast('⚠️ Không đủ Xu!');
+    if (amt <= 0 || currentUser.balance < amt) return showToast('⚠️ Không đủ Vàng!');
     currentUser.balance -= amt;
     bcBets[key] += amt;
     document.getElementById(`bc-bet-${key}`).textContent = fmt(bcBets[key]);
@@ -1031,7 +1020,7 @@ document.getElementById('btn-bc-shake').addEventListener('click', () => {
   });
   if (win > 0) {
     currentUser.balance += win;
-    showToast(`🦀 Thắng Bầu Cua +${fmt(win)} Xu!`);
+    showToast(`🦀 Thắng Bầu Cua +${fmt(win)}!`);
   }
   updateHeaderUI();
 });
@@ -1043,7 +1032,7 @@ function playHiLow(guessUp) {
   if (!currentUser) return;
   if (hlPot === 0) {
     const startBet = 200000;
-    if (currentUser.balance < startBet) return showToast('⚠️ Cần 200,000 Xu!');
+    if (currentUser.balance < startBet) return showToast('⚠️ Cần 200,000 Vàng!');
     currentUser.balance -= startBet;
     hlPot = startBet;
   }
@@ -1052,10 +1041,10 @@ function playHiLow(guessUp) {
   document.getElementById('hl-card').textContent = CARD_LABELS[nextVal] + suits[Math.floor(Math.random() * 4)];
   if ((guessUp && nextVal >= hlCurrentVal) || (!guessUp && nextVal <= hlCurrentVal)) {
     hlPot = Math.floor(hlPot * 1.9);
-    showToast(`🔥 Chuẩn! Quỹ lên ${fmt(hlPot)} Xu`);
+    showToast(`🔥 Quỹ lên ${fmt(hlPot)}!`);
   } else {
     hlPot = 0;
-    showToast('💥 Gãy cầu Cao Thấp!');
+    showToast('💥 Gãy cầu!');
   }
   hlCurrentVal = nextVal;
   document.getElementById('hl-pot').textContent = 'Quỹ: ' + fmt(hlPot);
@@ -1067,16 +1056,16 @@ document.getElementById('btn-hl-down').addEventListener('click', () => playHiLow
 document.getElementById('btn-hl-cash').addEventListener('click', () => {
   if (!currentUser || hlPot <= 0) return;
   currentUser.balance += hlPot;
-  showToast(`💰 Nhận +${fmt(hlPot)} Xu!`);
+  showToast(`💰 Nhận +${fmt(hlPot)}!`);
   hlPot = 0;
   document.getElementById('hl-pot').textContent = 'Quỹ: 0';
   updateHeaderUI();
 });
 
 // ==================== TABS & MODALS ====================
-document.querySelectorAll('.nav-tab').forEach((tab) => {
+document.querySelectorAll('.sq-tab').forEach((tab) => {
   tab.addEventListener('click', () => {
-    document.querySelectorAll('.nav-tab').forEach((t) => t.classList.remove('active'));
+    document.querySelectorAll('.sq-tab').forEach((t) => t.classList.remove('active'));
     document.querySelectorAll('.game-view').forEach((v) => v.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById('view-' + tab.dataset.tab).classList.add('active');
@@ -1088,20 +1077,21 @@ function renderLeaderboard() {
   accountsDB = loadAccountsDB();
   const wrap = document.getElementById('rank-list');
   const bots = [
-    { name: 'VuaBẻCầu88', vip: 10, bal: 985000000 },
-    { name: 'LongThiếuGia', vip: 9, bal: 642000000 },
-    { name: 'TrùmSănHũ666', vip: 10, bal: 510000000 }
+    { name: 'hung_camap', bal: 985000000 },
+    { name: 'tuan_bds99', bal: 742000000 },
+    { name: 'vua_san_hu', bal: 610000000 },
+    { name: 'minh_nhua_hn', bal: 480000000 },
+    { name: 'hoang_audi', bal: 395000000 }
   ];
   const realUsers = accountsDB.map((a) => ({
     name: a.nickname + (currentUser && a.username === currentUser.username ? ' (Bạn)' : ''),
-    vip: 8,
     bal: a.balance + (a.vault || 0)
   }));
   const list = [...realUsers, ...bots].sort((a, b) => b.bal - a.bal);
   wrap.innerHTML = list.map((item, idx) => `
     <div class="rank-row">
-      <div><b>#${idx + 1}</b> <span class="chat-vip">VIP ${item.vip}</span> ${item.name}</div>
-      <div style="color:#ffd700;font-weight:900">${fmt(item.bal)} 🪙</div>
+      <div><b>#${idx + 1}</b> ${item.name}</div>
+      <div style="color:#ffd700;font-weight:900">$ ${fmt(item.bal)}</div>
     </div>`).join('');
 }
 
@@ -1117,10 +1107,10 @@ document.getElementById('btn-open-bank').addEventListener('click', () => openMod
 document.getElementById('btn-open-gift').addEventListener('click', () => openModal('modal-gift'));
 document.getElementById('btn-open-profile').addEventListener('click', () => {
   if (!currentUser) return;
-  document.getElementById('profile-acc-info').textContent = `Tài khoản đăng nhập: ${currentUser.username} | Mã khôi phục: ${currentUser.pin}`;
+  document.getElementById('profile-acc-info').textContent = `Tài khoản: ${currentUser.username} | Mã bảo mật: ${currentUser.pin}`;
   document.getElementById('profile-name-inp').value = currentUser.nickname;
   document.getElementById('profile-newpass-inp').value = '';
-  document.getElementById('profile-vip-info').textContent = `Tổng cược: ${fmt(currentUser.totalWagered)} Xu`;
+  document.getElementById('profile-vip-info').textContent = `Tổng cược: ${fmt(currentUser.totalWagered)}`;
   openModal('modal-profile');
 });
 
@@ -1128,31 +1118,30 @@ document.getElementById('btn-open-soicau').addEventListener('click', () => {
   const tCount = state.txHistory.filter((x) => x === 'T').length;
   const xCount = state.txHistory.filter((x) => x === 'X').length;
   const hCount = state.txHistory.filter((x) => x === 'H').length;
-  document.getElementById('soicau-summary').innerHTML = `<p style="margin-bottom:8px">TÀI: <b style="color:#ff5252">${tCount}</b> | XỈU: <b style="color:#29b6f6">${xCount}</b> | NỔ HŨ: <b style="color:#ffd700">${hCount}</b></p>`;
+  document.getElementById('soicau-summary').innerHTML = `<p style="margin-bottom:6px;font-size:12px">⚫ TÀI: <b>${tCount}</b> | ⚪ XỈU: <b>${xCount}</b> | 🟡 NỔ HŨ: <b style="color:#ffd700">${hCount}</b></p>`;
   document.getElementById('soicau-list').innerHTML = state.txDetailLog.map((r) => `
     <div class="rank-row"><span>#${r.session}</span><span>Xúc xắc: ${r.dice.join('-')} (${r.sum})</span><b>${r.winDoor}</b></div>`).join('');
   openModal('modal-soicau');
 });
 
-// KÉT SẮT & CHUYỂN KHOẢN THẬT GIỮA CÁC TÀI KHOẢN
 document.getElementById('btn-vault-deposit').addEventListener('click', () => {
   if (!currentUser) return;
   const v = Number(document.getElementById('vault-amount').value);
-  if (v <= 0 || currentUser.balance < v) return showToast('⚠️ Số Xu không hợp lệ!');
+  if (v <= 0 || currentUser.balance < v) return showToast('⚠️ Số Vàng không hợp lệ!');
   currentUser.balance -= v;
   currentUser.vault += v;
   updateHeaderUI();
-  showToast(`🏦 Đã gửi ${fmt(v)} Xu vào Két!`);
+  showToast(`🏦 Đã gửi ${fmt(v)} vào Két!`);
 });
 
 document.getElementById('btn-vault-withdraw').addEventListener('click', () => {
   if (!currentUser) return;
   const v = Number(document.getElementById('vault-amount').value);
-  if (v <= 0 || currentUser.vault < v) return showToast('⚠️ Két sắt không đủ Xu!');
+  if (v <= 0 || currentUser.vault < v) return showToast('⚠️ Két sắt không đủ!');
   currentUser.vault -= v;
   currentUser.balance += v;
   updateHeaderUI();
-  showToast(`🏦 Đã rút ${fmt(v)} Xu ra ví!`);
+  showToast(`🏦 Đã rút ${fmt(v)} ra Ví!`);
 });
 
 document.getElementById('btn-send-transfer').addEventListener('click', () => {
@@ -1169,30 +1158,28 @@ document.getElementById('btn-send-transfer').addEventListener('click', () => {
     saveAccountsDB(accountsDB);
   }
   updateHeaderUI();
-  showToast(`💸 Đã chuyển ${fmt(amt)} Xu cho ${target}!`);
+  showToast(`💸 Đã chuyển ${fmt(amt)} cho ${target}!`);
 });
 
-// GIFTCODE
 const GIFTCODES = { SUNWIN888: 25000000, VIP999: 50000000, NOHU68: 40000000, SAP666: 100000000 };
 document.getElementById('btn-claim-code').addEventListener('click', () => {
   if (!currentUser) return;
   const code = document.getElementById('giftcode-input').value.trim().toUpperCase();
-  if (!GIFTCODES[code]) return showToast('❌ Giftcode không hợp lệ!');
-  if (currentUser.usedCodes.includes(code)) return showToast('⚠️ Bạn đã nhận mã này rồi!');
+  if (!GIFTCODES[code]) return showToast('❌ Giftcode không tồn tại!');
+  if (currentUser.usedCodes.includes(code)) return showToast('⚠️ Bạn đã dùng mã này rồi!');
   currentUser.usedCodes.push(code);
   currentUser.balance += GIFTCODES[code];
   updateHeaderUI();
-  showToast(`🎁 Nhận thành công +${fmt(GIFTCODES[code])} Xu!`);
+  showToast(`🎁 Nhận +${fmt(GIFTCODES[code])} Vàng!`);
 });
 
 document.getElementById('btn-daily-relief').addEventListener('click', () => {
   if (!currentUser) return;
   currentUser.balance += 10000000;
   updateHeaderUI();
-  showToast('🪙 Đã nhận +10,000,000 Xu cứu trợ!');
+  showToast('🪙 Đã nhận +10,000,000 Vàng!');
 });
 
-// HỒ SƠ & ĐỔI MK
 document.querySelectorAll('.av-choice').forEach((btn) => {
   btn.addEventListener('click', () => {
     if (!currentUser) return;
@@ -1209,35 +1196,35 @@ document.getElementById('btn-save-profile').addEventListener('click', () => {
   if (newPass) currentUser.password = newPass;
   updateHeaderUI();
   document.getElementById('modal-profile').classList.add('hidden');
-  showToast('✅ Đã lưu thông tin tài khoản!');
+  showToast('✅ Đã lưu hồ sơ!');
 });
 
-// ==================== ADMIN QUẢN LÝ TÀI KHOẢN & CHỈNH HŨ TROLL BẠN BÈ ====================
+// ==================== QUẢN TRỊ ADMIN (CHỈ TÀI KHOẢN 'admin' MỚI TRUY CẬP ĐƯỢC) ====================
 function renderAdminAccountsList() {
+  if (!isCurrentUserAdmin()) return;
   accountsDB = loadAccountsDB();
   const wrap = document.getElementById('admin-accounts-list');
   if (!wrap) return;
   wrap.innerHTML = accountsDB.map((acc) => `
     <div class="acc-item-card">
       <div class="acc-item-top">
-        <span>👤 TK: ${acc.username} (${acc.nickname})</span>
-        <span style="color:${acc.locked ? '#ff5252' : '#00e676'}">${acc.locked ? 'ĐÃ KHÓA' : 'HOẠT ĐỘNG'}</span>
+        <span>👤 ${acc.username} (${acc.nickname})</span>
+        <span style="color:${acc.locked ? '#ff5252' : '#00e676'}">${acc.locked ? 'KHÓA' : 'MỞ'}</span>
       </div>
-      <div class="acc-item-sub">
-        🔑 Mật khẩu: <b>${acc.password}</b> | PIN: <b>${acc.pin}</b> | Số dư: <b style="color:#ffd700">${fmt(acc.balance)} Xu</b>
-      </div>
+      <div>🔑 MK: <b>${acc.password}</b> | PIN: <b>${acc.pin}</b> | Ví: <b style="color:#ffd700">${fmt(acc.balance)}</b></div>
       <div class="acc-item-actions">
-        <button class="acc-mini-btn" onclick="adminResetPass('${acc.username}')">Cấp Lại MK</button>
-        <button class="acc-mini-btn" onclick="adminAddXu('${acc.username}', 100000000)">+100M Xu</button>
-        <button class="acc-mini-btn" onclick="adminZeroXu('${acc.username}')">Về 0 Xu</button>
-        <button class="acc-mini-btn" onclick="adminToggleLock('${acc.username}')">${acc.locked ? 'Mở Khóa' : 'Khóa TK'}</button>
+        <button class="acc-mini-btn" onclick="adminResetPass('${acc.username}')">Đổi MK</button>
+        <button class="acc-mini-btn" onclick="adminAddXu('${acc.username}', 100000000)">+100M</button>
+        <button class="acc-mini-btn" onclick="adminZeroXu('${acc.username}')">Về 0</button>
+        <button class="acc-mini-btn" onclick="adminToggleLock('${acc.username}')">${acc.locked ? 'Mở' : 'Khóa'}</button>
       </div>
     </div>
   `).join('');
 }
 
 window.adminResetPass = function (uname) {
-  const newP = prompt(`Nhập mật khẩu mới cấp lại cho tài khoản [${uname}]:`, '123456');
+  if (!isCurrentUserAdmin()) return;
+  const newP = prompt(`Nhập mật khẩu mới cho [${uname}]:`, '123456');
   if (!newP) return;
   accountsDB = loadAccountsDB();
   const target = accountsDB.find((a) => a.username === uname);
@@ -1246,11 +1233,12 @@ window.adminResetPass = function (uname) {
     if (currentUser && currentUser.username === uname) currentUser.password = target.password;
     saveAccountsDB(accountsDB);
     renderAdminAccountsList();
-    showToast(`✅ Đã cấp mật khẩu mới [${target.password}] cho ${uname}!`);
+    showToast(`✅ Đã đổi mật khẩu cho ${uname}!`);
   }
 };
 
 window.adminAddXu = function (uname, amt) {
+  if (!isCurrentUserAdmin()) return;
   accountsDB = loadAccountsDB();
   const target = accountsDB.find((a) => a.username === uname);
   if (target) {
@@ -1259,11 +1247,12 @@ window.adminAddXu = function (uname, amt) {
     saveAccountsDB(accountsDB);
     updateHeaderUI();
     renderAdminAccountsList();
-    showToast(`💰 Đã bơm +${fmt(amt)} Xu cho ${uname}!`);
+    showToast(`💰 Đã cộng +${fmt(amt)} cho ${uname}!`);
   }
 };
 
 window.adminZeroXu = function (uname) {
+  if (!isCurrentUserAdmin()) return;
   accountsDB = loadAccountsDB();
   const target = accountsDB.find((a) => a.username === uname);
   if (target) {
@@ -1272,79 +1261,75 @@ window.adminZeroXu = function (uname) {
     saveAccountsDB(accountsDB);
     updateHeaderUI();
     renderAdminAccountsList();
-    showToast(`😈 Đã rút sạch Xu của ${uname} về 0!`);
+    showToast(`😈 Đã đưa số dư của ${uname} về 0!`);
   }
 };
 
 window.adminToggleLock = function (uname) {
+  if (!isCurrentUserAdmin()) return;
   accountsDB = loadAccountsDB();
   const target = accountsDB.find((a) => a.username === uname);
   if (target) {
     target.locked = !target.locked;
     saveAccountsDB(accountsDB);
     renderAdminAccountsList();
-    showToast(`${target.locked ? '🔒 Đã khóa' : '🔓 Đã mở khóa'} tài khoản ${uname}!`);
+    showToast(`${target.locked ? '🔒 Đã khóa' : '🔓 Đã mở'} tài khoản ${uname}!`);
   }
 };
 
 document.getElementById('btn-open-admin').addEventListener('click', () => {
+  if (!isCurrentUserAdmin()) return;
   renderAdminAccountsList();
   openModal('modal-admin');
 });
 
-document.getElementById('btn-unlock-admin').addEventListener('click', () => {
-  if (document.getElementById('admin-pin-inp').value === '8888') {
-    document.getElementById('admin-lock-view').classList.add('hidden');
-    document.getElementById('admin-panel-view').classList.remove('hidden');
-    renderAdminAccountsList();
-  } else {
-    showToast('❌ Sai mã PIN Admin!');
-  }
-});
-
 document.querySelectorAll('.adm-opt').forEach((b) => {
   b.addEventListener('click', () => {
+    if (!isCurrentUserAdmin()) return;
     document.querySelectorAll('.adm-opt').forEach((x) => x.classList.remove('active'));
     b.classList.add('active');
     state.adminForceTX = b.dataset.forceTx;
-    showToast('🎭 Đã gài chế độ ngầm: ' + b.textContent);
+    showToast('🎭 Đã gài cầu: ' + b.textContent);
   });
 });
 
 document.getElementById('btn-adm-set-dice').addEventListener('click', () => {
+  if (!isCurrentUserAdmin()) return;
   const d1 = Math.min(6, Math.max(1, Number(document.getElementById('adm-d1').value) || 6));
   const d2 = Math.min(6, Math.max(1, Number(document.getElementById('adm-d2').value) || 6));
   const d3 = Math.min(6, Math.max(1, Number(document.getElementById('adm-d3').value) || 6));
   state.adminCustomDice = [d1, d2, d3];
   state.adminForceTX = 'CUSTOM_DICE';
   document.querySelectorAll('.adm-opt').forEach((x) => x.classList.remove('active'));
-  showToast(`🎯 Đã chốt ngầm phiên tới ra chính xác: ${d1} - ${d2} - ${d3}`);
+  showToast(`🎯 Đã chốt phiên tới ra: ${d1}-${d2}-${d3}`);
 });
 
 document.getElementById('btn-adm-hu-500m').addEventListener('click', () => {
+  if (!isCurrentUserAdmin()) return;
   state.jackpot += 500000000;
   updateHeaderUI();
-  showToast('🔥 Đã bơm Quỹ Hũ thêm +500,000,000 Xu!');
+  showToast('🔥 Đã bơm Hũ +500M!');
 });
 
 document.getElementById('btn-adm-hu-zero').addEventListener('click', () => {
+  if (!isCurrentUserAdmin()) return;
   state.jackpot = 0;
   updateHeaderUI();
-  showToast('💨 Đã xả Quỹ Hũ về 0 Xu!');
+  showToast('💨 Đã xả Hũ về 0!');
 });
 
 document.getElementById('btn-adm-add50m').addEventListener('click', () => {
-  if (!currentUser) return;
+  if (!isCurrentUserAdmin()) return;
   currentUser.balance += 50000000;
   updateHeaderUI();
-  showToast('💰 +50,000,000 Xu vào ví!');
+  showToast('💰 +50,000,000 vào ví!');
 });
 
 document.getElementById('btn-adm-add500m').addEventListener('click', () => {
-  if (!currentUser) return;
+  if (!isCurrentUserAdmin()) return;
   currentUser.balance += 500000000;
   updateHeaderUI();
-  showToast('💰 +500,000,000 Xu vào ví!');
+  showToast('💰 +500,000,000 vào ví!');
 });
 
 document.getElementById('btn-sound').addEventListener('click', (e) => {
@@ -1355,7 +1340,7 @@ document.getElementById('btn-sound').addEventListener('click', (e) => {
 
 document.getElementById('btn-copy-md5').addEventListener('click', () => {
   navigator.clipboard?.writeText(document.getElementById('tx-md5-str').textContent);
-  showToast('📋 Đã sao chép chuỗi MD5!');
+  showToast('🔒 Đã copy mã MD5 phiên hiện tại!');
 });
 
 // KHỞI ĐỘNG
@@ -1366,5 +1351,5 @@ startTxRound();
 renderXdCau();
 updateXdUI();
 updateHeaderUI();
-appendChatMessage('TrùmSănHũ666', 10, 'Anh em để ý Hũ Tài Xỉu nhé, tiền bên thua đang dồn vào Hũ căng đét rồi!');
-appendChatMessage('VuaBẻCầu88', 10, 'Lót nhẹ 500K vào Sáp 111 với Sáp 666 đi ae, nổ hũ phát ăn x120 cộng trọn Hũ luôn!');
+appendChatMessage('tuan_bds99', 'cầu hôm nay nét căng ae ơi, vào kiếm lộc thôi');
+appendChatMessage('hung_camap', 'hũ đang hơn 58 củ rồi kìa, lót nhẹ sáp 111 với 666 săn hũ đi ae');
