@@ -1,8 +1,41 @@
+// ==================== TỰ ĐỘNG CĂN CHỈNH MÀN HÌNH NGANG VỪA KHÍT 100% IPHONE ====================
+let currentScale = 1;
+let isRotatedPortrait = false;
+
+function fitStageToScreen() {
+  const shell = document.getElementById('app-shell');
+  if (!shell) return;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const designW = 940;
+  const designH = 430;
+
+  if (vh > vw) {
+    // Khi người chơi cầm dọc điện thoại -> Tự động xoay ngang 90 độ và trừ vùng an toàn tai thỏ/Home bar
+    isRotatedPortrait = true;
+    const safeLength = vh - 34;
+    const safeThickness = vw - 12;
+    currentScale = Math.min(safeLength / designW, safeThickness / designH);
+    shell.style.transform = `translate(-50%, -50%) rotate(90deg) scale(${currentScale})`;
+  } else {
+    // Khi người chơi xoay ngang điện thoại -> Trừ vùng an toàn tai thỏ 2 bên và thanh Home dưới đáy
+    isRotatedPortrait = false;
+    const safeLength = vw - 40;
+    const safeThickness = vh - 16;
+    currentScale = Math.min(safeLength / designW, safeThickness / designH);
+    shell.style.transform = `translate(-50%, -50%) rotate(0deg) scale(${currentScale})`;
+  }
+}
+
+window.addEventListener('resize', fitStageToScreen);
+window.addEventListener('orientationchange', () => setTimeout(fitStageToScreen, 120));
+fitStageToScreen();
+
+// ==================== CƠ SỞ DỮ LIỆU TÀI KHOẢN & TRẠNG THÁI ====================
 const ACC_DB_KEY = 'sunwin_accounts_db_v5';
 const SESSION_USER_KEY = 'sunwin_current_user_v5';
 const GLOBAL_STATE_KEY = 'sunwin_global_state_v5';
 
-// TÀI KHOẢN KHỞI TẠO (CHỈ TÀI KHOẢN 'admin' MỚI THẤY NÚT QUẢN TRỊ)
 const INITIAL_ACCOUNTS = [
   {
     username: 'admin',
@@ -61,8 +94,8 @@ const DEFAULT_GLOBAL = {
   nanBat: true,
   chip: 100000,
   jackpot: 58420000,
-  txSession: 908214,
-  txHistory: ['T', 'X', 'T', 'T', 'X', 'H', 'T', 'T', 'X', 'T', 'X', 'T', 'T', 'X'],
+  txSession: 908225,
+  txHistory: ['T', 'X', 'T', 'T', 'X', 'H', 'T', 'T', 'X', 'T', 'X', 'T', 'T', 'X', 'T', 'X'],
   txDetailLog: [],
   xdSession: 55201,
   xdHistory: ['C', 'L', 'C', 'C', 'L', 'C', 'L', 'C'],
@@ -124,7 +157,7 @@ function showToast(msg) {
   window._toastTimer = setTimeout(() => box.classList.add('hidden'), 2500);
 }
 
-// ==================== ĐĂNG NHẬP / ĐĂNG KÝ / QUÊN MK & PHÂN QUYỀN ADMIN ẨN ====================
+// ==================== ĐĂNG NHẬP / ĐĂNG KÝ / QUÊN MK & PHÂN QUYỀN ADMIN ====================
 document.querySelectorAll('.auth-tab').forEach((tab) => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.auth-tab').forEach((t) => t.classList.remove('active'));
@@ -145,7 +178,6 @@ function loginSuccess(acc) {
   localStorage.setItem(SESSION_USER_KEY, acc.username);
   document.getElementById('auth-screen').classList.add('hidden');
 
-  // CHỈ HIỆN NÚT ADMIN KHI ĐĂNG NHẬP ĐÚNG TÀI KHOẢN 'admin'
   const adminBtn = document.getElementById('btn-open-admin');
   if (isCurrentUserAdmin()) {
     adminBtn.classList.remove('hidden');
@@ -155,6 +187,7 @@ function loginSuccess(acc) {
   }
 
   updateHeaderUI();
+  fitStageToScreen();
   showToast(`☀️ Chào mừng ${acc.nickname} vào sảnh Sunwin!`);
 }
 
@@ -296,21 +329,21 @@ function triggerRealisticPlayerChat(phase, extra = '') {
     pool = [
       'tay này đánh gì anh em ơi',
       'vừa nạp 20 củ vào gỡ gạc đây',
-      'hũ lên to vãi, lót nhẹ 200k sáp 1 với sáp 6 biết đâu bất ngờ',
+      'hũ lên to vãi, lót nhẹ 200k sáp 1 với sáp 6',
       'cầu đang đẹp đừng ai bẻ nhé',
       'theo tài 5m kiếm cốc cafe sáng',
       'xỉu đi ae ơi cầu đang nghiêng xỉu',
       'mới rút 50m xong giờ vào văn nghệ 2m tài'
     ];
-    if (last4 === 'TTTT') pool.push('bệt tài 4 tay rồi kìa, còn chạy tiếp không ae?', 'cầu bệt tài cứ thế mà nuôi thôi');
-    if (last4 === 'XXXX') pool.push('xỉu bệt dài thế nhỉ, tay này bẻ tài được chưa ae?');
+    if (last4 === 'TTTT') pool.push('bệt tài 4 tay rồi kìa, theo tiếp thôi');
+    if (last4 === 'XXXX') pool.push('xỉu bệt dài thế nhỉ, bẻ tài được chưa ae?');
   } else if (phase === 'BET_LATE') {
     pool = [
       'vừa nhồi thêm 15m tài giây cuối',
       'tất tay xỉu 30 củ rồi khấn hộ phát ae',
-      'tiền bên tài nhảy kinh thế, cá mập nào vừa vào lệnh à',
+      'tiền bên tài nhảy kinh thế, cá mập vào lệnh à',
       'lót 500k sáp bất kỳ rồi, ra tam hoa là ấm',
-      'khóa sổ lẹ mở bát đi hồi hộp quá'
+      'khóa sổ mở bát đi hồi hộp quá'
     ];
   } else if (phase === 'SQUEEZE') {
     pool = [
@@ -335,7 +368,6 @@ function triggerRealisticPlayerChat(phase, extra = '') {
   appendChatMessage(p, msg);
 }
 
-// KHI NGƯỜI CHƠI CHAT -> NGƯỜI CHƠI TRONG BÀN TRẢ LỜI TỰ NHIÊN
 document.getElementById('chat-form').addEventListener('submit', (e) => {
   e.preventDefault();
   if (!currentUser) return;
@@ -349,15 +381,13 @@ document.getElementById('chat-form').addEventListener('submit', (e) => {
   const lower = txt.toLowerCase();
   setTimeout(() => {
     const bot = REAL_PLAYERS[Math.floor(Math.random() * REAL_PLAYERS.length)];
-    let reply = `ok bạn ${currentUser.nickname} nhé, tay này mình theo bạn 5m!`;
+    let reply = `ok bạn ${currentUser.nickname} nhé, theo bạn 5m!`;
     if (lower.includes('tài') || lower.includes('tai')) {
-      reply = `${currentUser.nickname} hô tài kìa ae, vừa nhồi thêm 10m tài theo bạn!`;
+      reply = `${currentUser.nickname} hô tài kìa ae, nhồi thêm 10m tài theo bạn!`;
     } else if (lower.includes('xỉu') || lower.includes('xiu')) {
       reply = `trùng máu xỉu với ${currentUser.nickname} rồi, bú chặt tay này!`;
     } else if (lower.includes('hũ') || lower.includes('sáp') || lower.includes('hu')) {
       reply = `hũ đang căng đét ${currentUser.nickname} ơi, lót sáp 111 với 666 đi!`;
-    } else if (lower.includes('xin') || lower.includes('lộc')) {
-      reply = `cứ theo cầu mình hô là có lộc ngay ${currentUser.nickname} ơi!`;
     }
     appendChatMessage(bot, reply);
   }, 1100);
@@ -417,8 +447,8 @@ function computeFinalDiceAtLock() {
     return [6, 6, 6];
   }
   if (mode === 'TROLL_OPPOSITE') {
-    if (txMyBets.TAI >= txMyBets.XIU) return [4, 3, 3]; // 10 nút Xỉu
-    return [4, 4, 3]; // 11 nút Tài
+    if (txMyBets.TAI >= txMyBets.XIU) return [4, 3, 3];
+    return [4, 4, 3];
   }
   if (mode === 'TAI') {
     while (true) {
@@ -433,7 +463,6 @@ function computeFinalDiceAtLock() {
     }
   }
 
-  // TỰ NHIÊN: Có xác suất nổ hũ 111 / 666 hoặc Sáp tự nhiên
   const rand = Math.random();
   if (rand < 0.045) return Math.random() < 0.5 ? [1, 1, 1] : [6, 6, 6];
   if (rand < 0.085) {
@@ -446,7 +475,7 @@ function computeFinalDiceAtLock() {
 function renderCauStrip() {
   const wrap = document.getElementById('tx-cau-dots');
   wrap.innerHTML = '';
-  state.txHistory.slice(-18).forEach((r) => {
+  state.txHistory.slice(-20).forEach((r) => {
     const d = document.createElement('div');
     d.className = `c-dot ${r}`;
     d.textContent = r;
@@ -467,7 +496,11 @@ function startTxRound() {
   document.getElementById('tx-md5-str').textContent = generateMD5String(state.txSession, 3, 4, 5);
   document.getElementById('tx-result-pop').classList.add('hidden');
   document.getElementById('tx-bowl').classList.add('hidden');
+  // Ẩn xúc xắc khi đang đếm ngược để không bị đè số lên xúc xắc
+  document.getElementById('tx-dice-group').classList.add('hidden');
   document.getElementById('tx-timer').classList.remove('hidden');
+  document.getElementById('tx-timer').textContent = txTimeLeft;
+
   document.getElementById('box-tai').classList.remove('win-glow');
   document.getElementById('box-xiu').classList.remove('win-glow');
   document.querySelectorAll('.sun-sap-cell').forEach((b) => b.classList.remove('win-glow'));
@@ -512,7 +545,6 @@ function revealTxResult() {
   const isHuTai666 = d1 === 6 && d2 === 6 && d3 === 6;
   const winDoor = sum >= 11 ? 'TAI' : 'XIU';
 
-  // TIỀN BÊN THUA TỰ ĐỘNG CHẢY VÀO HŨ
   const losingPlayerBet = winDoor === 'TAI' ? txMyBets.XIU : txMyBets.TAI;
   const losingBotFlow = Math.floor((winDoor === 'TAI' ? txPoolXiu : txPoolTai) * 0.22);
   const addedToHu = losingPlayerBet + losingBotFlow;
@@ -539,7 +571,6 @@ function revealTxResult() {
   if (winDoor === 'XIU' && txMyBets.XIU > 0) totalWin += Math.floor(txMyBets.XIU * mainMult);
   if (isSap && txMyBets.SAP_ANY > 0) totalWin += Math.floor(txMyBets.SAP_ANY * 30);
 
-  // XỬ LÝ NỔ HŨ (1-1-1 HOẶC 6-6-6 -> HŨ VỀ 0)
   if (isHuXiu111 || isHuTai666) {
     const potBeforeReset = state.jackpot;
     let playerWonPot = 0;
@@ -602,7 +633,7 @@ function revealTxResult() {
   setTimeout(() => startTxRound(), 5200);
 }
 
-// KÉO BÁT NẶN HỖ TRỢ CẢ MÀN HÌNH XOAY NGANG TỰ ĐỘNG
+// KÉO BÁT NẶN HỖ TRỢ TỌA ĐỘ AUTO-SCALE
 (function initBowlDrag() {
   const bowl = document.getElementById('tx-bowl');
   let dragging = false;
@@ -618,14 +649,13 @@ function revealTxResult() {
 
   function onMove(x, y) {
     if (!dragging) return;
-    const rawDx = x - startX;
-    const rawDy = y - startY;
-    const isPortraitRotated = window.innerHeight > window.innerWidth;
-    const moveX = isPortraitRotated ? rawDy : rawDx;
-    const moveY = isPortraitRotated ? -rawDx : rawDy;
+    const rawDx = (x - startX) / (currentScale || 1);
+    const rawDy = (y - startY) / (currentScale || 1);
+    const moveX = isRotatedPortrait ? rawDy : rawDx;
+    const moveY = isRotatedPortrait ? -rawDx : rawDy;
 
     bowl.style.transform = `translate(${moveX}px, ${moveY}px)`;
-    if (Math.hypot(moveX, moveY) > 62) {
+    if (Math.hypot(moveX, moveY) > 58) {
       dragging = false;
       bowl.style.transform = 'translate(0,0)';
       revealTxResult();
@@ -806,13 +836,12 @@ function settleXocDia() {
   }, 4500);
 }
 
-// ==================== VÒNG LẶP THỜI GIAN THỰC (NGƯỜI CHƠI VÀO TIỀN NHƯ THẬT) ====================
+// ==================== VÒNG LẶP THỜI GIAN THỰC ====================
 setInterval(() => {
   if (txPhase === 'BETTING') {
     txTimeLeft--;
     document.getElementById('tx-timer').textContent = txTimeLeft;
 
-    // Nhịp vào tiền giống người thật: 5 giây cuối cá mập nhồi lệnh cực gắt
     const multiplier = txTimeLeft <= 5 ? 3.5 : 1;
     const chunks = [50000, 100000, 250000, 500000, 1200000, 3500000];
     const addTai = Math.floor((chunks[Math.floor(Math.random() * chunks.length)] + Math.random() * 1500000) * multiplier);
@@ -832,6 +861,7 @@ setInterval(() => {
       currentDice = computeFinalDiceAtLock();
       document.getElementById('tx-timer').classList.add('hidden');
       const grp = document.getElementById('tx-dice-group');
+      grp.classList.remove('hidden');
       grp.classList.add('shaking');
       playTone(400, 0.2, 'sawtooth');
 
@@ -1199,7 +1229,7 @@ document.getElementById('btn-save-profile').addEventListener('click', () => {
   showToast('✅ Đã lưu hồ sơ!');
 });
 
-// ==================== QUẢN TRỊ ADMIN (CHỈ TÀI KHOẢN 'admin' MỚI TRUY CẬP ĐƯỢC) ====================
+// ==================== QUẢN TRỊ ADMIN ====================
 function renderAdminAccountsList() {
   if (!isCurrentUserAdmin()) return;
   accountsDB = loadAccountsDB();
@@ -1352,4 +1382,4 @@ renderXdCau();
 updateXdUI();
 updateHeaderUI();
 appendChatMessage('tuan_bds99', 'cầu hôm nay nét căng ae ơi, vào kiếm lộc thôi');
-appendChatMessage('hung_camap', 'hũ đang hơn 58 củ rồi kìa, lót nhẹ sáp 111 với 666 săn hũ đi ae');
+appendChatMessage('hung_camap', 'hũ đang to kỷ lục kìa, lót nhẹ sáp 111 với 666 săn hũ đi ae');
