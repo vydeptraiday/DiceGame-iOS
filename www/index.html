@@ -5,564 +5,537 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Hoàng Gia VIP" />
-  <title>Hoàng Gia VIP - Cổng Game Đại Gia</title>
+  <meta name="apple-mobile-web-app-title" content="Sunwin VIP" />
+  <title>SUNWIN - Cổng Game Bài Đổi Thưởng Số 1</title>
   <link rel="stylesheet" href="assets/app.css" />
 </head>
 <body>
-  <div id="app-shell">
+  <div id="landscape-wrapper">
+    <div id="app-shell">
 
-    <!-- ==================== MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ / QUÊN MK ==================== -->
-    <div id="auth-screen" class="auth-overlay">
-      <div class="auth-card">
-        <div class="auth-logo">🐉 HOÀNG GIA VIP</div>
-        <div class="auth-sub">CỔNG GAME TÀI XỈU NỔ HŨ ĐẲNG CẤP</div>
+      <!-- ==================== MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ / QUÊN MK ==================== -->
+      <div id="auth-screen" class="auth-overlay">
+        <div class="auth-card">
+          <div class="sun-logo-badge">☀️ SUNWIN</div>
+          <div class="auth-sub">CỔNG GAME GIẢI TRÍ THƯỢNG LƯU</div>
 
-        <div class="auth-tabs">
-          <button class="auth-tab active" data-authtab="login">Đăng Nhập</button>
-          <button class="auth-tab" data-authtab="register">Đăng Ký</button>
-          <button class="auth-tab" data-authtab="forgot">Quên MK</button>
-        </div>
-
-        <!-- FORM ĐĂNG NHẬP -->
-        <form id="form-login" class="auth-form">
-          <input type="text" id="login-user" placeholder="Tên tài khoản..." required autocomplete="off" />
-          <input type="password" id="login-pass" placeholder="Mật khẩu..." required />
-          <button type="submit" class="gold-btn full">ĐĂNG NHẬP NGAY</button>
-        </form>
-
-        <!-- FORM ĐĂNG KÝ -->
-        <form id="form-register" class="auth-form hidden">
-          <input type="text" id="reg-user" placeholder="Tên đăng nhập (viết liền)..." required autocomplete="off" />
-          <input type="text" id="reg-nick" placeholder="Biệt danh hiển thị trong bàn..." required autocomplete="off" />
-          <input type="password" id="reg-pass" placeholder="Mật khẩu..." required />
-          <input type="text" id="reg-pin" placeholder="Mã khôi phục 4 số (dùng khi quên MK)..." maxlength="6" required />
-          <button type="submit" class="gold-btn full">TẠO TÀI KHOẢN (+25,000,000 XU)</button>
-        </form>
-
-        <!-- FORM QUÊN & CẤP LẠI MẬT KHẨU -->
-        <form id="form-forgot" class="auth-form hidden">
-          <input type="text" id="fg-user" placeholder="Nhập tên tài khoản cần cấp lại MK..." required autocomplete="off" />
-          <input type="text" id="fg-pin" placeholder="Nhập Mã khôi phục (hoặc mã cứu hộ 8888)..." required />
-          <input type="password" id="fg-newpass" placeholder="Nhập mật khẩu mới..." required />
-          <button type="submit" class="gold-btn full">CẤP LẠI MẬT KHẨU MỚI</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- ==================== HIỆU ỨNG NỔ HŨ TOÀN MÀN HÌNH ==================== -->
-    <div id="jackpot-explosion" class="jp-explosion-overlay hidden">
-      <div class="jp-explosion-card">
-        <div class="jp-dragon-icon">🐉💥👑</div>
-        <div class="jp-title-flare" id="jp-exp-title">NỔ HŨ ĐẠI THẮNG!</div>
-        <div class="jp-sub-flare" id="jp-exp-sub">XÚC XẮC TAM HOA 6-6-6</div>
-        <div class="jp-amount-flare" id="jp-exp-amount">+0 XU</div>
-        <div class="jp-reset-note">Quỹ Hũ đã được giải ngân hết và quay về 0 Xu!</div>
-        <button class="gold-btn full" id="btn-close-jp-exp">NHẬN LỘC NỔ HŨ</button>
-      </div>
-    </div>
-
-    <!-- TOP BAR -->
-    <header class="top-bar">
-      <div class="user-chip" id="btn-open-profile">
-        <div class="avatar-ring" id="ui-avatar">🐉</div>
-        <div class="user-meta">
-          <div class="user-line">
-            <span id="ui-username">ĐạiGia88</span>
-            <span class="vip-tag" id="ui-vip">VIP 1</span>
+          <div class="auth-tabs">
+            <button class="auth-tab active" data-authtab="login">ĐĂNG NHẬP</button>
+            <button class="auth-tab" data-authtab="register">ĐĂNG KÝ</button>
+            <button class="auth-tab" data-authtab="forgot">QUÊN MK</button>
           </div>
-          <div class="balance-pill">
-            <span class="coin-ic">🪙</span>
-            <span id="ui-balance">25,000,000</span>
-            <button class="plus-btn" id="btn-open-gift" title="Nhận Lộc">+</button>
-          </div>
-        </div>
-      </div>
 
-      <div class="top-actions">
-        <button class="icon-btn" id="btn-open-bank" title="Két Sắt">🏦</button>
-        <button class="icon-btn" id="btn-sound" title="Âm thanh">🔊</button>
-        <button class="icon-btn admin-trigger" id="btn-open-admin" title="Quản Trò">⚙️</button>
-        <button class="icon-btn logout-btn" id="btn-logout" title="Đăng xuất">🚪</button>
-      </div>
-    </header>
+          <!-- ĐĂNG NHẬP -->
+          <form id="form-login" class="auth-form">
+            <input type="text" id="login-user" placeholder="Tên đăng nhập..." required autocomplete="off" />
+            <input type="password" id="login-pass" placeholder="Mật khẩu..." required />
+            <button type="submit" class="sun-gold-btn">VÀO GAME NGAY</button>
+          </form>
 
-    <!-- LIVE MARQUEE -->
-    <div class="marquee-bar">
-      <span class="marquee-ic">📢</span>
-      <div class="marquee-viewport">
-        <div class="marquee-track" id="ui-marquee">
-          🔥 [VIP 10] VuaBẻCầu88 vừa NỔ HŨ 6-6-6 TÀI nhận 148,500,000 Xu! • 🐉 Tiền bên thua mỗi ván tự động cộng dồn vào Hũ Tài Xỉu!
-        </div>
-      </div>
-    </div>
-
-    <!-- NAVIGATION TABS -->
-    <nav class="game-nav">
-      <button class="nav-tab active" data-tab="taixiu">🎲 Tài Xỉu</button>
-      <button class="nav-tab" data-tab="xocdia">⚪ Xóc Đĩa</button>
-      <button class="nav-tab" data-tab="nohu">🎰 Quay Hũ</button>
-      <button class="nav-tab" data-tab="gacha">💎 Gacha</button>
-      <button class="nav-tab" data-tab="minigame">🦀 Bầu Cua</button>
-      <button class="nav-tab" data-tab="rank">🏆 BXH</button>
-    </nav>
-
-    <!-- MAIN STAGE -->
-    <main class="stage-container">
-
-      <!-- ==================== 1. TÀI XỈU NỔ HŨ & SÁP ==================== -->
-      <section class="game-view active" id="view-taixiu">
-        <div class="tx-board">
-          <!-- THANH HŨ TÀI XỈU TRUNG TÂM -->
-          <div class="tx-jackpot-header">
-            <div class="hu-badge-left">🐉 HŨ XỈU (1-1-1)</div>
-            <div class="hu-center-pot">
-              <div class="hu-title">🔥 QUỸ HŨ TÀI XỈU 🔥</div>
-              <div class="hu-number" id="ui-tx-jackpot">50,000,000</div>
-              <div class="hu-flow-note" id="ui-hu-flow">Tiền bên thua tự động chảy vào Hũ</div>
+          <!-- ĐĂNG KÝ -->
+          <form id="form-register" class="auth-form hidden">
+            <div class="auth-grid-2">
+              <input type="text" id="reg-user" placeholder="Tên tài khoản (viết liền)..." required autocomplete="off" />
+              <input type="text" id="reg-nick" placeholder="Tên hiển thị trong bàn..." required autocomplete="off" />
+              <input type="password" id="reg-pass" placeholder="Mật khẩu..." required />
+              <input type="text" id="reg-pin" placeholder="Mã bảo mật 4 số (khôi phục MK)..." maxlength="6" required />
             </div>
-            <div class="hu-badge-right">HŨ TÀI (6-6-6) 🐉</div>
-          </div>
+            <button type="submit" class="sun-gold-btn">ĐĂNG KÝ (+25,000,000 VÀNG)</button>
+          </form>
 
-          <div class="tx-top-meta">
-            <span class="session-badge" id="tx-session">#88901</span>
-            <span class="mode-badge" id="tx-mode-badge">MD5 XANH CHÍN</span>
-            <button class="mini-pill-btn" id="btn-toggle-nan">🖐 Nặn: BẬT</button>
-          </div>
-
-          <div class="tx-arena">
-            <!-- CỬA TÀI -->
-            <div class="tx-side tai-side" id="box-tai">
-              <div class="tx-title-big">TÀI</div>
-              <div class="tx-range">11-17 (Sáp x5)</div>
-              <div class="tx-crowd">👤 <span id="tx-users-tai">142</span></div>
-              <div class="tx-total-pool" id="tx-pool-tai">0</div>
-              <div class="tx-my-bet">Cược: <b id="tx-my-tai">0</b></div>
-              <button class="bet-trigger-btn tai-btn" data-door="TAI">ĐẶT TÀI</button>
+          <!-- QUÊN MẬT KHẨU -->
+          <form id="form-forgot" class="auth-form hidden">
+            <div class="auth-grid-2">
+              <input type="text" id="fg-user" placeholder="Tên tài khoản đã đăng ký..." required autocomplete="off" />
+              <input type="text" id="fg-pin" placeholder="Mã bảo mật 4 số của bạn..." required />
             </div>
-
-            <!-- ĐĨA XÚC XẮC TRUNG TÂM -->
-            <div class="tx-center-plate">
-              <div class="plate-outer" id="tx-plate">
-                <div class="timer-ring" id="tx-timer">20</div>
-                <div class="dice-group" id="tx-dice-group">
-                  <div class="die3d" id="tx-d1" data-val="6"></div>
-                  <div class="die3d" id="tx-d2" data-val="6"></div>
-                  <div class="die3d" id="tx-d3" data-val="6"></div>
-                </div>
-                <div class="result-pop hidden" id="tx-result-pop">18 - TÀI</div>
-                <!-- BÁT NẶN KÉO THẢ -->
-                <div class="dragon-bowl hidden" id="tx-bowl">
-                  <div class="bowl-dragon-crest">🐉</div>
-                  <div class="bowl-hint">Kéo bát để nặn</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- CỬA XỈU -->
-            <div class="tx-side xiu-side" id="box-xiu">
-              <div class="tx-title-big">XỈU</div>
-              <div class="tx-range">4-10 (Sáp x5)</div>
-              <div class="tx-crowd">👤 <span id="tx-users-xiu">138</span></div>
-              <div class="tx-total-pool" id="tx-pool-xiu">0</div>
-              <div class="tx-my-bet">Cược: <b id="tx-my-xiu">0</b></div>
-              <button class="bet-trigger-btn xiu-btn" data-door="XIU">ĐẶT XỈU</button>
-            </div>
-          </div>
-
-          <!-- CỬA SÁP & SĂN NỔ HŨ X CAO -->
-          <div class="sap-bet-row">
-            <div class="sap-box" data-sap="HU_XIU">
-              <div class="sap-name">⚀⚀⚀ SÁP 1 (NỔ HŨ XỈU)</div>
-              <div class="sap-odds">Ăn x120 + Trọn Hũ</div>
-              <div class="sap-my">Đã cược: <b id="tx-my-huxiu">0</b></div>
-            </div>
-            <div class="sap-box highlight" data-sap="SAP_ANY">
-              <div class="sap-name">🎲 BỘ BA SÁP BẤT KỲ</div>
-              <div class="sap-odds">111 → 666 (Ăn x30)</div>
-              <div class="sap-my">Đã cược: <b id="tx-my-sap">0</b></div>
-            </div>
-            <div class="sap-box" data-sap="HU_TAI">
-              <div class="sap-name">⚅⚅⚅ SÁP 6 (NỔ HŨ TÀI)</div>
-              <div class="sap-odds">Ăn x120 + Trọn Hũ</div>
-              <div class="sap-my">Đã cược: <b id="tx-my-hutai">0</b></div>
-            </div>
-          </div>
-
-          <!-- CẦU TÀI XỈU -->
-          <div class="cau-strip-wrap">
-            <div class="cau-dots" id="tx-cau-dots"></div>
-            <button class="soi-cau-btn" id="btn-open-soicau">📊 Soi Cầu</button>
-          </div>
-
-          <!-- PHỈNH CƯỢC NHANH -->
-          <div class="chip-bar">
-            <div class="chip-list" id="tx-chips">
-              <button class="chip-item" data-val="10000">10K</button>
-              <button class="chip-item active" data-val="100000">100K</button>
-              <button class="chip-item" data-val="500000">500K</button>
-              <button class="chip-item" data-val="1000000">1M</button>
-              <button class="chip-item" data-val="5000000">5M</button>
-              <button class="chip-item" data-val="10000000">10M</button>
-              <button class="chip-item allin" data-val="ALL">TẤT TAY</button>
-            </div>
-          </div>
-
-          <div class="md5-bar">
-            <span class="md5-tag">MD5:</span>
-            <code id="tx-md5-str">e4d909c290d0fb1ca068ffaddf22cbd0</code>
-            <button class="copy-tiny" id="btn-copy-md5">Copy</button>
-          </div>
-        </div>
-
-        <!-- LIVE CHAT CAO THỦ -->
-        <div class="live-chat-panel">
-          <div class="chat-head">
-            <span>💬 Bàn luận Cao Thủ (<b id="chat-online-cnt">342</b> online)</span>
-            <span class="live-dot">● TRỰC TIẾP</span>
-          </div>
-          <div class="chat-messages" id="chat-box"></div>
-          <form class="chat-input-row" id="chat-form">
-            <input type="text" id="chat-input" placeholder="Chém gió cùng các cao thủ..." maxlength="90" autocomplete="off" />
-            <button type="submit" class="send-chat-btn">Gửi</button>
+            <input type="password" id="fg-newpass" placeholder="Nhập mật khẩu mới..." required />
+            <button type="submit" class="sun-gold-btn">ĐỔI MẬT KHẨU MỚI</button>
           </form>
         </div>
-      </section>
+      </div>
 
-      <!-- ==================== 2. XÓC ĐĨA TỨ LINH ==================== -->
-      <section class="game-view" id="view-xocdia">
-        <div class="xd-board">
-          <div class="xd-header">
-            <span class="session-badge" id="xd-session">#55201</span>
-            <div class="xd-timer-box">⏳ <span id="xd-timer">18</span>s</div>
-            <div class="xd-cau-strip" id="xd-cau-strip"></div>
+      <!-- ==================== HIỆU ỨNG NỔ HŨ RỒNG VÀNG TOÀN MÀN HÌNH ==================== -->
+      <div id="jackpot-explosion" class="jp-explosion-overlay hidden">
+        <div class="jp-explosion-card">
+          <div class="jp-dragon-icon">🐉💥👑</div>
+          <div class="jp-title-flare" id="jp-exp-title">NỔ HŨ RỒNG VÀNG!</div>
+          <div class="jp-sub-flare" id="jp-exp-sub">XÚC XẮC TAM HOA 6-6-6</div>
+          <div class="jp-amount-flare" id="jp-exp-amount">+0</div>
+          <div class="jp-reset-note">Toàn bộ Quỹ Hũ đã được trao thưởng và quay về 0!</div>
+          <button class="sun-gold-btn" id="btn-close-jp-exp">NHẬN TIỀN NỔ HŨ</button>
+        </div>
+      </div>
+
+      <!-- ==================== THANH TOP BAR CHUẨN SUNWIN NGANG ==================== -->
+      <header class="sun-topbar">
+        <div class="sun-user-box" id="btn-open-profile">
+          <div class="sun-avatar" id="ui-avatar">🐉</div>
+          <div class="sun-user-info">
+            <div class="sun-nick-row">
+              <span id="ui-username">DaiGiaSun</span>
+              <span class="sun-vip-badge" id="ui-vip">VIP 1</span>
+            </div>
+            <div class="sun-uid">ID: <span id="ui-uid">882910</span></div>
           </div>
+        </div>
 
-          <div class="xd-plate-wrap">
-            <div class="xd-plate" id="xd-plate">
-              <div class="xd-coins" id="xd-coins">
-                <span class="xd-coin red"></span>
-                <span class="xd-coin white"></span>
-                <span class="xd-coin red"></span>
-                <span class="xd-coin white"></span>
+        <div class="sun-currency-bar">
+          <div class="sun-money-pill">
+            <span class="sun-coin-icon">$</span>
+            <span id="ui-balance">25,000,000</span>
+            <button class="sun-add-btn" id="btn-open-gift" title="Nạp Lộc">+</button>
+          </div>
+          <div class="sun-vault-pill" id="btn-open-bank">
+            <span>🏦 Két:</span>
+            <b id="ui-top-vault">0</b>
+          </div>
+        </div>
+
+        <nav class="sun-Quick-tabs">
+          <button class="sq-tab active" data-tab="taixiu">🎲 Tài Xỉu MD5</button>
+          <button class="sq-tab" data-tab="xocdia">⚪ Xóc Đĩa</button>
+          <button class="sq-tab" data-tab="nohu">🎰 Nổ Hũ</button>
+          <button class="sq-tab" data-tab="gacha">💎 Kho Báu</button>
+          <button class="sq-tab" data-tab="minigame">🦀 Bầu Cua</button>
+          <button class="sq-tab" data-tab="rank">🏆 BXH</button>
+        </nav>
+
+        <div class="sun-sys-btns">
+          <!-- NÚT ADMIN ẨN HOÀN TOÀN, CHỈ HIỆN KHI ĐĂNG NHẬP TÀI KHOẢN ADMIN -->
+          <button class="sun-icon-btn admin-only-btn hidden" id="btn-open-admin" title="Quản Trị">⚙️</button>
+          <button class="sun-icon-btn" id="btn-sound" title="Âm thanh">🔊</button>
+          <button class="sun-icon-btn logout-ic" id="btn-logout" title="Đăng xuất">🚪</button>
+        </div>
+      </header>
+
+      <!-- DÒNG CHỮ CHẠY VINH DANH -->
+      <div class="sun-marquee">
+        <span class="mq-bell">🔔</span>
+        <div class="mq-clip">
+          <div class="mq-track" id="ui-marquee">
+            Chúc mừng người chơi [tuan_bds99] vừa thắng 48,500,000 tại Tài Xỉu! • Chúc mừng [hung_camap] NỔ HŨ SÁP 666 nhận 165,200,000! • Tiền bên thua mỗi phiên tự động cộng dồn vào Quỹ Hũ!
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== KHÔNG GIAN BÀN CHƠI NGANG (LANDSCAPE STAGE) ==================== -->
+      <main class="sun-landscape-stage">
+
+        <!-- 1. BÀN TÀI XỈU SUNWIN OVAL + CHAT BÊN PHẢI -->
+        <section class="game-view active" id="view-taixiu">
+          <div class="sun-tx-layout">
+
+            <!-- BÀN TÀI XỈU OVAL BÊN TRÁI -->
+            <div class="sun-tx-oval-table">
+              <!-- ĐỈNH HŨ RỒNG VÀNG -->
+              <div class="sun-hu-crown">
+                <span class="hu-side-tag">⚀⚀⚀ NỔ HŨ XỈU</span>
+                <div class="hu-pot-center">
+                  <div class="hu-pot-label">🐉 QUỸ HŨ TÀI XỈU 🐉</div>
+                  <div class="hu-pot-val" id="ui-tx-jackpot">58,420,000</div>
+                </div>
+                <span class="hu-side-tag">NỔ HŨ TÀI ⚅⚅⚅</span>
               </div>
-              <div class="xd-bowl" id="xd-bowl">🐉 BÁT LONG</div>
+
+              <!-- THANH PHIÊN & CHẾ ĐỘ NẶN -->
+              <div class="sun-tx-subbar">
+                <span class="sun-session-id" id="tx-session">#908214</span>
+                <span class="sun-flow-status" id="ui-hu-flow">Đang nhận cược phiên mới...</span>
+                <button class="sun-nan-toggle" id="btn-toggle-nan">🖐 Nặn bát: BẬT</button>
+              </div>
+
+              <!-- KHU VỰC 2 CÁNH TÀI - ĐĨA - XỈU -->
+              <div class="sun-tx-wings">
+                <!-- CÁNH TÀI -->
+                <div class="sun-wing tai-wing" id="box-tai">
+                  <div class="wing-header-txt">TÀI</div>
+                  <div class="wing-users">👤 <span id="tx-users-tai">284</span></div>
+                  <div class="wing-total-pot" id="tx-pool-tai">0</div>
+                  <div class="wing-my-bet">Cược: <b id="tx-my-tai">0</b></div>
+                  <button class="wing-bet-btn tai" data-door="TAI">ĐẶT CƯỢC</button>
+                </div>
+
+                <!-- ĐĨA TRUNG TÂM -->
+                <div class="sun-center-bowl-zone">
+                  <div class="sun-plate-ring" id="tx-plate">
+                    <div class="sun-countdown" id="tx-timer">20</div>
+                    <div class="sun-dice-wrap" id="tx-dice-group">
+                      <div class="die3d" id="tx-d1"></div>
+                      <div class="die3d" id="tx-d2"></div>
+                      <div class="die3d" id="tx-d3"></div>
+                    </div>
+                    <div class="sun-result-ribbon hidden" id="tx-result-pop">18 - TÀI</div>
+                    <!-- BÁT NẶN RỒNG VÀNG -->
+                    <div class="sun-dragon-cover hidden" id="tx-bowl">
+                      <div class="cover-emblem">🐉</div>
+                      <div class="cover-txt">Kéo để nặn</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CÁNH XỈU -->
+                <div class="sun-wing xiu-wing" id="box-xiu">
+                  <div class="wing-header-txt">XỈU</div>
+                  <div class="wing-users">👤 <span id="tx-users-xiu">269</span></div>
+                  <div class="wing-total-pot" id="tx-pool-xiu">0</div>
+                  <div class="wing-my-bet">Cược: <b id="tx-my-xiu">0</b></div>
+                  <button class="wing-bet-btn xiu" data-door="XIU">ĐẶT CƯỢC</button>
+                </div>
+              </div>
+
+              <!-- HÀNG ĐÁNH SÁP & SĂN NỔ HŨ X CAO -->
+              <div class="sun-sap-strip">
+                <div class="sun-sap-cell" data-sap="HU_XIU">
+                  <span class="s-title">⚀⚀⚀ SÁP 1 (HŨ XỈU)</span>
+                  <span class="s-mult">x120 + Hũ</span>
+                  <b id="tx-my-huxiu">0</b>
+                </div>
+                <div class="sun-sap-cell center-sap" data-sap="SAP_ANY">
+                  <span class="s-title">🎲 SÁP BẤT KỲ (111-666)</span>
+                  <span class="s-mult">Ăn x30</span>
+                  <b id="tx-my-sap">0</b>
+                </div>
+                <div class="sun-sap-cell" data-sap="HU_TAI">
+                  <span class="s-title">⚅⚅⚅ SÁP 6 (HŨ TÀI)</span>
+                  <span class="s-mult">x120 + Hũ</span>
+                  <b id="tx-my-hutai">0</b>
+                </div>
+              </div>
+
+              <!-- DÃY CẦU ĐEN TRẮNG SUNWIN + PHỈNH TRÒN -->
+              <div class="sun-bottom-controls">
+                <div class="sun-bead-road">
+                  <div class="bead-list" id="tx-cau-dots"></div>
+                  <button class="sun-soicau-btn" id="btn-open-soicau">📊 Soi Cầu</button>
+                  <button class="sun-md5-copy" id="btn-copy-md5" title="Copy chuỗi MD5">🔒 MD5</button>
+                  <code id="tx-md5-str" class="hidden"></code>
+                </div>
+
+                <div class="sun-chips-rack" id="tx-chips">
+                  <button class="sun-chip c10k" data-val="10000">10K</button>
+                  <button class="sun-chip c50k" data-val="50000">50K</button>
+                  <button class="sun-chip c100k active" data-val="100000">100K</button>
+                  <button class="sun-chip c500k" data-val="500000">500K</button>
+                  <button class="sun-chip c1m" data-val="1000000">1M</button>
+                  <button class="sun-chip c5m" data-val="5000000">5M</button>
+                  <button class="sun-chip c10m" data-val="10000000">10M</button>
+                  <button class="sun-chip callin" data-val="ALL">TẤT TAY</button>
+                </div>
+              </div>
             </div>
-            <div class="xd-status-text" id="xd-status">ĐANG NHẬN CƯỢC...</div>
+
+            <!-- KHUNG CHAT TRỰC TUYẾN BÊN PHẢI BÀN TÀI XỈU -->
+            <div class="sun-chat-dock">
+              <div class="sun-chat-header">
+                <span>💬 Phòng Chat (<b id="chat-online-cnt">648</b>)</span>
+                <span class="online-badge">● LIVE</span>
+              </div>
+              <div class="sun-chat-feed" id="chat-box"></div>
+              <form class="sun-chat-form" id="chat-form">
+                <input type="text" id="chat-input" placeholder="Nhập nội dung chat..." maxlength="85" autocomplete="off" />
+                <button type="submit">Gửi</button>
+              </form>
+            </div>
+
           </div>
+        </section>
 
-          <div class="xd-grid-doors">
-            <div class="xd-door main-even" data-xddoor="CHAN">
-              <div class="xd-door-name">CHẴN</div>
-              <div class="xd-odds">1 ăn 1.98</div>
-              <div class="xd-pool" id="xd-pool-CHAN">0</div>
-              <div class="xd-my" id="xd-my-CHAN">0</div>
+        <!-- 2. XÓC ĐĨA TỨ LINH NGANG -->
+        <section class="game-view" id="view-xocdia">
+          <div class="xd-landscape-board">
+            <div class="xd-left-zone">
+              <div class="xd-meta-row">
+                <span class="sun-session-id" id="xd-session">#55201</span>
+                <div class="xd-timer-pill">⏳ <span id="xd-timer">18</span>s</div>
+              </div>
+              <div class="xd-plate" id="xd-plate">
+                <div class="xd-coins" id="xd-coins">
+                  <span class="xd-coin red"></span>
+                  <span class="xd-coin white"></span>
+                  <span class="xd-coin red"></span>
+                  <span class="xd-coin white"></span>
+                </div>
+                <div class="xd-bowl" id="xd-bowl">🐉 BÁT LONG</div>
+              </div>
+              <div class="xd-status-text" id="xd-status">ĐANG NHẬN CƯỢC...</div>
+              <div class="xd-cau-strip" id="xd-cau-strip"></div>
             </div>
-            <div class="xd-door main-odd" data-xddoor="LE">
-              <div class="xd-door-name">LẺ</div>
-              <div class="xd-odds">1 ăn 1.98</div>
-              <div class="xd-pool" id="xd-pool-LE">0</div>
-              <div class="xd-my" id="xd-my-LE">0</div>
+
+            <div class="xd-right-zone">
+              <div class="xd-grid-doors">
+                <div class="xd-door main-even" data-xddoor="CHAN">
+                  <div class="xd-door-name">CHẴN</div>
+                  <div class="xd-odds">x1.98</div>
+                  <div class="xd-pool" id="xd-pool-CHAN">0</div>
+                  <div class="xd-my" id="xd-my-CHAN">0</div>
+                </div>
+                <div class="xd-door main-odd" data-xddoor="LE">
+                  <div class="xd-door-name">LẺ</div>
+                  <div class="xd-odds">x1.98</div>
+                  <div class="xd-pool" id="xd-pool-LE">0</div>
+                  <div class="xd-my" id="xd-my-LE">0</div>
+                </div>
+              </div>
+              <div class="xd-sub-doors">
+                <div class="xd-door sub" data-xddoor="4DO">
+                  <div>🔴🔴🔴🔴</div><div class="xd-odds">x14</div><div class="xd-my" id="xd-my-4DO">0</div>
+                </div>
+                <div class="xd-door sub" data-xddoor="4TRANG">
+                  <div>⚪⚪⚪⚪</div><div class="xd-odds">x14</div><div class="xd-my" id="xd-my-4TRANG">0</div>
+                </div>
+                <div class="xd-door sub" data-xddoor="3DO1TRANG">
+                  <div>🔴🔴🔴⚪</div><div class="xd-odds">x3.5</div><div class="xd-my" id="xd-my-3DO1TRANG">0</div>
+                </div>
+                <div class="xd-door sub" data-xddoor="3TRANG1DO">
+                  <div>⚪⚪⚪🔴</div><div class="xd-odds">x3.5</div><div class="xd-my" id="xd-my-3TRANG1DO">0</div>
+                </div>
+              </div>
             </div>
           </div>
+        </section>
 
-          <div class="xd-sub-doors">
-            <div class="xd-door sub" data-xddoor="4DO">
-              <div class="dots-preview">🔴🔴🔴🔴</div>
-              <div class="xd-odds">x14</div>
-              <div class="xd-my" id="xd-my-4DO">0</div>
+        <!-- 3. QUAY HŨ THẦN TÀI NGANG -->
+        <section class="game-view" id="view-nohu">
+          <div class="slot-landscape-wrap">
+            <div class="slot-left-reels">
+              <div class="slot-grid" id="slot-grid">
+                <div class="slot-cell">🐉</div><div class="slot-cell">👑</div><div class="slot-cell">💰</div>
+                <div class="slot-cell">💎</div><div class="slot-cell">🐉</div><div class="slot-cell">🧧</div>
+                <div class="slot-cell">🪙</div><div class="slot-cell">💎</div><div class="slot-cell">🐉</div>
+              </div>
             </div>
-            <div class="xd-door sub" data-xddoor="4TRANG">
-              <div class="dots-preview">⚪⚪⚪⚪</div>
-              <div class="xd-odds">x14</div>
-              <div class="xd-my" id="xd-my-4TRANG">0</div>
-            </div>
-            <div class="xd-door sub" data-xddoor="3DO1TRANG">
-              <div class="dots-preview">🔴🔴🔴⚪</div>
-              <div class="xd-odds">x3.5</div>
-              <div class="xd-my" id="xd-my-3DO1TRANG">0</div>
-            </div>
-            <div class="xd-door sub" data-xddoor="3TRANG1DO">
-              <div class="dots-preview">⚪⚪⚪🔴</div>
-              <div class="xd-odds">x3.5</div>
-              <div class="xd-my" id="xd-my-3TRANG1DO">0</div>
+            <div class="slot-right-ctrl">
+              <div class="jp-crown">👑 QUỸ HŨ LONG VƯƠNG 👑</div>
+              <div class="jp-big-number" id="slot-jp-val">58,420,000</div>
+              <div class="slot-win-msg" id="slot-msg">Quay 3 🐉 thẳng hàng để NỔ HŨ!</div>
+              <div class="slot-bet-selector">
+                <button class="sbet-btn active" data-sbet="50000">50K</button>
+                <button class="sbet-btn" data-sbet="200000">200K</button>
+                <button class="sbet-btn" data-sbet="1000000">1M</button>
+                <button class="sbet-btn" data-sbet="5000000">5M</button>
+              </div>
+              <div class="slot-action-btns">
+                <button class="spin-main-btn" id="btn-slot-spin">🎰 QUAY NGAY</button>
+                <button class="spin-auto-btn" id="btn-slot-auto">🔄 Tự Quay</button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ==================== 3. QUAY HŨ THẦN TÀI ==================== -->
-      <section class="game-view" id="view-nohu">
-        <div class="slot-cabinet">
-          <div class="slot-jackpot-banner">
-            <div class="jp-crown">👑 QUỸ HŨ LONG VƯƠNG 👑</div>
-            <div class="jp-big-number" id="slot-jp-val">50,000,000</div>
-          </div>
-
-          <div class="slot-grid" id="slot-grid">
-            <div class="slot-cell">🐉</div><div class="slot-cell">👑</div><div class="slot-cell">💰</div>
-            <div class="slot-cell">💎</div><div class="slot-cell">🐉</div><div class="slot-cell">🧧</div>
-            <div class="slot-cell">🪙</div><div class="slot-cell">💎</div><div class="slot-cell">🐉</div>
-          </div>
-
-          <div class="slot-win-msg" id="slot-msg">Quay ra 3 🐉 trên 1 dòng để NỔ HŨ (Hũ về 0)!</div>
-
-          <div class="slot-controls">
-            <div class="slot-bet-selector">
-              <span>Mức quay:</span>
-              <button class="sbet-btn active" data-sbet="50000">50K</button>
-              <button class="sbet-btn" data-sbet="200000">200K</button>
-              <button class="sbet-btn" data-sbet="1000000">1M</button>
-              <button class="sbet-btn" data-sbet="5000000">5M</button>
-            </div>
-            <div class="slot-action-btns">
-              <button class="spin-main-btn" id="btn-slot-spin">🎰 QUAY HŨ</button>
-              <button class="spin-auto-btn" id="btn-slot-auto">🔄 Tự Quay</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==================== 4. GACHA KHO BÁU ==================== -->
-      <section class="game-view" id="view-gacha">
-        <div class="gacha-stage">
-          <div class="gacha-banner">
-            <div class="gacha-title">✨ TRIỆU HỒI THẦN LONG GACHA ✨</div>
-            <div class="gacha-rates">
-              <span class="tier-ur">UR Thần Long (x50)</span>
-              <span class="tier-ssr">SSR Phượng Hoàng (x10)</span>
-              <span class="tier-sr">SR Kỳ Lân (x3)</span>
-            </div>
-            <div class="pity-bar-wrap">
+        <!-- 4. KHO BÁU TỨ LINH GACHA -->
+        <section class="game-view" id="view-gacha">
+          <div class="gacha-landscape-wrap">
+            <div class="gacha-left-info">
+              <div class="gacha-title">✨ KHO BÁU LONG VƯƠNG ✨</div>
+              <div class="gacha-rates">
+                <span class="tier-ur">UR Thần Long (x50)</span>
+                <span class="tier-ssr">SSR Phượng Hoàng (x10)</span>
+                <span class="tier-sr">SR Kỳ Lân (x3)</span>
+              </div>
               <div class="pity-label">Bảo hiểm nổ UR: <b id="gacha-pity-cnt">0</b>/30 lượt</div>
               <div class="pity-track"><div class="pity-fill" id="gacha-pity-fill"></div></div>
+              <div style="margin:8px 0">
+                <select id="gacha-base-cost" class="gold-select">
+                  <option value="100000">Mức: 100,000 / Lượt</option>
+                  <option value="500000">Mức: 500,000 / Lượt</option>
+                  <option value="2000000">Mức: 2,000,000 / Lượt</option>
+                </select>
+              </div>
+              <div class="gacha-btn-row">
+                <button class="gacha-pull-btn x1" id="btn-gacha-x1">🔑 Mở x1</button>
+                <button class="gacha-pull-btn x10" id="btn-gacha-x10">🔥 Mở x10</button>
+              </div>
+            </div>
+            <div class="gacha-chest-Showcase" id="gacha-showcase">
+              <div class="chest-icon" id="gacha-chest-anim">🧰</div>
+              <div class="gacha-results-grid hidden" id="gacha-results-grid"></div>
             </div>
           </div>
+        </section>
 
-          <div class="gacha-chest-Showcase" id="gacha-showcase">
-            <div class="chest-icon" id="gacha-chest-anim">🧰</div>
-            <div class="gacha-results-grid hidden" id="gacha-results-grid"></div>
-          </div>
+        <!-- 5. BẦU CUA & TRÊN DƯỚI NGANG -->
+        <section class="game-view" id="view-minigame">
+          <div class="mini-landscape-grid">
+            <div class="baucua-card">
+              <div class="sub-header">
+                <span>🦀 BẦU CUA HOÀNG KIM</span>
+                <button class="gold-action-sm" id="btn-bc-shake">LẮC BÁT</button>
+              </div>
+              <div class="bc-dice-row" id="bc-dice-row">
+                <div class="bc-die">🦀</div><div class="bc-die">🦐</div><div class="bc-die">🐟</div>
+              </div>
+              <div class="bc-grid" id="bc-grid">
+                <div class="bc-item" data-animal="BAU">🍐 Bầu <b id="bc-bet-BAU">0</b></div>
+                <div class="bc-item" data-animal="CUA">🦀 Cua <b id="bc-bet-CUA">0</b></div>
+                <div class="bc-item" data-animal="TOM">🦐 Tôm <b id="bc-bet-TOM">0</b></div>
+                <div class="bc-item" data-animal="CA">🐟 Cá <b id="bc-bet-CA">0</b></div>
+                <div class="bc-item" data-animal="GA">🐓 Gà <b id="bc-bet-GA">0</b></div>
+                <div class="bc-item" data-animal="NAI">🦌 Nai <b id="bc-bet-NAI">0</b></div>
+              </div>
+            </div>
 
-          <div class="gacha-controls">
-            <div class="gacha-cost-row">
-              <span>Giá mở:</span>
-              <select id="gacha-base-cost" class="gold-select">
-                <option value="100000">100,000 Xu / Lượt</option>
-                <option value="500000">500,000 Xu / Lượt</option>
-                <option value="2000000">2,000,000 Xu / Lượt</option>
-              </select>
-            </div>
-            <div class="gacha-btn-row">
-              <button class="gacha-pull-btn x1" id="btn-gacha-x1">🔑 Mở x1 Lượt</button>
-              <button class="gacha-pull-btn x10" id="btn-gacha-x10">🔥 Mở x10 (Cam kết SR+)</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==================== 5. BẦU CUA & CAO THẤP ==================== -->
-      <section class="game-view" id="view-minigame">
-        <div class="mini-split">
-          <div class="baucua-card">
-            <div class="sub-header">
-              <span>🦀 BẦU CUA HOÀNG KIM</span>
-              <button class="gold-action-sm" id="btn-bc-shake">LẮC NGAY</button>
-            </div>
-            <div class="bc-dice-row" id="bc-dice-row">
-              <div class="bc-die">🦀</div>
-              <div class="bc-die">🦐</div>
-              <div class="bc-die">🐟</div>
-            </div>
-            <div class="bc-grid" id="bc-grid">
-              <div class="bc-item" data-animal="BAU">🍐 Bầu <b id="bc-bet-BAU">0</b></div>
-              <div class="bc-item" data-animal="CUA">🦀 Cua <b id="bc-bet-CUA">0</b></div>
-              <div class="bc-item" data-animal="TOM">🦐 Tôm <b id="bc-bet-TOM">0</b></div>
-              <div class="bc-item" data-animal="CA">🐟 Cá <b id="bc-bet-CA">0</b></div>
-              <div class="bc-item" data-animal="GA">🐓 Gà <b id="bc-bet-GA">0</b></div>
-              <div class="bc-item" data-animal="NAI">🦌 Nai <b id="bc-bet-NAI">0</b></div>
-            </div>
-          </div>
-
-          <div class="hilow-card">
-            <div class="sub-header">
-              <span>🃏 CAO THẤP LẬT BÀI</span>
-              <span id="hl-pot">Quỹ: 0</span>
-            </div>
-            <div class="hl-arena">
-              <div class="playing-card" id="hl-card">A♠</div>
-              <div class="hl-actions">
-                <button class="hl-btn up" id="btn-hl-up">⬆️ TRÊN (x1.9)</button>
-                <button class="hl-btn down" id="btn-hl-down">⬇️ DƯỚI (x1.9)</button>
-                <button class="hl-btn cash" id="btn-hl-cash">💰 NHẬN TIỀN</button>
+            <div class="hilow-card">
+              <div class="sub-header">
+                <span>🃏 TRÊN DƯỚI</span>
+                <span id="hl-pot">Quỹ: 0</span>
+              </div>
+              <div class="hl-arena">
+                <div class="playing-card" id="hl-card">A♠</div>
+                <div class="hl-actions">
+                  <button class="hl-btn up" id="btn-hl-up">⬆️ TRÊN (x1.9)</button>
+                  <button class="hl-btn down" id="btn-hl-down">⬇️ DƯỚI (x1.9)</button>
+                  <button class="hl-btn cash" id="btn-hl-cash">💰 NHẬN LỘC</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ==================== 6. BẢNG XẾP HẠNG ==================== -->
-      <section class="game-view" id="view-rank">
-        <div class="rank-card">
-          <div class="sub-header">🏆 BẢNG VÀNG ĐẠI GIA SERVER</div>
-          <div class="rank-list" id="rank-list"></div>
-        </div>
-      </section>
-
-    </main>
-
-    <!-- TOAST -->
-    <div id="toast-box" class="toast-box hidden"></div>
-
-    <!-- MODAL SOI CẦU -->
-    <div class="modal-backdrop hidden" id="modal-soicau">
-      <div class="modal-sheet">
-        <div class="modal-top">
-          <h3>📊 Thống Kê & Lịch Sử Phiên</h3>
-          <button class="close-x" data-close="modal-soicau">✕</button>
-        </div>
-        <div class="soicau-stats" id="soicau-summary"></div>
-        <div class="soicau-history-list" id="soicau-list"></div>
-      </div>
-    </div>
-
-    <!-- MODAL KÉT SẮT & CHUYỂN KHOẢN -->
-    <div class="modal-backdrop hidden" id="modal-bank">
-      <div class="modal-sheet">
-        <div class="modal-top">
-          <h3>🏦 Két Sắt & Chuyển Khoản</h3>
-          <button class="close-x" data-close="modal-bank">✕</button>
-        </div>
-        <div class="vault-info">
-          <div>Ví chính: <b id="vault-cur-bal">0</b></div>
-          <div>Trong Két: <b id="vault-saved-bal">0</b></div>
-        </div>
-        <div class="form-group">
-          <input type="number" id="vault-amount" placeholder="Nhập số Xu..." />
-          <div class="btn-pair">
-            <button class="gold-btn" id="btn-vault-deposit">Gửi Vào Két</button>
-            <button class="outline-btn" id="btn-vault-withdraw">Rút Ra Ví</button>
+        <!-- 6. BẢNG VINH DANH -->
+        <section class="game-view" id="view-rank">
+          <div class="rank-card">
+            <div class="sub-header">🏆 BẢNG VÀNG ĐẠI GIA SUNWIN</div>
+            <div class="rank-list" id="rank-list"></div>
           </div>
-        </div>
-        <hr class="divider" />
-        <h4>💸 Chuyển Xu Cho Tài Khoản Khác</h4>
-        <div class="form-group">
-          <input type="text" id="transfer-target" placeholder="Tên đăng nhập hoặc Biệt danh..." />
-          <input type="number" id="transfer-amount" placeholder="Số Xu chuyển..." />
-          <button class="gold-btn full" id="btn-send-transfer">Chuyển Xu Ngay</button>
-        </div>
-      </div>
-    </div>
+        </section>
 
-    <!-- MODAL GIFTCODE -->
-    <div class="modal-backdrop hidden" id="modal-gift">
-      <div class="modal-sheet">
-        <div class="modal-top">
-          <h3>🎁 Giftcode & Lộc Hoàn Lương</h3>
-          <button class="close-x" data-close="modal-gift">✕</button>
-        </div>
-        <div class="form-group">
-          <p class="hint-sm">Code: <code>SUNWIN888</code>, <code>VIP999</code>, <code>NOHU68</code>, <code>SAP666</code></p>
-          <input type="text" id="giftcode-input" placeholder="Nhập Giftcode..." />
-          <button class="gold-btn full" id="btn-claim-code">Nhận Giftcode</button>
-        </div>
-        <hr class="divider" />
-        <button class="gold-btn full" id="btn-daily-relief">🪙 Nhận Lộc Cứu Trợ (+10,000,000 Xu)</button>
-      </div>
-    </div>
+      </main>
 
-    <!-- MODAL HỒ SƠ CÁ NHÂN & ĐỔI MK -->
-    <div class="modal-backdrop hidden" id="modal-profile">
-      <div class="modal-sheet">
-        <div class="modal-top">
-          <h3>👑 Hồ Sơ Cá Nhân</h3>
-          <button class="close-x" data-close="modal-profile">✕</button>
-        </div>
-        <div class="form-group">
-          <div id="profile-acc-info" class="hint-sm"></div>
-          <label>Biệt Danh Hiển Thị:</label>
-          <input type="text" id="profile-name-inp" maxlength="18" />
-          <label>Đổi Mật Khẩu Mới (bỏ trống nếu giữ nguyên):</label>
-          <input type="password" id="profile-newpass-inp" placeholder="Mật khẩu mới..." />
-          <label>Chọn Avatar:</label>
-          <div class="avatar-picker" id="avatar-picker">
-            <button class="av-choice">🐉</button>
-            <button class="av-choice">🦁</button>
-            <button class="av-choice">👑</button>
-            <button class="av-choice">🦅</button>
-            <button class="av-choice">💎</button>
-            <button class="av-choice">🐯</button>
+      <!-- TOAST THÔNG BÁO -->
+      <div id="toast-box" class="toast-box hidden"></div>
+
+      <!-- MODAL SOI CẦU -->
+      <div class="modal-backdrop hidden" id="modal-soicau">
+        <div class="modal-sheet">
+          <div class="modal-top">
+            <h3>📊 Thống Kê Cầu Tài Xỉu</h3>
+            <button class="close-x" data-close="modal-soicau">✕</button>
           </div>
-          <div class="vip-progress-info" id="profile-vip-info"></div>
-          <button class="gold-btn full" id="btn-save-profile">Lưu Thay Đổi</button>
+          <div id="soicau-summary"></div>
+          <div class="soicau-history-list" id="soicau-list"></div>
         </div>
       </div>
-    </div>
 
-    <!-- ==================== MODAL QUẢN TRÒ ADMIN (PIN: 8888) ==================== -->
-    <div class="modal-backdrop hidden" id="modal-admin">
-      <div class="modal-sheet admin-wide">
-        <div class="modal-top">
-          <h3>⚙️ Hệ Thống Quản Trị & Chỉnh Cầu Ngầm</h3>
-          <button class="close-x" data-close="modal-admin">✕</button>
-        </div>
-
-        <div id="admin-lock-view" class="form-group">
-          <input type="password" id="admin-pin-inp" placeholder="Nhập PIN Admin (Mặc định: 8888)" />
-          <button class="gold-btn full" id="btn-unlock-admin">Truy Cập Quyền Admin</button>
-        </div>
-
-        <div id="admin-panel-view" class="hidden">
-          <!-- CHẾ ĐỘ CHỈNH CẦU & HŨ GIAN LẬN TROLL BẠN BÈ -->
-          <div class="admin-section">
-            <h4>🎭 1. Chỉnh Cầu & Kích Nổ Hũ Ngầm (Troll Bạn Bè)</h4>
-            <p class="hint-sm">Lưu ý: Màn hình ngoài vẫn hiện <b>MD5 XANH CHÍN</b> để bạn bè không biết!</p>
-            <div class="admin-btn-grid">
-              <button class="adm-opt active" data-force-tx="AUTO">🎲 Tự Nhiên (Có Nổ Hũ)</button>
-              <button class="adm-opt" data-force-tx="TROLL_OPPOSITE">😈 Bẻ Ngược Cửa Bạn Đặt</button>
-              <button class="adm-opt" data-force-tx="HU_TAI_666">🐉 Ép NỔ HŨ TÀI (6-6-6)</button>
-              <button class="adm-opt" data-force-tx="HU_XIU_111">💥 Ép NỔ HŨ XỈU (1-1-1)</button>
-              <button class="adm-opt" data-force-tx="TAI">🔴 Ép Ra TÀI Thường</button>
-              <button class="adm-opt" data-force-tx="XIU">🔵 Ép Ra XỈU Thường</button>
-              <button class="adm-opt" data-force-tx="SAP_RANDOM">💎 Ép SÁP Bất Kỳ</button>
-              <button class="adm-opt" data-force-tx="FORCE_WIN_JACKPOT">👑 Cho Người Chơi Ăn Hũ</button>
+      <!-- MODAL KÉT SẮT & CHUYỂN KHOẢN -->
+      <div class="modal-backdrop hidden" id="modal-bank">
+        <div class="modal-sheet">
+          <div class="modal-top">
+            <h3>🏦 Két Sắt & Chuyển Khoản</h3>
+            <button class="close-x" data-close="modal-bank">✕</button>
+          </div>
+          <div class="vault-info">
+            <span>Số dư Ví: <b id="vault-cur-bal">0</b></span>
+            <span>Trong Két: <b id="vault-saved-bal">0</b></span>
+          </div>
+          <div class="modal-grid-2">
+            <div class="form-group">
+              <h4>🔐 Két Sắt Bảo Mật</h4>
+              <input type="number" id="vault-amount" placeholder="Số Vàng..." />
+              <div class="btn-pair">
+                <button class="sun-gold-btn" id="btn-vault-deposit">Gửi Két</button>
+                <button class="outline-btn" id="btn-vault-withdraw">Rút Ví</button>
+              </div>
             </div>
-
-            <div class="custom-dice-box">
-              <span>Chốt 3 mặt xúc xắc cụ thể:</span>
-              <input type="number" id="adm-d1" min="1" max="6" value="6" />
-              <input type="number" id="adm-d2" min="1" max="6" value="6" />
-              <input type="number" id="adm-d3" min="1" max="6" value="6" />
-              <button class="gold-action-sm" id="btn-adm-set-dice">Đặt 3 Hột</button>
+            <div class="form-group">
+              <h4>💸 Chuyển Khoản Người Chơi</h4>
+              <input type="text" id="transfer-target" placeholder="Tên người nhận..." />
+              <input type="number" id="transfer-amount" placeholder="Số Vàng chuyển..." />
+              <button class="sun-gold-btn" id="btn-send-transfer">Chuyển Ngay</button>
             </div>
           </div>
+        </div>
+      </div>
 
-          <hr class="divider" />
-
-          <!-- ĐIỀU KHIỂN QUỸ HŨ -->
-          <div class="admin-section">
-            <h4>💰 2. Can Thiệp Quỹ Hũ Tài Xỉu</h4>
-            <div class="btn-pair">
-              <button class="gold-btn" id="btn-adm-hu-500m">Bơm Hũ +500M</button>
-              <button class="outline-btn" id="btn-adm-hu-zero">Xả Hũ Về 0</button>
-            </div>
-            <div class="btn-pair" style="margin-top:6px">
-              <button class="gold-btn" id="btn-adm-add50m">+50M Vào Ví Mình</button>
-              <button class="gold-btn" id="btn-adm-add500m">+500M Vào Ví Mình</button>
-            </div>
+      <!-- MODAL NẠP LỘC & GIFTCODE -->
+      <div class="modal-backdrop hidden" id="modal-gift">
+        <div class="modal-sheet">
+          <div class="modal-top">
+            <h3>🎁 Sự Kiện & Giftcode Sunwin</h3>
+            <button class="close-x" data-close="modal-gift">✕</button>
           </div>
-
-          <hr class="divider" />
-
-          <!-- QUẢN LÝ TÀI KHOẢN NGƯỜI CHƠI -->
-          <div class="admin-section">
-            <h4>👥 3. Quản Lý Toàn Bộ Tài Khoản & Cấp Lại Mật Khẩu</h4>
-            <div id="admin-accounts-list" class="admin-acc-list"></div>
+          <div class="form-group">
+            <p class="hint-sm">Code: <code>SUNWIN888</code>, <code>VIP999</code>, <code>NOHU68</code>, <code>SAP666</code></p>
+            <input type="text" id="giftcode-input" placeholder="Nhập mã Giftcode nhận lộc..." />
+            <button class="sun-gold-btn" id="btn-claim-code">XÁC NHẬN GIFTCODE</button>
+            <button class="outline-btn" id="btn-daily-relief">🪙 Nhận Lộc Tân Thủ (+10,000,000)</button>
           </div>
         </div>
       </div>
-    </div>
 
+      <!-- MODAL HỒ SƠ CÁ NHÂN -->
+      <div class="modal-backdrop hidden" id="modal-profile">
+        <div class="modal-sheet">
+          <div class="modal-top">
+            <h3>👑 Thông Tin Tài Khoản</h3>
+            <button class="close-x" data-close="modal-profile">✕</button>
+          </div>
+          <div class="form-group">
+            <div id="profile-acc-info" class="hint-sm"></div>
+            <div class="modal-grid-2">
+              <input type="text" id="profile-name-inp" placeholder="Tên hiển thị..." maxlength="18" />
+              <input type="password" id="profile-newpass-inp" placeholder="Mật khẩu mới (nếu đổi)..." />
+            </div>
+            <div class="avatar-picker" id="avatar-picker">
+              <button class="av-choice">🐉</button>
+              <button class="av-choice">🦁</button>
+              <button class="av-choice">👑</button>
+              <button class="av-choice">🦅</button>
+              <button class="av-choice">💎</button>
+              <button class="av-choice">🐯</button>
+            </div>
+            <div id="profile-vip-info" class="hint-sm"></div>
+            <button class="sun-gold-btn" id="btn-save-profile">LƯU HỒ SƠ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== MODAL QUẢN TRỊ RIÊNG CHO ADMIN ==================== -->
+      <div class="modal-backdrop hidden" id="modal-admin">
+        <div class="modal-sheet admin-wide">
+          <div class="modal-top">
+            <h3>⚙️ Bảng Điều Khiển Hệ Thống (Chỉ Admin)</h3>
+            <button class="close-x" data-close="modal-admin">✕</button>
+          </div>
+          <div class="modal-grid-2">
+            <div class="admin-section">
+              <h4>🎭 1. Chỉnh Cầu & Nổ Hũ Ngầm</h4>
+              <div class="admin-btn-grid">
+                <button class="adm-opt active" data-force-tx="AUTO">🎲 Tự Nhiên</button>
+                <button class="adm-opt" data-force-tx="TROLL_OPPOSITE">😈 Bẻ Ngược Cửa Đặt</button>
+                <button class="adm-opt" data-force-tx="HU_TAI_666">🐉 Nổ Hũ TÀI (6-6-6)</button>
+                <button class="adm-opt" data-force-tx="HU_XIU_111">💥 Nổ Hũ XỈU (1-1-1)</button>
+                <button class="adm-opt" data-force-tx="TAI">🔴 Ép Ra TÀI</button>
+                <button class="adm-opt" data-force-tx="XIU">🔵 Ép Ra XỈU</button>
+                <button class="adm-opt" data-force-tx="SAP_RANDOM">💎 Ép SÁP Bất Kỳ</button>
+                <button class="adm-opt" data-force-tx="FORCE_WIN_JACKPOT">👑 Cho Ăn Nổ Hũ</button>
+              </div>
+              <div class="custom-dice-box">
+                <span>Đặt 3 hột:</span>
+                <input type="number" id="adm-d1" min="1" max="6" value="6" />
+                <input type="number" id="adm-d2" min="1" max="6" value="6" />
+                <input type="number" id="adm-d3" min="1" max="6" value="6" />
+                <button class="gold-action-sm" id="btn-adm-set-dice">Chốt</button>
+              </div>
+              <div class="btn-pair" style="margin-top:6px">
+                <button class="sun-gold-btn" id="btn-adm-hu-500m">Bơm Hũ +500M</button>
+                <button class="outline-btn" id="btn-adm-hu-zero">Xả Hũ Về 0</button>
+              </div>
+              <div class="btn-pair" style="margin-top:6px">
+                <button class="sun-gold-btn" id="btn-adm-add50m">+50M Vào Ví</button>
+                <button class="sun-gold-btn" id="btn-adm-add500m">+500M Vào Ví</button>
+              </div>
+            </div>
+
+            <div class="admin-section">
+              <h4>👥 2. Quản Lý Tài Khoản & Mật Khẩu</h4>
+              <div id="admin-accounts-list" class="admin-acc-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
   <script src="assets/app.js"></script>
 </body>
