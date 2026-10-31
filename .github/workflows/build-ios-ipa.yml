@@ -38,61 +38,108 @@ jobs:
           fi
           npx cap sync ios
 
-      - name: 6. Configure iOS Deployment Target 16.2 & Info.plist
+      - name: 6. Configure Fullscreen Landscape & Hide iPhone White Home Bar
+        run: |
+          PLIST="ios/App/App/Info.plist"
+          /usr/libexec/PlistBuddy -c "Delete :UISupportedInterfaceOrientations" "$PLIST" || true
+          /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations array" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations:0 string UIInterfaceOrientationLandscapeRight" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations:1 string UIInterfaceOrientationLandscapeLeft" "$PLIST"
+
+          /usr/libexec/PlistBuddy -c "Delete :UISupportedInterfaceOrientations~ipad" "$PLIST" || true
+          /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations~ipad array" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations~ipad:0 string UIInterfaceOrientationLandscapeRight" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations~ipad:1 string UIInterfaceOrientationLandscapeLeft" "$PLIST"
+
+          /usr/libexec/PlistBuddy -c "Set :UIStatusBarHidden true" "$PLIST" || /usr/libexec/PlistBuddy -c "Add :UIStatusBarHidden bool true" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Set :UIViewControllerBasedStatusBarAppearance false" "$PLIST" || /usr/libexec/PlistBuddy -c "Add :UIViewControllerBasedStatusBarAppearance bool false" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Set :UIRequiresFullScreen true" "$PLIST" || /usr/libexec/PlistBuddy -c "Add :UIRequiresFullScreen bool true" "$PLIST"
+
+          cat << 'EOF' > ios/App/App/AppDelegate.swift
+          import UIKit
+          import Capacitor
+          import WebKit
+
+          @UIApplicationMain
+          class AppDelegate: UIResponder, UIApplicationDelegate {
+
+              var window: UIWindow?
+
+              func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+                  UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
+                  application.isStatusBarHidden = true
+
+                  // Ẩn thanh trắng Home Indicator dưới đáy iPhone & Status Bar
+                  let hideBlock: @convention(block) (AnyObject) -> Bool = { _ in return true }
+                  let hideImp = imp_implementationWithBlock(hideBlock)
+                  if let m1 = class_getInstanceMethod(UIViewController.self, #selector(getter: UIViewController.prefersHomeIndicatorAutoHidden)) {
+                      method_setImplementation(m1, hideImp)
+                  }
+                  if let m2 = class_getInstanceMethod(UIViewController.self, #selector(getter: UIViewController.prefersStatusBarHidden)) {
+                      method_setImplementation(m2, hideImp)
+                  }
+                  let edgeBlock: @convention(block) (AnyObject) -> UInt = { _ in return UIRectEdge.all.rawValue }
+                  let edgeImp = imp_implementationWithBlock(edgeBlock)
+                  if let m3 = class_getInstanceMethod(UIViewController.self, #selector(getter: UIViewController.preferredScreenEdgesDeferringSystemGestures)) {
+                      method_setImplementation(m3, edgeImp)
+                  }
+
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                      self.window?.backgroundColor = UIColor(red: 0.06, green: 0.01, blue: 0.0, alpha: 1.0)
+                      if let rootVC = self.window?.rootViewController {
+                          rootVC.view.backgroundColor = UIColor(red: 0.06, green: 0.01, blue: 0.0, alpha: 1.0)
+                          rootVC.setNeedsStatusBarAppearanceUpdate()
+                          rootVC.setNeedsUpdateOfHomeIndicatorAutoHidden()
+                          rootVC.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
+                      }
+                  }
+                  return true
+              }
+
+              func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+                  return .landscape
+              }
+
+              func applicationDidBecomeActive(_ application: UIApplication) {
+                  self.window?.rootViewController?.setNeedsUpdateOfHomeIndicatorAutoHidden()
+                  self.window?.rootViewController?.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
+              }
+
+              func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+                  return ApplicationDelegateProxy.shared.application(app, open: url, options: options)
+              }
+
+              func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+                  return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
+              }
+          }
+          EOF
+
+      - name: 7. Set Deployment Target 16.2 & Build Unsigned Archive
         run: |
           cd ios/App
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*;/IPHONEOS_DEPLOYMENT_TARGET = 16.2;/g' App.xcodeproj/project.pbxproj
-          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Hoàng Gia VIP" App/Info.plist || true
-          /usr/libexec/PlistBuddy -c "Add :UIStatusBarHidden bool true" App/Info.plist || true
-          /usr/libexec/PlistBuddy -c "Add :UIViewControllerBasedStatusBarAppearance bool false" App/Info.plist || true
+          xcodebuild clean archive \
+            -project App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            IPHONEOS_DEPLOYMENT_TARGET=16.2 \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES
 
-      - name: 7. Build iOS App via Xcode (Unsigned for iOS 16.2 / TrollStore / Sideloadly)
+      - name: 8. Package Payload into .ipa
         run: |
-          cd ios/App
-          if [ -f "Podfile" ]; then
-            pod install || true
-          fi
-          if [ -d "App.xcworkspace" ]; then
-            xcodebuild -workspace App.xcworkspace \
-              -scheme App \
-              -configuration Release \
-              -sdk iphoneos \
-              -derivedDataPath build \
-              IPHONEOS_DEPLOYMENT_TARGET=16.2 \
-              CODE_SIGN_IDENTITY="" \
-              CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGNING_ALLOWED=NO \
-              clean build
-          else
-            xcodebuild -project App.xcodeproj \
-              -scheme App \
-              -configuration Release \
-              -sdk iphoneos \
-              -derivedDataPath build \
-              IPHONEOS_DEPLOYMENT_TARGET=16.2 \
-              CODE_SIGN_IDENTITY="" \
-              CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGNING_ALLOWED=NO \
-              clean build
-          fi
+          mkdir -p "$RUNNER_TEMP/ipa/Payload"
+          cp -R "$RUNNER_TEMP/App.xcarchive/Products/Applications/App.app" "$RUNNER_TEMP/ipa/Payload/"
+          cd "$RUNNER_TEMP/ipa"
+          zip -qr "$GITHUB_WORKSPACE/HoangGiaVIP-iOS16.2-unsigned.ipa" Payload
 
-      - name: 8. Package .app Bundle into Unsigned .IPA
-        run: |
-          mkdir -p build_ipa/Payload
-          APP_PATH=$(find ios/App/build -name "App.app" -type d | head -n 1)
-          if [ -z "$APP_PATH" ]; then
-            echo "Error: App.app not found!"
-            exit 1
-          fi
-          cp -R "$APP_PATH" build_ipa/Payload/App.app
-          cd build_ipa
-          zip -r9 ../HoangGiaVIP-iOS16.2-unsigned.ipa Payload
-          cd ..
-          ls -lh HoangGiaVIP-iOS16.2-unsigned.ipa
-
-      - name: 9. Upload IPA Artifact to GitHub Actions
+      - name: 9. Upload IPA Artifact
         uses: actions/upload-artifact@v4
         with:
           name: HoangGiaVIP-iOS16.2-IPA
           path: HoangGiaVIP-iOS16.2-unsigned.ipa
-          if-no-files-found: error
+          retention-days: 90
