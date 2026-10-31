@@ -17,41 +17,45 @@
 }
 
 html, body {
-  width: 100vw;
-  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
-  background: #080100;
+  background: #120200;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
   color: var(--text-main);
-  position: fixed;
-  inset: 0;
 }
 
-/* KHUNG CHỨA TOÀN MÀN HÌNH ĐỂ CĂN GIỮA BÀN GAME */
+/* KHUNG NỀN TRÀN VIỀN MÀN HÌNH */
 #viewport-stage {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(circle at center, #330904 0%, #060100 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #380a04 0%, #100200 100%);
   overflow: hidden;
 }
 
-/* CANVAS CHUẨN 940x430 TỰ ĐỘNG CO GIÃN VỪA KHÍT MỌI MÀN HÌNH IPHONE */
+/* KHUNG BÀN CHƠI 880x400 ĐƯỢC CĂN TÂM CHÍNH XÁC BẰNG JS */
 #app-shell {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 940px;
-  height: 430px;
+  width: 880px;
+  height: 400px;
   transform-origin: center center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background: radial-gradient(circle at 50% 30%, #4a1107 0%, #160401 100%);
-  border: 2.5px solid var(--sun-gold-2);
-  border-radius: 18px;
-  box-shadow: 0 0 35px rgba(0, 0, 0, 0.95), inset 0 0 25px rgba(245, 185, 53, 0.15);
+  border: 2px solid var(--sun-gold-2);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.95), inset 0 0 25px rgba(245, 185, 53, 0.15);
   overflow: hidden;
 }
 
@@ -64,11 +68,11 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 10px;
 }
 
 .auth-card {
-  width: 430px;
+  width: 410px;
   background: linear-gradient(180deg, #380b04 0%, #180301 100%);
   border: 2px solid var(--sun-gold-2);
   border-radius: 16px;
@@ -78,7 +82,7 @@ html, body {
 }
 
 .sun-logo-badge {
-  font-size: 26px;
+  font-size: 25px;
   font-weight: 900;
   color: var(--sun-gold-1);
   text-shadow: 0 2px 12px #ff9100;
@@ -143,52 +147,53 @@ html, body {
   background: linear-gradient(180deg, #fff099 0%, #f5b935 50%, #b87309 100%);
   color: #2e0700;
   border: 1px solid #fff5cc;
-  padding: 8px 12px;
+  padding: 7px 12px;
   border-radius: 8px;
   font-weight: 900;
-  font-size: 11.5px;
+  font-size: 11px;
   cursor: pointer;
   white-space: nowrap;
 }
 
-/* ==================== TOP BAR SUNWIN (KHÔNG BAO GIỜ RỚT DÒNG) ==================== */
+/* ==================== TOP BAR (HIỂN THỊ ĐẦY ĐỦ BỘ CÔNG CỤ GÓC PHẢI) ==================== */
 .sun-topbar {
-  height: 44px;
+  height: 40px;
+  width: 100%;
   flex-shrink: 0;
   background: linear-gradient(180deg, #3d0d05 0%, #1c0502 100%);
   border-bottom: 1.5px solid var(--sun-gold-2);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
-  gap: 6px;
+  padding: 0 8px;
+  gap: 5px;
 }
 
 .sun-user-box {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .sun-avatar {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: radial-gradient(circle, #6e1709, #240501);
   border: 1.5px solid var(--sun-gold-1);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .sun-nick-row {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   color: var(--sun-gold-1);
   white-space: nowrap;
@@ -197,15 +202,15 @@ html, body {
 .sun-vip-badge {
   background: linear-gradient(135deg, #ffd700, #b87309);
   color: #240400;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 900;
-  padding: 1px 5px;
+  padding: 1px 4px;
   border-radius: 4px;
   white-space: nowrap;
 }
 
 .sun-uid {
-  font-size: 9px;
+  font-size: 8.5px;
   color: #bcaaa4;
   white-space: nowrap;
 }
@@ -213,19 +218,19 @@ html, body {
 .sun-currency-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 .sun-money-pill {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   background: #0f0200;
-  border: 1.5px solid var(--sun-gold-2);
-  border-radius: 16px;
-  padding: 2px 4px 2px 7px;
-  font-size: 12px;
+  border: 1px solid var(--sun-gold-2);
+  border-radius: 14px;
+  padding: 2px 4px 2px 6px;
+  font-size: 11px;
   font-weight: 900;
   color: #ffd700;
   white-space: nowrap;
@@ -234,33 +239,35 @@ html, body {
 .sun-coin-icon {
   background: linear-gradient(180deg, #fff099, #d48817);
   color: #300;
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 900;
 }
 
 .sun-add-btn {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   border: none;
   background: linear-gradient(180deg, #00e676, #008e46);
   color: #fff;
   font-weight: 900;
+  font-size: 11px;
+  line-height: 1;
   cursor: pointer;
 }
 
 .sun-vault-pill {
   background: #1c0502;
   border: 1px solid var(--sun-gold-3);
-  border-radius: 14px;
-  padding: 3px 8px;
-  font-size: 11px;
+  border-radius: 12px;
+  padding: 2px 6px;
+  font-size: 10px;
   color: #ffe082;
   cursor: pointer;
   white-space: nowrap;
@@ -268,7 +275,7 @@ html, body {
 
 .sun-Quick-tabs {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   flex-shrink: 0;
 }
 
@@ -276,9 +283,9 @@ html, body {
   background: #280803;
   border: 1px solid rgba(245, 185, 53, 0.35);
   color: #f5d78e;
-  padding: 5px 8px;
-  border-radius: 7px;
-  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 10px;
   font-weight: 800;
   cursor: pointer;
   white-space: nowrap;
@@ -292,18 +299,19 @@ html, body {
 
 .sun-sys-btns {
   display: flex;
+  align-items: center;
   gap: 4px;
   flex-shrink: 0;
 }
 
 .sun-icon-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  border: 1px solid var(--sun-gold-3);
-  background: #260702;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--sun-gold-2);
+  background: #2b0803;
   color: #fff;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -312,14 +320,14 @@ html, body {
 
 /* MARQUEE */
 .sun-marquee {
-  height: 20px;
+  height: 18px;
   flex-shrink: 0;
   background: rgba(0, 0, 0, 0.65);
   border-bottom: 1px solid rgba(245, 185, 53, 0.2);
   display: flex;
   align-items: center;
-  padding: 0 10px;
-  font-size: 10.5px;
+  padding: 0 8px;
+  font-size: 10px;
   color: #ffe082;
 }
 
@@ -342,8 +350,9 @@ html, body {
 
 /* ==================== LANDSCAPE STAGE ==================== */
 .sun-landscape-stage {
-  height: 361px;
-  padding: 6px 8px;
+  flex: 1;
+  min-height: 0;
+  padding: 5px 7px;
   overflow: hidden;
   display: flex;
 }
@@ -358,25 +367,26 @@ html, body {
   display: flex;
 }
 
-/* ==================== BÀN TÀI XỈU SUNWIN OVAL NGANG ==================== */
+/* ==================== BÀN TÀI XỈU SUNWIN OVAL NGANG (CO GIÃN TỰ ĐỘNG KHÔNG TRÀN) ==================== */
 .sun-tx-layout {
   display: grid;
-  grid-template-columns: 668px 244px;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) 216px;
+  gap: 7px;
   width: 100%;
   height: 100%;
 }
 
 .sun-tx-oval-table {
   background: radial-gradient(ellipse at center, #631409 0%, #260602 80%, #140200 100%);
-  border: 2.5px solid var(--sun-gold-2);
-  border-radius: 22px;
-  padding: 6px 12px;
+  border: 2px solid var(--sun-gold-2);
+  border-radius: 20px;
+  padding: 5px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.85);
   height: 100%;
+  min-width: 0;
   overflow: hidden;
 }
 
@@ -386,13 +396,13 @@ html, body {
   justify-content: space-between;
   background: linear-gradient(90deg, #2b0702, #6e1409, #2b0702);
   border: 1.5px solid #ffd700;
-  border-radius: 14px;
-  padding: 2px 14px;
-  height: 36px;
+  border-radius: 12px;
+  padding: 2px 12px;
+  height: 34px;
 }
 
 .hu-side-tag {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 900;
   color: #ffcc80;
   white-space: nowrap;
@@ -403,13 +413,13 @@ html, body {
 }
 
 .hu-pot-label {
-  font-size: 8.5px;
+  font-size: 8px;
   font-weight: 900;
   color: #ffab91;
 }
 
 .hu-pot-val {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 900;
   color: #ffd700;
   text-shadow: 0 0 10px #ff9100;
@@ -420,15 +430,15 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 10px;
-  height: 20px;
+  font-size: 9.5px;
+  height: 18px;
 }
 
 .sun-session-id {
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid var(--sun-gold-3);
-  padding: 1px 7px;
-  border-radius: 8px;
+  padding: 1px 6px;
+  border-radius: 7px;
   color: var(--sun-gold-1);
   font-weight: 800;
 }
@@ -436,16 +446,16 @@ html, body {
 .sun-flow-status {
   color: #69f0ae;
   font-weight: 700;
-  font-size: 10px;
+  font-size: 9.5px;
 }
 
 .sun-nan-toggle {
   background: #330903;
   border: 1px solid var(--sun-gold-2);
   color: var(--sun-gold-1);
-  padding: 1px 8px;
-  border-radius: 8px;
-  font-size: 10px;
+  padding: 1px 7px;
+  border-radius: 7px;
+  font-size: 9.5px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -453,20 +463,19 @@ html, body {
 /* 2 CÁNH TÀI XỈU & ĐĨA TRUNG TÂM */
 .sun-tx-wings {
   display: grid;
-  grid-template-columns: 1fr 126px 1fr;
+  grid-template-columns: 1fr 118px 1fr;
   align-items: center;
-  gap: 10px;
-  height: 138px;
+  gap: 8px;
+  height: 128px;
 }
 
 .sun-wing {
   background: rgba(0, 0, 0, 0.45);
   border: 1.5px solid rgba(245, 185, 53, 0.4);
-  border-radius: 14px;
+  border-radius: 13px;
   padding: 4px 8px;
   text-align: center;
-  transition: 0.2s;
-  height: 132px;
+  height: 122px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -474,11 +483,11 @@ html, body {
 
 .sun-wing.win-glow, .sun-sap-cell.win-glow {
   border-color: #fff;
-  box-shadow: 0 0 20px #ffd700, inset 0 0 14px rgba(255, 215, 0, 0.5);
+  box-shadow: 0 0 18px #ffd700, inset 0 0 12px rgba(255, 215, 0, 0.5);
 }
 
 .wing-header-txt {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 900;
   letter-spacing: 2px;
   line-height: 1.05;
@@ -495,28 +504,28 @@ html, body {
 }
 
 .wing-users {
-  font-size: 10px;
+  font-size: 9.5px;
   color: #d7ccc8;
 }
 
 .wing-total-pot {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 900;
   color: #ffd700;
 }
 
 .wing-my-bet {
-  font-size: 10px;
+  font-size: 9.5px;
   color: #69f0ae;
 }
 
 .wing-bet-btn {
   width: 100%;
-  padding: 5px 0;
-  border-radius: 12px;
+  padding: 4px 0;
+  border-radius: 11px;
   border: 1px solid #fff3c4;
   font-weight: 900;
-  font-size: 11px;
+  font-size: 10.5px;
   cursor: pointer;
 }
 
@@ -538,8 +547,8 @@ html, body {
 }
 
 .sun-plate-ring {
-  width: 122px;
-  height: 122px;
+  width: 114px;
+  height: 114px;
   border-radius: 50%;
   background: radial-gradient(circle, #330904 0%, #0d0200 80%);
   border: 3.5px solid var(--sun-gold-2);
@@ -552,19 +561,19 @@ html, body {
 }
 
 .sun-countdown {
-  font-size: 42px;
+  font-size: 38px;
   font-weight: 900;
   color: #ffd700;
-  text-shadow: 0 0 16px #ff6d00, 0 2px 4px #000;
+  text-shadow: 0 0 14px #ff6d00, 0 2px 4px #000;
   z-index: 4;
 }
 
 .sun-dice-wrap {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   flex-wrap: wrap;
   justify-content: center;
-  width: 84px;
+  width: 78px;
   z-index: 2;
 }
 
@@ -574,26 +583,26 @@ html, body {
 
 @keyframes shakeDice {
   0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(-6px, 5px) rotate(-15deg); }
-  50% { transform: translate(6px, -5px) rotate(15deg); }
+  25% { transform: translate(-5px, 4px) rotate(-15deg); }
+  50% { transform: translate(5px, -4px) rotate(15deg); }
   75% { transform: translate(-4px, -4px) rotate(-10deg); }
 }
 
 .die3d {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   background: radial-gradient(circle at 30% 30%, #ffffff, #dcdcdc);
-  border-radius: 7px;
+  border-radius: 6px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  padding: 3.5px;
+  padding: 3px;
 }
 
 .pip {
-  width: 5px;
-  height: 5px;
+  width: 4.5px;
+  height: 4.5px;
   border-radius: 50%;
   background: #1b1b1b;
   align-self: center;
@@ -602,18 +611,18 @@ html, body {
 
 .pip.red-pip {
   background: #d50000;
-  width: 6.5px;
-  height: 6.5px;
+  width: 6px;
+  height: 6px;
 }
 
 .sun-result-ribbon {
   position: absolute;
-  bottom: 5px;
+  bottom: 4px;
   background: rgba(0, 0, 0, 0.92);
   border: 1px solid #ffd700;
-  padding: 1px 7px;
-  border-radius: 10px;
-  font-size: 9.5px;
+  padding: 1px 6px;
+  border-radius: 9px;
+  font-size: 9px;
   font-weight: 900;
   color: #ffd700;
   z-index: 6;
@@ -635,26 +644,26 @@ html, body {
   touch-action: none;
 }
 
-.cover-emblem { font-size: 30px; }
-.cover-txt { font-size: 9px; font-weight: 800; color: #ffd700; }
+.cover-emblem { font-size: 28px; }
+.cover-txt { font-size: 8.5px; font-weight: 800; color: #ffd700; }
 
-/* HÀNG CỬA SÁP X30 & SĂN HŨ X120 (1 DÒNG CHUẨN) */
+/* HÀNG CỬA SÁP X30 & SĂN HŨ X120 */
 .sun-sap-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  height: 28px;
+  gap: 5px;
+  height: 25px;
 }
 
 .sun-sap-cell {
   background: rgba(0, 0, 0, 0.55);
   border: 1px solid rgba(245, 185, 53, 0.45);
-  border-radius: 8px;
-  padding: 0 7px;
+  border-radius: 7px;
+  padding: 0 6px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 9.5px;
+  font-size: 9px;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -672,31 +681,31 @@ html, body {
 .sun-bottom-controls {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .sun-bead-road {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   background: rgba(0, 0, 0, 0.55);
-  padding: 3px 8px;
-  border-radius: 10px;
-  height: 24px;
+  padding: 2px 7px;
+  border-radius: 9px;
+  height: 22px;
 }
 
 .bead-list {
   display: flex;
-  gap: 4px;
+  gap: 3.5px;
   flex: 1;
   overflow: hidden;
 }
 
 .c-dot {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -720,16 +729,15 @@ html, body {
   background: radial-gradient(circle, #ffd700, #ff6f00);
   border: 1.5px solid #fff;
   color: #300;
-  box-shadow: 0 0 8px #ffd700;
 }
 
 .sun-soicau-btn, .sun-md5-copy {
   background: linear-gradient(180deg, #fff099, #c88719);
   color: #2b0500;
   border: none;
-  border-radius: 6px;
-  padding: 2px 7px;
-  font-size: 9.5px;
+  border-radius: 5px;
+  padding: 2px 6px;
+  font-size: 9px;
   font-weight: 900;
   cursor: pointer;
   white-space: nowrap;
@@ -738,19 +746,18 @@ html, body {
 .sun-chips-rack {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 5px;
-  height: 28px;
+  gap: 4px;
+  height: 25px;
 }
 
 .sun-chip {
-  height: 26px;
-  border-radius: 13px;
+  height: 24px;
+  border-radius: 12px;
   border: 1.5px dashed rgba(255, 255, 255, 0.75);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 900;
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
   white-space: nowrap;
 }
 
@@ -764,100 +771,105 @@ html, body {
 .callin { background: linear-gradient(180deg, #ffd700, #b71c1c); border-style: solid; }
 
 .sun-chip.active {
-  transform: translateY(-2px);
+  transform: translateY(-1.5px);
   border: 2px solid #ffd700;
-  box-shadow: 0 0 10px #ffd700;
+  box-shadow: 0 0 8px #ffd700;
 }
 
-/* ==================== KHUNG CHAT BÊN PHẢI (KHÔNG TRÀN CHỮ, HIỆN ĐỦ NÚT GỬI) ==================== */
+/* ==================== KHUNG CHAT BÊN PHẢI (HIỂN THỊ TRỌN VẸN 100%) ==================== */
 .sun-chat-dock {
-  width: 244px;
+  width: 216px;
   height: 100%;
-  background: rgba(18, 3, 1, 0.94);
+  background: rgba(18, 3, 1, 0.95);
   border: 2px solid var(--sun-gold-2);
-  border-radius: 18px;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .sun-chat-header {
-  height: 28px;
+  height: 26px;
   flex-shrink: 0;
-  padding: 0 10px;
+  padding: 0 8px;
   background: linear-gradient(180deg, #3b0b04, #1c0401);
   border-bottom: 1px solid rgba(245, 185, 53, 0.3);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 800;
   color: var(--sun-gold-1);
 }
 
-.online-badge { color: #00e676; font-size: 9.5px; }
+.online-badge {
+  color: #00e676;
+  font-size: 9px;
+  flex-shrink: 0;
+}
 
 .sun-chat-feed {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 5px 8px;
+  padding: 5px 7px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: 10.5px;
+  gap: 3.5px;
+  font-size: 10px;
 }
 
 .chat-line {
-  line-height: 1.28;
+  line-height: 1.25;
   word-wrap: break-word;
   overflow-wrap: anywhere;
 }
 
-.chat-user { font-weight: 800; color: #ffd54f; margin-right: 4px; }
+.chat-user { font-weight: 800; color: #ffd54f; margin-right: 3px; }
 .chat-user.me { color: #00e676; }
 
 .sun-chat-form {
-  height: 30px;
+  height: 28px;
+  width: 100%;
   flex-shrink: 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px;
   border-top: 1px solid rgba(245, 185, 53, 0.35);
 }
 
 .sun-chat-form input {
-  flex: 1;
+  width: 100%;
   min-width: 0;
   background: #0c0200;
   border: none;
   color: #fff;
-  padding: 0 8px;
-  font-size: 11px;
+  padding: 0 7px;
+  font-size: 10.5px;
   outline: none;
   user-select: text;
 }
 
 .sun-chat-form button {
-  width: 44px;
-  flex-shrink: 0;
+  width: 42px;
   background: linear-gradient(180deg, #fff099, #cf8512);
   color: #2b0500;
   border: none;
   font-weight: 900;
-  font-size: 11px;
+  font-size: 10.5px;
   cursor: pointer;
 }
 
 /* ==================== CÁC SẢNH GAME NGANG KHÁC ==================== */
 .xd-landscape-board, .slot-landscape-wrap, .gacha-landscape-wrap, .mini-landscape-grid {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 12px;
+  grid-template-columns: 240px 1fr;
+  gap: 10px;
   width: 100%;
   height: 100%;
   background: rgba(24, 5, 2, 0.85);
   border: 2px solid var(--sun-gold-2);
-  border-radius: 20px;
-  padding: 10px;
+  border-radius: 18px;
+  padding: 8px;
 }
 
 .mini-landscape-grid { grid-template-columns: 1.2fr 1fr; }
@@ -874,74 +886,74 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-.xd-plate { width: 116px; height: 116px; border-radius: 50%; background: #260707; border: 4px solid var(--sun-gold-2); position: relative; display: flex; align-items: center; justify-content: center; }
-.xd-coins { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-.xd-coin { width: 24px; height: 24px; border-radius: 50%; }
+.xd-plate { width: 110px; height: 110px; border-radius: 50%; background: #260707; border: 3.5px solid var(--sun-gold-2); position: relative; display: flex; align-items: center; justify-content: center; }
+.xd-coins { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+.xd-coin { width: 22px; height: 22px; border-radius: 50%; }
 .xd-coin.red { background: radial-gradient(circle, #ff5252, #b71c1c); }
 .xd-coin.white { background: radial-gradient(circle, #ffffff, #bdbdbd); }
-.xd-bowl { position: absolute; inset: 5px; border-radius: 50%; background: radial-gradient(circle, #8e1414, #360505); border: 2px solid var(--sun-gold-1); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 11px; color: var(--sun-gold-1); transition: 0.45s; }
-.xd-bowl.open { transform: translateY(-95px) scale(0.85); opacity: 0.2; }
+.xd-bowl { position: absolute; inset: 5px; border-radius: 50%; background: radial-gradient(circle, #8e1414, #360505); border: 2px solid var(--sun-gold-1); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10.5px; color: var(--sun-gold-1); transition: 0.45s; }
+.xd-bowl.open { transform: translateY(-90px) scale(0.85); opacity: 0.2; }
 .xd-grid-doors { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.xd-sub-doors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.xd-door { background: rgba(0, 0, 0, 0.55); border: 1.5px solid rgba(245, 185, 53, 0.45); border-radius: 12px; padding: 8px 4px; text-align: center; cursor: pointer; }
-.xd-door.win-glow { border-color: #fff; box-shadow: 0 0 16px #ffd700; }
-.xd-door-name { font-size: 20px; font-weight: 900; }
+.xd-sub-doors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.xd-door { background: rgba(0, 0, 0, 0.55); border: 1.5px solid rgba(245, 185, 53, 0.45); border-radius: 10px; padding: 6px 4px; text-align: center; cursor: pointer; }
+.xd-door.win-glow { border-color: #fff; box-shadow: 0 0 14px #ffd700; }
+.xd-door-name { font-size: 18px; font-weight: 900; }
 .main-even .xd-door-name { color: #ff5252; }
 .main-odd .xd-door-name { color: #40c4ff; }
-.xd-odds { font-size: 10px; opacity: 0.8; }
-.xd-pool { font-size: 12px; font-weight: 800; color: #ffd700; }
-.xd-my { font-size: 10.5px; color: #69f0ae; font-weight: 700; }
+.xd-odds { font-size: 9.5px; opacity: 0.8; }
+.xd-pool { font-size: 11px; font-weight: 800; color: #ffd700; }
+.xd-my { font-size: 10px; color: #69f0ae; font-weight: 700; }
 .xd-cau-strip { display: flex; gap: 3px; }
 
 .slot-left-reels { display: flex; align-items: center; justify-content: center; }
-.slot-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #0e0303; padding: 8px; border-radius: 14px; border: 2px solid var(--sun-gold-2); }
-.slot-cell { height: 74px; background: #260909; border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 34px; }
-.jp-big-number { font-size: 24px; font-weight: 900; color: #ffd700; }
-.slot-win-msg { font-size: 12px; font-weight: 800; color: #69f0ae; }
+.slot-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #0e0303; padding: 8px; border-radius: 12px; border: 2px solid var(--sun-gold-2); }
+.slot-cell { height: 68px; background: #260909; border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+.jp-big-number { font-size: 22px; font-weight: 900; color: #ffd700; }
+.slot-win-msg { font-size: 11px; font-weight: 800; color: #69f0ae; }
 .slot-bet-selector { display: flex; gap: 5px; }
-.sbet-btn { background: #2b0a0a; border: 1px solid var(--sun-gold-2); color: #ffd700; padding: 5px 10px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+.sbet-btn { background: #2b0a0a; border: 1px solid var(--sun-gold-2); color: #ffd700; padding: 4px 9px; border-radius: 7px; font-weight: 800; cursor: pointer; }
 .sbet-btn.active { background: #ffd700; color: #240505; }
-.slot-action-btns, .gacha-btn-row { display: flex; gap: 8px; width: 100%; }
-.spin-main-btn { flex: 2; background: linear-gradient(180deg, #fff099, #b8860b); color: #240404; border: none; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 900; cursor: pointer; }
-.spin-auto-btn { flex: 1; background: #331010; border: 1px solid var(--sun-gold-2); color: #ffd700; border-radius: 10px; font-weight: 800; cursor: pointer; }
+.slot-action-btns, .gacha-btn-row { display: flex; gap: 7px; width: 100%; }
+.spin-main-btn { flex: 2; background: linear-gradient(180deg, #fff099, #b8860b); color: #240404; border: none; padding: 9px; border-radius: 9px; font-size: 12px; font-weight: 900; cursor: pointer; }
+.spin-auto-btn { flex: 1; background: #331010; border: 1px solid var(--sun-gold-2); color: #ffd700; border-radius: 9px; font-weight: 800; cursor: pointer; }
 
-.gacha-rates { display: flex; gap: 4px; font-size: 9.5px; flex-wrap: wrap; justify-content: center; }
+.gacha-rates { display: flex; gap: 4px; font-size: 9px; flex-wrap: wrap; justify-content: center; }
 .tier-ur { background: #b71c1c; padding: 2px 5px; border-radius: 5px; font-weight: 800; }
 .tier-ssr { background: #e65100; padding: 2px 5px; border-radius: 5px; font-weight: 800; }
 .tier-sr { background: #4a148c; padding: 2px 5px; border-radius: 5px; font-weight: 800; }
 .pity-track { width: 100%; height: 8px; background: #0d0205; border-radius: 6px; border: 1px solid var(--sun-gold-2); overflow: hidden; }
 .pity-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ffd700, #ff1744); }
-.gacha-chest-Showcase { background: rgba(0, 0, 0, 0.45); border-radius: 14px; display: flex; align-items: center; justify-content: center; padding: 8px; }
-.chest-icon { font-size: 60px; }
+.gacha-chest-Showcase { background: rgba(0, 0, 0, 0.45); border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 8px; }
+.chest-icon { font-size: 56px; }
 .gacha-results-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 100%; }
-.gacha-card { background: #240814; border: 1px solid var(--sun-gold-2); border-radius: 8px; padding: 5px 2px; font-size: 9.5px; font-weight: 800; text-align: center; }
+.gacha-card { background: #240814; border: 1px solid var(--sun-gold-2); border-radius: 7px; padding: 4px 2px; font-size: 9px; font-weight: 800; text-align: center; }
 .gacha-card.UR { background: linear-gradient(180deg, #ff1744, #6a0000); border-color: #fff; }
 .gacha-card.SSR { background: linear-gradient(180deg, #ff9100, #663000); }
-.gold-select { background: #240808; color: #ffd700; border: 1px solid var(--sun-gold-2); padding: 5px 8px; border-radius: 8px; font-weight: 700; }
-.gacha-pull-btn { flex: 1; padding: 9px 6px; border-radius: 9px; border: none; font-weight: 900; font-size: 11px; color: #fff; cursor: pointer; }
+.gold-select { background: #240808; color: #ffd700; border: 1px solid var(--sun-gold-2); padding: 4px 8px; border-radius: 7px; font-weight: 700; }
+.gacha-pull-btn { flex: 1; padding: 8px 6px; border-radius: 8px; border: none; font-weight: 900; font-size: 11px; color: #fff; cursor: pointer; }
 .gacha-pull-btn.x1 { background: linear-gradient(180deg, #4fc3f7, #0277bd); }
 .gacha-pull-btn.x10 { background: linear-gradient(180deg, #ffd700, #c62828); }
 
-.baucua-card, .hilow-card, .rank-card { background: rgba(0,0,0,0.45); border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 14px; padding: 8px; display: flex; flex-direction: column; justify-content: space-between; width: 100%; }
-.sub-header { display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: #ffd700; font-size: 12px; }
-.gold-action-sm { background: linear-gradient(180deg, #fff099, #b8860b); border: none; color: #240404; padding: 4px 10px; border-radius: 7px; font-weight: 900; cursor: pointer; }
+.baucua-card, .hilow-card, .rank-card { background: rgba(0,0,0,0.45); border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 12px; padding: 8px; display: flex; flex-direction: column; justify-content: space-between; width: 100%; }
+.sub-header { display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: #ffd700; font-size: 11.5px; }
+.gold-action-sm { background: linear-gradient(180deg, #fff099, #b8860b); border: none; color: #240404; padding: 4px 9px; border-radius: 6px; font-weight: 900; cursor: pointer; }
 .bc-dice-row { display: flex; justify-content: center; gap: 10px; }
-.bc-die { width: 40px; height: 40px; background: #2e0c0c; border: 1.5px solid #ffd700; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 21px; }
+.bc-die { width: 38px; height: 38px; background: #2e0c0c; border: 1.5px solid #ffd700; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
 .bc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-.bc-item { background: #2b0b0b; border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 8px; padding: 5px; text-align: center; font-size: 11px; font-weight: 800; cursor: pointer; }
-.bc-item b { display: block; color: #69f0ae; font-size: 10px; }
+.bc-item { background: #2b0b0b; border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 7px; padding: 4px; text-align: center; font-size: 10.5px; font-weight: 800; cursor: pointer; }
+.bc-item b { display: block; color: #69f0ae; font-size: 9.5px; }
 .hl-arena { display: flex; align-items: center; justify-content: space-around; gap: 10px; flex: 1; }
-.playing-card { width: 70px; height: 94px; background: #fff; color: #d50000; border-radius: 9px; font-size: 25px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
-.hl-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.hl-btn { padding: 7px; border: none; border-radius: 8px; font-weight: 900; font-size: 11px; cursor: pointer; }
+.playing-card { width: 66px; height: 90px; background: #fff; color: #d50000; border-radius: 8px; font-size: 24px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+.hl-actions { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.hl-btn { padding: 6px; border: none; border-radius: 7px; font-weight: 900; font-size: 10.5px; cursor: pointer; }
 .hl-btn.up { background: #e53935; color: #fff; }
 .hl-btn.down { background: #1e88e5; color: #fff; }
 .hl-btn.cash { background: #ffd700; color: #240404; }
-.rank-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; overflow-y: auto; }
-.rank-row { display: flex; justify-content: space-between; background: #290b0b; padding: 7px 10px; border-radius: 8px; font-size: 11px; }
+.rank-list { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; overflow-y: auto; }
+.rank-row { display: flex; justify-content: space-between; background: #290b0b; padding: 6px 9px; border-radius: 7px; font-size: 10.5px; }
 
 /* ==================== MODALS & JACKPOT OVERLAY ==================== */
 .modal-backdrop, .jp-explosion-overlay {
@@ -956,65 +968,65 @@ html, body {
 }
 
 .jp-explosion-card {
-  width: 400px;
+  width: 390px;
   background: radial-gradient(circle, #7a0e0e 0%, #210303 100%);
   border: 3px solid #ffd700;
-  border-radius: 20px;
-  padding: 16px;
+  border-radius: 18px;
+  padding: 14px;
   text-align: center;
   box-shadow: 0 0 50px #ff1744;
 }
 
-.jp-dragon-icon { font-size: 42px; }
-.jp-title-flare { font-size: 21px; font-weight: 900; color: #ffd700; }
-.jp-sub-flare { font-size: 12px; font-weight: 800; color: #fff; margin: 4px 0; }
-.jp-amount-flare { font-size: 25px; font-weight: 900; color: #00e676; margin: 6px 0; }
-.jp-reset-note { font-size: 10.5px; color: #ffe082; margin-bottom: 10px; }
+.jp-dragon-icon { font-size: 40px; }
+.jp-title-flare { font-size: 20px; font-weight: 900; color: #ffd700; }
+.jp-sub-flare { font-size: 11.5px; font-weight: 800; color: #fff; margin: 4px 0; }
+.jp-amount-flare { font-size: 24px; font-weight: 900; color: #00e676; margin: 6px 0; }
+.jp-reset-note { font-size: 10px; color: #ffe082; margin-bottom: 10px; }
 
 .modal-sheet {
-  width: 500px;
+  width: 480px;
   max-height: 92%;
   background: #210602;
   border: 2px solid var(--sun-gold-2);
-  border-radius: 16px;
-  padding: 12px 14px;
+  border-radius: 14px;
+  padding: 10px 12px;
   overflow-y: auto;
 }
 
-.modal-sheet.admin-wide { width: 700px; }
-.modal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: #ffd700; font-size: 13px; }
-.close-x { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; }
-.modal-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.vault-info { display: flex; justify-content: space-around; background: #120300; padding: 6px; border-radius: 8px; margin-bottom: 8px; font-size: 12px; color: #ffd700; }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-group input { background: #0e0200; border: 1px solid var(--sun-gold-3); color: #fff; padding: 7px 10px; border-radius: 8px; font-size: 12px; user-select: text; }
-.btn-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.outline-btn { background: #2b0904; border: 1px solid var(--sun-gold-2); color: #ffd700; padding: 8px; border-radius: 8px; font-weight: 800; font-size: 11px; cursor: pointer; }
-.hint-sm { font-size: 10.5px; color: #ffe082; }
+.modal-sheet.admin-wide { width: 680px; }
+.modal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; color: #ffd700; font-size: 12.5px; }
+.close-x { background: none; border: none; color: #fff; font-size: 17px; cursor: pointer; }
+.modal-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.vault-info { display: flex; justify-content: space-around; background: #120300; padding: 5px; border-radius: 7px; margin-bottom: 6px; font-size: 11.5px; color: #ffd700; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group input { background: #0e0200; border: 1px solid var(--sun-gold-3); color: #fff; padding: 6px 9px; border-radius: 7px; font-size: 11.5px; user-select: text; }
+.btn-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.outline-btn { background: #2b0904; border: 1px solid var(--sun-gold-2); color: #ffd700; padding: 7px; border-radius: 7px; font-weight: 800; font-size: 10.5px; cursor: pointer; }
+.hint-sm { font-size: 10px; color: #ffe082; }
 .avatar-picker { display: flex; gap: 6px; justify-content: center; }
-.av-choice { font-size: 20px; padding: 4px 8px; background: #2c0a04; border: 1px solid var(--sun-gold-2); border-radius: 8px; cursor: pointer; }
+.av-choice { font-size: 19px; padding: 3px 7px; background: #2c0a04; border: 1px solid var(--sun-gold-2); border-radius: 7px; cursor: pointer; }
 
 .admin-btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin: 4px 0; }
-.adm-opt { background: #2b0a04; border: 1px solid var(--sun-gold-3); color: #fff; padding: 6px 4px; border-radius: 7px; font-size: 10.5px; font-weight: 700; cursor: pointer; }
+.adm-opt { background: #2b0a04; border: 1px solid var(--sun-gold-3); color: #fff; padding: 5px 4px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer; }
 .adm-opt.active { background: #00c853; color: #00220b; border-color: #fff; }
-.custom-dice-box { display: flex; align-items: center; gap: 4px; background: #140300; padding: 5px; border-radius: 8px; font-size: 10.5px; margin-top: 4px; }
-.custom-dice-box input { width: 34px; text-align: center; background: #2b0a0a; border: 1px solid var(--sun-gold-2); color: #ffd700; padding: 3px; border-radius: 5px; font-weight: 900; }
-.admin-acc-list { display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; }
-.acc-item-card { background: #140300; border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 8px; padding: 6px; font-size: 10px; display: flex; flex-direction: column; gap: 4px; }
+.custom-dice-box { display: flex; align-items: center; gap: 4px; background: #140300; padding: 4px; border-radius: 7px; font-size: 10px; margin-top: 4px; }
+.custom-dice-box input { width: 32px; text-align: center; background: #2b0a0a; border: 1px solid var(--sun-gold-2); color: #ffd700; padding: 2px; border-radius: 5px; font-weight: 900; }
+.admin-acc-list { display: flex; flex-direction: column; gap: 5px; max-height: 210px; overflow-y: auto; }
+.acc-item-card { background: #140300; border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 7px; padding: 5px; font-size: 9.5px; display: flex; flex-direction: column; gap: 3px; }
 .acc-item-top { display: flex; justify-content: space-between; font-weight: 800; color: #ffd700; }
 .acc-item-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
-.acc-mini-btn { padding: 4px 2px; font-size: 9.5px; font-weight: 800; border-radius: 5px; border: 1px solid var(--sun-gold-3); background: #2d0b05; color: #fff; cursor: pointer; }
+.acc-mini-btn { padding: 3px 2px; font-size: 9px; font-weight: 800; border-radius: 4px; border: 1px solid var(--sun-gold-3); background: #2d0b05; color: #fff; cursor: pointer; }
 
 .toast-box {
   position: absolute;
-  top: 50px;
+  top: 46px;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(90deg, #fff099, #f5b935);
   color: #2b0500;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 11.5px;
+  padding: 5px 14px;
+  border-radius: 18px;
+  font-size: 11px;
   font-weight: 900;
   z-index: 400;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.75);
