@@ -11,6 +11,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-unsigned-ipa:
     name: Compile Capacitor iOS 16.2 & Package IPA
@@ -51,14 +54,27 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations~ipad:0 string UIInterfaceOrientationLandscapeRight" "$PLIST"
           /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations~ipad:1 string UIInterfaceOrientationLandscapeLeft" "$PLIST"
 
-          /usr/libexec/PlistBuddy -c "Set :UIStatusBarHidden true" "$PLIST" || /usr/libexec/PlistBuddy -c "Add :UIStatusBarHidden bool true" "$PLIST"
-          /usr/libexec/PlistBuddy -c "Set :UIViewControllerBasedStatusBarAppearance false" "$PLIST" || /usr/libexec/PlistBuddy -c "Add :UIViewControllerBasedStatusBarAppearance bool false" "$PLIST"
-          /usr/libexec/PlistBuddy -c "Set :UIRequiresFullScreen true" "$PLIST" || /usr/libexec/PlistBuddy -c "Add :UIRequiresFullScreen bool true" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Delete :UIStatusBarHidden" "$PLIST" || true
+          /usr/libexec/PlistBuddy -c "Add :UIStatusBarHidden bool true" "$PLIST"
+
+          /usr/libexec/PlistBuddy -c "Delete :UIViewControllerBasedStatusBarAppearance" "$PLIST" || true
+          /usr/libexec/PlistBuddy -c "Add :UIViewControllerBasedStatusBarAppearance bool false" "$PLIST"
+
+          /usr/libexec/PlistBuddy -c "Delete :UIRequiresFullScreen" "$PLIST" || true
+          /usr/libexec/PlistBuddy -c "Add :UIRequiresFullScreen bool true" "$PLIST"
 
           cat << 'EOF' > ios/App/App/AppDelegate.swift
           import UIKit
           import Capacitor
-          import WebKit
+
+          extension UIViewController {
+              @objc func sunwin_prefersHomeIndicatorAutoHidden() -> Bool {
+                  return true
+              }
+              @objc func sunwin_prefersStatusBarHidden() -> Bool {
+                  return true
+              }
+          }
 
           @UIApplicationMain
           class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -66,43 +82,20 @@ jobs:
               var window: UIWindow?
 
               func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+                  if let m1 = class_getInstanceMethod(UIViewController.self, #selector(getter: UIViewController.prefersHomeIndicatorAutoHidden)),
+                     let s1 = class_getInstanceMethod(UIViewController.self, #selector(UIViewController.sunwin_prefersHomeIndicatorAutoHidden)) {
+                      method_exchangeImplementations(m1, s1)
+                  }
+                  if let m2 = class_getInstanceMethod(UIViewController.self, #selector(getter: UIViewController.prefersStatusBarHidden)),
+                     let s2 = class_getInstanceMethod(UIViewController.self, #selector(UIViewController.sunwin_prefersStatusBarHidden)) {
+                      method_exchangeImplementations(m2, s2)
+                  }
                   UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
-                  application.isStatusBarHidden = true
-
-                  // Ẩn thanh trắng Home Indicator dưới đáy iPhone & Status Bar
-                  let hideBlock: @convention(block) (AnyObject) -> Bool = { _ in return true }
-                  let hideImp = imp_implementationWithBlock(hideBlock)
-                  if let m1 = class_getInstanceMethod(UIViewController.self, #selector(getter: UIViewController.prefersHomeIndicatorAutoHidden)) {
-                      method_setImplementation(m1, hideImp)
-                  }
-                  if let m2 = class_getInstanceMethod(UIViewController.self, #selector(getter: UIViewController.prefersStatusBarHidden)) {
-                      method_setImplementation(m2, hideImp)
-                  }
-                  let edgeBlock: @convention(block) (AnyObject) -> UInt = { _ in return UIRectEdge.all.rawValue }
-                  let edgeImp = imp_implementationWithBlock(edgeBlock)
-                  if let m3 = class_getInstanceMethod(UIViewController.self, #selector(getter: UIViewController.preferredScreenEdgesDeferringSystemGestures)) {
-                      method_setImplementation(m3, edgeImp)
-                  }
-
-                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                      self.window?.backgroundColor = UIColor(red: 0.06, green: 0.01, blue: 0.0, alpha: 1.0)
-                      if let rootVC = self.window?.rootViewController {
-                          rootVC.view.backgroundColor = UIColor(red: 0.06, green: 0.01, blue: 0.0, alpha: 1.0)
-                          rootVC.setNeedsStatusBarAppearanceUpdate()
-                          rootVC.setNeedsUpdateOfHomeIndicatorAutoHidden()
-                          rootVC.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
-                      }
-                  }
                   return true
               }
 
               func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
                   return .landscape
-              }
-
-              func applicationDidBecomeActive(_ application: UIApplication) {
-                  self.window?.rootViewController?.setNeedsUpdateOfHomeIndicatorAutoHidden()
-                  self.window?.rootViewController?.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
               }
 
               func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -115,25 +108,44 @@ jobs:
           }
           EOF
 
-      - name: 7. Set Deployment Target 16.2 & Build Unsigned Archive
+      - name: 7. Compile iOS 16.2 App (Unsigned Build)
         run: |
           cd ios/App
-          xcodebuild clean archive \
-            -project App.xcodeproj \
-            -scheme App \
-            -configuration Release \
-            -sdk iphoneos \
-            -archivePath "$RUNNER_TEMP/App.xcarchive" \
-            IPHONEOS_DEPLOYMENT_TARGET=16.2 \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            AD_HOC_CODE_SIGNING_ALLOWED=YES
+          if [ -d "App.xcworkspace" ]; then
+            xcodebuild build \
+              -workspace App.xcworkspace \
+              -scheme App \
+              -configuration Release \
+              -sdk iphoneos \
+              -derivedDataPath "$RUNNER_TEMP/derived" \
+              IPHONEOS_DEPLOYMENT_TARGET=16.2 \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO \
+              EXPANDED_CODE_SIGN_IDENTITY=""
+          else
+            xcodebuild build \
+              -project App.xcodeproj \
+              -scheme App \
+              -configuration Release \
+              -sdk iphoneos \
+              -derivedDataPath "$RUNNER_TEMP/derived" \
+              IPHONEOS_DEPLOYMENT_TARGET=16.2 \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO \
+              EXPANDED_CODE_SIGN_IDENTITY=""
+          fi
 
       - name: 8. Package Payload into .ipa
         run: |
+          APP_PATH=$(find "$RUNNER_TEMP/derived" -name "App.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "App.app not found!"
+            exit 1
+          fi
           mkdir -p "$RUNNER_TEMP/ipa/Payload"
-          cp -R "$RUNNER_TEMP/App.xcarchive/Products/Applications/App.app" "$RUNNER_TEMP/ipa/Payload/"
+          cp -R "$APP_PATH" "$RUNNER_TEMP/ipa/Payload/App.app"
           cd "$RUNNER_TEMP/ipa"
           zip -qr "$GITHUB_WORKSPACE/HoangGiaVIP-iOS16.2-unsigned.ipa" Payload
 
