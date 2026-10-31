@@ -1,35 +1,45 @@
-// ==================== TỰ ĐỘNG CĂN CHỈNH MÀN HÌNH NGANG VỪA KHÍT 100% IPHONE ====================
+// ==================== CĂN GIỮA TUYỆT ĐỐI BẰNG PIXEL TRÊN MỌI MÀN HÌNH IPHONE ====================
 let currentScale = 1;
 let isRotatedPortrait = false;
 
 function fitStageToScreen() {
+  const stage = document.getElementById('viewport-stage');
   const shell = document.getElementById('app-shell');
-  if (!shell) return;
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const designW = 940;
-  const designH = 430;
+  if (!stage || !shell) return;
+
+  const rect = stage.getBoundingClientRect();
+  const vw = rect.width || window.innerWidth;
+  const vh = rect.height || window.innerHeight;
+  const designW = 880;
+  const designH = 400;
+
+  // Đặt vị trí chính xác bằng pixel dựa trên khung hiển thị thực tế
+  shell.style.left = `${vw / 2}px`;
+  shell.style.top = `${vh / 2}px`;
 
   if (vh > vw) {
-    // Khi người chơi cầm dọc điện thoại -> Tự động xoay ngang 90 độ và trừ vùng an toàn tai thỏ/Home bar
+    // Trường hợp mở trên trình duyệt dọc
     isRotatedPortrait = true;
-    const safeLength = vh - 34;
-    const safeThickness = vw - 12;
-    currentScale = Math.min(safeLength / designW, safeThickness / designH);
+    const availW = vh - 20;
+    const availH = vw - 10;
+    currentScale = Math.min(availW / designW, availH / designH);
     shell.style.transform = `translate(-50%, -50%) rotate(90deg) scale(${currentScale})`;
   } else {
-    // Khi người chơi xoay ngang điện thoại -> Trừ vùng an toàn tai thỏ 2 bên và thanh Home dưới đáy
+    // Màn hình ngang gốc của app IPA trên iPhone
     isRotatedPortrait = false;
-    const safeLength = vw - 40;
-    const safeThickness = vh - 16;
-    currentScale = Math.min(safeLength / designW, safeThickness / designH);
+    const availW = vw - 24;
+    const availH = vh - 10;
+    currentScale = Math.min(availW / designW, availH / designH);
     shell.style.transform = `translate(-50%, -50%) rotate(0deg) scale(${currentScale})`;
   }
 }
 
 window.addEventListener('resize', fitStageToScreen);
-window.addEventListener('orientationchange', () => setTimeout(fitStageToScreen, 120));
-fitStageToScreen();
+window.addEventListener('orientationchange', () => {
+  setTimeout(fitStageToScreen, 80);
+  setTimeout(fitStageToScreen, 300);
+});
+setTimeout(fitStageToScreen, 50);
 
 // ==================== CƠ SỞ DỮ LIỆU TÀI KHOẢN & TRẠNG THÁI ====================
 const ACC_DB_KEY = 'sunwin_accounts_db_v5';
@@ -299,7 +309,7 @@ function updateHeaderUI() {
   saveState();
 }
 
-// ==================== HỆ THỐNG NGƯỜI CHƠI THẬT & CHAT TỰ NHIÊN SUNWIN ====================
+// ==================== HỆ THỐNG NGƯỜI CHƠI THẬT & CHAT TỰ NHIÊN ====================
 const REAL_PLAYERS = [
   'tuan_bds99', 'hung_camap', 'nam_becau88', 'linh_xinh2k3', 'duc_allin',
   'hoang_audi', 'minh_nhua_hn', 'thanh_nan_bat', 'khanh_sky99', 'binh_gold_vn',
@@ -496,7 +506,6 @@ function startTxRound() {
   document.getElementById('tx-md5-str').textContent = generateMD5String(state.txSession, 3, 4, 5);
   document.getElementById('tx-result-pop').classList.add('hidden');
   document.getElementById('tx-bowl').classList.add('hidden');
-  // Ẩn xúc xắc khi đang đếm ngược để không bị đè số lên xúc xắc
   document.getElementById('tx-dice-group').classList.add('hidden');
   document.getElementById('tx-timer').classList.remove('hidden');
   document.getElementById('tx-timer').textContent = txTimeLeft;
@@ -655,7 +664,7 @@ function revealTxResult() {
     const moveY = isRotatedPortrait ? -rawDx : rawDy;
 
     bowl.style.transform = `translate(${moveX}px, ${moveY}px)`;
-    if (Math.hypot(moveX, moveY) > 58) {
+    if (Math.hypot(moveX, moveY) > 55) {
       dragging = false;
       bowl.style.transform = 'translate(0,0)';
       revealTxResult();
