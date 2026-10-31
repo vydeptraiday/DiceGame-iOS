@@ -1,11 +1,11 @@
 :root {
-  --bg-deep: #0b0404;
-  --bg-card: #1a0909;
-  --gold-1: #ffe680;
-  --gold-2: #d4af37;
-  --tai-red: #ff2a2a;
-  --xiu-blue: #00d2ff;
-  --text-light: #fff6d6;
+  --sun-bg-1: #1b0502;
+  --sun-bg-2: #360c05;
+  --sun-gold-1: #fff099;
+  --sun-gold-2: #f5b935;
+  --sun-gold-3: #9e6308;
+  --sun-red: #d91414;
+  --text-main: #fff8e7;
 }
 
 * {
@@ -16,63 +16,89 @@
   user-select: none;
 }
 
-body {
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #090100;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-  background: radial-gradient(circle at top, #2b0909 0%, #090202 100%);
-  color: var(--text-light);
-  min-height: 100vh;
-  overflow-x: hidden;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
+  color: var(--text-main);
+}
+
+/* ==================== TỰ ĐỘNG XOAY MÀN HÌNH NGANG (AUTO-LANDSCAPE) ==================== */
+#landscape-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #3b0d06 0%, #0d0200 100%);
+}
+
+/* Khi cầm điện thoại dọc -> Tự động xoay ngang 90 độ chuẩn Sunwin */
+@media screen and (orientation: portrait) {
+  #landscape-wrapper {
+    width: 100vh;
+    height: 100vw;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
 }
 
 #app-shell {
-  max-width: 480px;
-  margin: 0 auto;
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
+  max-width: 960px;
+  max-height: 460px;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #1a0707 0%, #0d0303 100%);
-  box-shadow: 0 0 40px rgba(212, 175, 55, 0.25);
-  border-left: 1px solid rgba(212, 175, 55, 0.25);
-  border-right: 1px solid rgba(212, 175, 55, 0.25);
+  justify-content: space-between;
+  background: radial-gradient(circle at 50% 30%, #4a1107 0%, #160401 100%);
+  border: 2px solid var(--sun-gold-2);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(245, 185, 53, 0.15);
   position: relative;
+  overflow: hidden;
 }
 
-/* ==================== AUTH OVERLAY ==================== */
+/* ==================== AUTH SCREEN SUNWIN ==================== */
 .auth-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, #3b0b0b 0%, #090202 100%);
+  background: radial-gradient(circle at center, #521107 0%, #110200 100%);
   z-index: 300;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 12px;
 }
 
 .auth-card {
   width: 100%;
-  max-width: 390px;
-  background: linear-gradient(180deg, #290909, #120303);
-  border: 2px solid var(--gold-2);
+  max-width: 440px;
+  background: linear-gradient(180deg, #380b04 0%, #180301 100%);
+  border: 2.5px solid var(--sun-gold-2);
   border-radius: 18px;
-  padding: 20px 16px;
-  box-shadow: 0 0 35px rgba(255, 215, 0, 0.35);
+  padding: 16px 20px;
   text-align: center;
+  box-shadow: 0 0 45px rgba(245, 185, 53, 0.4);
 }
 
-.auth-logo {
-  font-size: 24px;
+.sun-logo-badge {
+  font-size: 28px;
   font-weight: 900;
-  color: var(--gold-1);
-  text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+  color: var(--sun-gold-1);
+  text-shadow: 0 2px 12px #ff9100;
+  letter-spacing: 2px;
 }
 
 .auth-sub {
-  font-size: 11px;
-  color: #ffab91;
-  margin: 4px 0 14px;
+  font-size: 10px;
+  color: #ffcc80;
+  margin-bottom: 10px;
   font-weight: 700;
 }
 
@@ -80,448 +106,431 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 6px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .auth-tab {
-  background: #240808;
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: #240602;
+  border: 1px solid var(--sun-gold-3);
   color: #e6c875;
-  padding: 8px 4px;
+  padding: 7px;
   border-radius: 8px;
-  font-size: 12px;
-  font-weight: 800;
+  font-size: 11px;
+  font-weight: 900;
   cursor: pointer;
 }
 
 .auth-tab.active {
-  background: linear-gradient(180deg, #ffe066, #b8860b);
-  color: #240404;
+  background: linear-gradient(180deg, #fff099, #d48817);
+  color: #2b0500;
   border-color: #fff;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+}
+
+.auth-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
 .auth-form input {
-  background: #0d0202;
-  border: 1px solid var(--gold-2);
+  background: #0f0200;
+  border: 1.5px solid var(--sun-gold-3);
   color: #fff;
-  padding: 11px 12px;
-  border-radius: 10px;
-  font-size: 13px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 12px;
   outline: none;
   user-select: text;
 }
 
-/* ==================== JACKPOT EXPLOSION OVERLAY ==================== */
-.jp-explosion-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.88);
-  z-index: 350;
+.sun-gold-btn {
+  background: linear-gradient(180deg, #fff099 0%, #f5b935 50%, #b87309 100%);
+  color: #2e0700;
+  border: 1px solid #fff5cc;
+  padding: 9px 14px;
+  border-radius: 9px;
+  font-weight: 900;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(245, 185, 53, 0.45);
+}
+
+/* ==================== TOP BAR SUNWIN ==================== */
+.sun-topbar {
+  height: 46px;
+  background: linear-gradient(180deg, #3d0d05 0%, #1c0502 100%);
+  border-bottom: 1.5px solid var(--sun-gold-2);
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 16px;
-  animation: popIn 0.35s ease;
-}
-
-@keyframes popIn {
-  0% { transform: scale(0.6); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.jp-explosion-card {
-  width: 100%;
-  max-width: 380px;
-  background: radial-gradient(circle, #6e0f0f 0%, #210404 100%);
-  border: 3px solid #ffd700;
-  border-radius: 22px;
-  padding: 22px 16px;
-  text-align: center;
-  box-shadow: 0 0 50px #ff1744, inset 0 0 25px rgba(255, 215, 0, 0.5);
-}
-
-.jp-dragon-icon {
-  font-size: 56px;
-  margin-bottom: 6px;
-}
-
-.jp-title-flare {
-  font-size: 24px;
-  font-weight: 900;
-  color: #ffd700;
-  text-shadow: 0 0 15px #ffeb3b;
-}
-
-.jp-sub-flare {
-  font-size: 14px;
-  font-weight: 800;
-  color: #fff;
-  margin: 6px 0;
-}
-
-.jp-amount-flare {
-  font-size: 28px;
-  font-weight: 900;
-  color: #00e676;
-  text-shadow: 0 0 16px rgba(0, 230, 118, 0.8);
-  margin: 10px 0;
-}
-
-.jp-reset-note {
-  font-size: 11px;
-  color: #ffdf85;
-  margin-bottom: 14px;
-}
-
-/* HEADER */
-.top-bar {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 8px 10px;
-  background: linear-gradient(180deg, #320c0c 0%, #160505 100%);
-  border-bottom: 1.5px solid var(--gold-2);
+  padding: 0 10px;
+  gap: 8px;
 }
 
-.user-chip {
+.sun-user-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   cursor: pointer;
 }
 
-.avatar-ring {
-  width: 38px;
-  height: 38px;
+.sun-avatar {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: radial-gradient(circle, #501212, #1c0505);
-  border: 2px solid var(--gold-1);
+  background: radial-gradient(circle, #6e1709, #240501);
+  border: 2px solid var(--sun-gold-1);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 18px;
 }
 
-.user-line {
+.sun-nick-row {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 700;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--sun-gold-1);
 }
 
-.vip-tag {
-  background: linear-gradient(135deg, #ffd700, #b8860b);
-  color: #200;
-  font-size: 10px;
+.sun-vip-badge {
+  background: linear-gradient(135deg, #ffd700, #b87309);
+  color: #240400;
+  font-size: 9px;
   font-weight: 900;
-  padding: 1px 5px;
+  padding: 1px 4px;
   border-radius: 4px;
 }
 
-.balance-pill {
+.sun-uid {
+  font-size: 9.5px;
+  color: #bcaaa4;
+}
+
+.sun-currency-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sun-money-pill {
   display: flex;
   align-items: center;
   gap: 5px;
-  background: rgba(0, 0, 0, 0.65);
-  border: 1px solid var(--gold-2);
-  border-radius: 20px;
+  background: #0f0200;
+  border: 1.5px solid var(--sun-gold-2);
+  border-radius: 18px;
   padding: 2px 4px 2px 8px;
-  margin-top: 2px;
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--gold-1);
+  font-size: 12px;
+  font-weight: 900;
+  color: #ffd700;
 }
 
-.plus-btn {
-  width: 20px;
-  height: 20px;
+.sun-coin-icon {
+  background: linear-gradient(180deg, #fff099, #d48817);
+  color: #300;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.sun-add-btn {
+  width: 19px;
+  height: 19px;
   border-radius: 50%;
   border: none;
-  background: linear-gradient(180deg, #ffe066, #c8961e);
-  color: #2a0800;
+  background: linear-gradient(180deg, #00e676, #008e46);
+  color: #fff;
   font-weight: 900;
   cursor: pointer;
 }
 
-.top-actions {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.sun-vault-pill {
+  background: #1c0502;
+  border: 1px solid var(--sun-gold-3);
+  border-radius: 14px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: #ffe082;
+  cursor: pointer;
 }
 
-.icon-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: 1px solid rgba(212, 175, 55, 0.5);
-  background: #240909;
+.sun-Quick-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.sq-tab {
+  background: #280803;
+  border: 1px solid rgba(245, 185, 53, 0.35);
+  color: #f5d78e;
+  padding: 5px 8px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sq-tab.active {
+  background: linear-gradient(180deg, #fff099, #cf8512);
+  color: #290500;
+  border-color: #fff;
+}
+
+.sun-sys-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.sun-icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: 1px solid var(--sun-gold-3);
+  background: #260702;
   color: #fff;
-  font-size: 15px;
+  font-size: 13px;
   cursor: pointer;
 }
 
 /* MARQUEE */
-.marquee-bar {
+.sun-marquee {
+  height: 20px;
+  background: rgba(0, 0, 0, 0.65);
+  border-bottom: 1px solid rgba(245, 185, 53, 0.2);
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: #120404;
-  padding: 4px 10px;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-  font-size: 11px;
-  color: #ffdf85;
+  padding: 0 10px;
+  font-size: 10.5px;
+  color: #ffe082;
 }
 
-.marquee-viewport {
+.mq-clip {
   overflow: hidden;
   white-space: nowrap;
   flex: 1;
+  margin-left: 6px;
 }
 
-.marquee-track {
+.mq-track {
   display: inline-block;
-  animation: scrollText 20s linear infinite;
+  animation: scrollMarquee 22s linear infinite;
 }
 
-@keyframes scrollText {
+@keyframes scrollMarquee {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 }
 
-/* NAV TABS */
-.game-nav {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 3px;
-  padding: 6px;
-  background: #170606;
-}
-
-.nav-tab {
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  background: #260b0b;
-  color: #e6c875;
-  padding: 7px 2px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.nav-tab.active {
-  background: linear-gradient(180deg, #ffe066 0%, #b8860b 100%);
-  color: #260505;
-  border-color: #fff;
-}
-
-/* MAIN STAGE */
-.stage-container {
+/* ==================== LANDSCAPE STAGE ==================== */
+.sun-landscape-stage {
   flex: 1;
-  padding: 6px 8px 12px;
+  padding: 6px 10px;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
 }
 
 .game-view {
   display: none;
-  flex-direction: column;
-  gap: 8px;
+  width: 100%;
+  height: 100%;
 }
 
 .game-view.active {
   display: flex;
 }
 
-/* ==================== TÀI XỈU & HŨ HEADER ==================== */
-.tx-board {
-  background: radial-gradient(circle at center, #420f0f 0%, #1c0606 100%);
-  border: 2px solid var(--gold-2);
-  border-radius: 16px;
-  padding: 8px;
-  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8);
+/* ==================== BÀN TÀI XỈU SUNWIN OVAL NGANG ==================== */
+.sun-tx-layout {
+  display: grid;
+  grid-template-columns: 1fr 245px;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
 }
 
-.tx-jackpot-header {
+.sun-tx-oval-table {
+  background: radial-gradient(ellipse at center, #631409 0%, #260602 80%, #140200 100%);
+  border: 3px solid var(--sun-gold-2);
+  border-radius: 26px;
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.85), 0 4px 20px rgba(0, 0, 0, 0.7);
+  position: relative;
+}
+
+.sun-hu-crown {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(90deg, #2b0707, #590d0d, #2b0707);
+  background: linear-gradient(90deg, #2b0702, #6e1409, #2b0702);
   border: 1.5px solid #ffd700;
-  border-radius: 12px;
-  padding: 5px 8px;
-  margin-bottom: 6px;
-  box-shadow: 0 0 14px rgba(255, 215, 0, 0.35);
+  border-radius: 18px;
+  padding: 3px 12px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
 }
 
-.hu-badge-left, .hu-badge-right {
-  font-size: 10px;
+.hu-side-tag {
+  font-size: 9.5px;
   font-weight: 900;
-  color: #ffca28;
-  width: 68px;
-  text-align: center;
-  line-height: 1.2;
+  color: #ffcc80;
 }
 
-.hu-center-pot {
+.hu-pot-center {
   text-align: center;
-  flex: 1;
 }
 
-.hu-title {
-  font-size: 10px;
+.hu-pot-label {
+  font-size: 9px;
   font-weight: 900;
   color: #ffab91;
 }
 
-.hu-number {
-  font-size: 20px;
+.hu-pot-val {
+  font-size: 17px;
   font-weight: 900;
   color: #ffd700;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.9);
+  text-shadow: 0 0 10px #ff9100;
 }
 
-.hu-flow-note {
-  font-size: 9px;
-  color: #69f0ae;
-  font-weight: 700;
-}
-
-.tx-top-meta {
+.sun-tx-subbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
-  font-size: 11px;
+  font-size: 10px;
 }
 
-.session-badge {
+.sun-session-id {
   background: rgba(0, 0, 0, 0.6);
-  border: 1px solid var(--gold-2);
-  padding: 2px 8px;
-  border-radius: 10px;
-  color: var(--gold-1);
-  font-weight: 700;
+  border: 1px solid var(--sun-gold-3);
+  padding: 1px 7px;
+  border-radius: 8px;
+  color: var(--sun-gold-1);
+  font-weight: 800;
 }
 
-.mode-badge {
-  background: #0d3b1e;
-  border: 1px solid #2ecc71;
+.sun-flow-status {
   color: #69f0ae;
-  padding: 2px 8px;
-  border-radius: 10px;
   font-weight: 700;
   font-size: 10px;
 }
 
-.mini-pill-btn {
-  background: #2f0d0d;
-  border: 1px solid var(--gold-2);
-  color: var(--gold-1);
+.sun-nan-toggle {
+  background: #330903;
+  border: 1px solid var(--sun-gold-2);
+  color: var(--sun-gold-1);
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* 2 CÁNH TÀI XỈU & ĐĨA TRUNG TÂM */
+.sun-tx-wings {
+  display: grid;
+  grid-template-columns: 1fr 136px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.sun-wing {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1.5px solid rgba(245, 185, 53, 0.4);
+  border-radius: 16px;
+  padding: 5px 8px;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.sun-wing.win-glow, .sun-sap-cell.win-glow {
+  border-color: #fff;
+  box-shadow: 0 0 22px #ffd700, inset 0 0 16px rgba(255, 215, 0, 0.5);
+  transform: scale(1.02);
+}
+
+.wing-header-txt {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.tai-wing .wing-header-txt {
+  color: #ffeb3b;
+  text-shadow: 0 0 12px #ff1744, 0 2px 0 #b71c1c;
+}
+
+.xiu-wing .wing-header-txt {
+  color: #ffffff;
+  text-shadow: 0 0 12px #00b0ff, 0 2px 0 #01579b;
+}
+
+.wing-users {
+  font-size: 10px;
+  color: #d7ccc8;
+}
+
+.wing-total-pot {
+  font-size: 14px;
+  font-weight: 900;
+  color: #ffd700;
+  margin: 2px 0;
+}
+
+.wing-my-bet {
+  font-size: 10px;
+  color: #69f0ae;
+  margin-bottom: 4px;
+}
+
+.wing-bet-btn {
+  width: 100%;
+  padding: 5px 0;
+  border-radius: 14px;
+  border: 1px solid #fff3c4;
+  font-weight: 900;
   font-size: 11px;
   cursor: pointer;
 }
 
-.tx-arena {
-  display: grid;
-  grid-template-columns: 1fr 134px 1fr;
-  align-items: center;
-  gap: 6px;
+.wing-bet-btn.tai {
+  background: linear-gradient(180deg, #ff5252, #9b0000);
+  color: #fff;
 }
 
-.tx-side {
-  background: rgba(0, 0, 0, 0.45);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
-  border-radius: 12px;
-  padding: 6px 4px;
-  text-align: center;
-  transition: 0.25s;
+.wing-bet-btn.xiu {
+  background: linear-gradient(180deg, #fff099, #c88719);
+  color: #2b0500;
 }
 
-.tx-side.win-glow, .sap-box.win-glow {
-  border-color: #fff;
-  box-shadow: 0 0 18px #ffd700, inset 0 0 12px rgba(255, 215, 0, 0.45);
-  transform: scale(1.02);
+/* ĐĨA VÀ BÁT NẶN RỒNG */
+.sun-center-bowl-zone {
+  display: flex;
+  justify-content: center;
 }
 
-.tx-title-big {
-  font-size: 22px;
-  font-weight: 900;
-}
-
-.tai-side .tx-title-big {
-  color: #ff3b3b;
-  text-shadow: 0 0 10px rgba(255, 59, 59, 0.7);
-}
-
-.xiu-side .tx-title-big {
-  color: #29b6f6;
-  text-shadow: 0 0 10px rgba(41, 182, 246, 0.7);
-}
-
-.tx-range { font-size: 9px; opacity: 0.85; color: #ffe082; }
-.tx-crowd { font-size: 10px; color: #ccc; margin: 2px 0; }
-.tx-total-pool { font-size: 12px; font-weight: 900; color: var(--gold-1); margin: 2px 0; }
-.tx-my-bet { font-size: 10px; color: #a5d6a7; margin-bottom: 4px; }
-
-.bet-trigger-btn {
-  width: 100%;
-  padding: 6px 0;
-  border-radius: 8px;
-  border: none;
-  font-weight: 900;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.tai-btn { background: linear-gradient(180deg, #ff5252, #b71c1c); color: #fff; }
-.xiu-btn { background: linear-gradient(180deg, #29b6f6, #0277bd); color: #fff; }
-
-/* CỬA SÁP X CAO */
-.sap-bet-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-  margin-top: 6px;
-}
-
-.sap-box {
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 215, 0, 0.45);
-  border-radius: 10px;
-  padding: 5px 3px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.sap-box.highlight {
-  background: linear-gradient(180deg, #3d0e0e, #1a0404);
-  border-color: #ffd700;
-}
-
-.sap-name { font-size: 9.5px; font-weight: 900; color: #ffd700; }
-.sap-odds { font-size: 9px; color: #ffab91; margin: 1px 0; font-weight: 700; }
-.sap-my { font-size: 9.5px; color: #69f0ae; }
-
-/* PLATE & 3D DICE */
-.tx-center-plate { display: flex; justify-content: center; }
-
-.plate-outer {
-  width: 130px;
-  height: 130px;
+.sun-plate-ring {
+  width: 128px;
+  height: 128px;
   border-radius: 50%;
-  background: radial-gradient(circle, #381010 0%, #140404 75%);
-  border: 4px solid var(--gold-2);
-  box-shadow: inset 0 0 15px #000;
+  background: radial-gradient(circle, #2b0804 0%, #0d0200 80%);
+  border: 4px solid var(--sun-gold-2);
+  box-shadow: inset 0 0 18px #000, 0 0 14px rgba(245, 185, 53, 0.45);
   position: relative;
   display: flex;
   align-items: center;
@@ -529,25 +538,27 @@ body {
   overflow: hidden;
 }
 
-.timer-ring {
+.sun-countdown {
   position: absolute;
-  font-size: 34px;
+  font-size: 38px;
   font-weight: 900;
-  color: var(--gold-1);
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  color: #ffd700;
+  text-shadow: 0 0 16px #ff6d00;
   z-index: 4;
 }
 
-.dice-group {
+.sun-dice-wrap {
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
   justify-content: center;
-  width: 92px;
+  width: 88px;
   z-index: 2;
 }
 
-.dice-group.shaking { animation: shakeDice 0.35s infinite; }
+.sun-dice-wrap.shaking {
+  animation: shakeDice 0.32s infinite;
+}
 
 @keyframes shakeDice {
   0%, 100% { transform: translate(0, 0) rotate(0deg); }
@@ -557,11 +568,11 @@ body {
 }
 
 .die3d {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   background: radial-gradient(circle at 30% 30%, #ffffff, #dcdcdc);
-  border-radius: 8px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.7);
+  border-radius: 7px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -569,35 +580,39 @@ body {
 }
 
 .pip {
-  width: 6px;
-  height: 6px;
+  width: 5.5px;
+  height: 5.5px;
   border-radius: 50%;
-  background: #222;
+  background: #1b1b1b;
   align-self: center;
   justify-self: center;
 }
 
-.pip.red-pip { background: #d50000; width: 7.5px; height: 7.5px; }
+.pip.red-pip {
+  background: #d50000;
+  width: 7px;
+  height: 7px;
+}
 
-.result-pop {
+.sun-result-ribbon {
   position: absolute;
   bottom: 6px;
   background: rgba(0, 0, 0, 0.9);
-  border: 1px solid var(--gold-1);
-  padding: 2px 7px;
+  border: 1px solid #ffd700;
+  padding: 2px 8px;
   border-radius: 10px;
   font-size: 10px;
   font-weight: 900;
-  color: var(--gold-1);
-  z-index: 5;
+  color: #ffd700;
+  z-index: 6;
 }
 
-.dragon-bowl {
+.sun-dragon-cover {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #a31616, #4a0606 80%);
-  border: 3px solid var(--gold-1);
+  background: radial-gradient(circle at 35% 35%, #b71c1c, #4a0707 80%);
+  border: 3px solid #ffd700;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -607,28 +622,66 @@ body {
   touch-action: none;
 }
 
-.bowl-dragon-crest { font-size: 34px; }
-.bowl-hint { font-size: 10px; color: var(--gold-1); font-weight: 700; }
+.cover-emblem { font-size: 32px; }
+.cover-txt { font-size: 9.5px; font-weight: 800; color: #ffd700; }
 
-/* CẦU STRIP & CHIPS */
-.cau-strip-wrap {
+/* HÀNG CỬA SÁP X30 & SĂN HŨ X120 */
+.sun-sap-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.sun-sap-cell {
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(245, 185, 53, 0.45);
+  border-radius: 10px;
+  padding: 3px 6px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  margin-top: 6px;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px 8px;
-  border-radius: 10px;
+  font-size: 9.5px;
+  cursor: pointer;
 }
 
-.cau-dots { display: flex; gap: 4px; overflow-x: auto; flex: 1; }
+.sun-sap-cell.center-sap {
+  background: linear-gradient(90deg, #3b0b04, #591107, #3b0b04);
+  border-color: #ffd700;
+}
 
+.s-title { font-weight: 900; color: #ffd700; }
+.s-mult { color: #ffab91; font-weight: 700; }
+.sun-sap-cell b { color: #69f0ae; }
+
+/* CẦU ĐEN TRẮNG SUNWIN & PHỈNH TRÒN */
+.sun-bottom-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sun-bead-road {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.bead-list {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  overflow-x: auto;
+}
+
+/* Hạt Đen = Tài, Hạt Trắng = Xỉu, Hạt Vàng = Nổ Hũ chuẩn Sunwin */
 .c-dot {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -636,233 +689,306 @@ body {
   flex-shrink: 0;
 }
 
-.c-dot.T { background: #ff2a2a; color: #fff; }
-.c-dot.X { background: #00b0ff; color: #001926; }
-.c-dot.H { background: #ffd700; color: #300; box-shadow: 0 0 8px #ffd700; }
+.c-dot.T {
+  background: radial-gradient(circle at 30% 30%, #444, #000);
+  border: 1.5px solid #ffd700;
+  color: #ffd700;
+}
 
-.soi-cau-btn {
-  background: linear-gradient(180deg, #ffe066, #b8860b);
-  color: #240606;
+.c-dot.X {
+  background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+  border: 1.5px solid #666;
+  color: #111;
+}
+
+.c-dot.H {
+  background: radial-gradient(circle, #ffd700, #ff6f00);
+  border: 1.5px solid #fff;
+  color: #300;
+  box-shadow: 0 0 8px #ffd700;
+}
+
+.sun-soicau-btn, .sun-md5-copy {
+  background: linear-gradient(180deg, #fff099, #c88719);
+  color: #2b0500;
   border: none;
   border-radius: 6px;
-  padding: 3px 7px;
-  font-size: 11px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.chip-bar { margin-top: 6px; }
-.chip-list { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-
-.chip-item {
-  background: #2b0c0c;
-  border: 1px solid var(--gold-2);
-  color: var(--gold-1);
-  padding: 5px 0;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.chip-item.active {
-  background: linear-gradient(180deg, #ffd700, #b8860b);
-  color: #210404;
-  border-color: #fff;
-}
-
-.chip-item.allin {
-  background: linear-gradient(180deg, #ff5252, #8e0000);
-  color: #fff;
-}
-
-.md5-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 5px;
-  background: rgba(0, 0, 0, 0.55);
-  padding: 3px 8px;
-  border-radius: 8px;
+  padding: 2px 7px;
   font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
 }
 
-.md5-bar code { flex: 1; overflow: hidden; text-overflow: ellipsis; color: #80cbc4; }
-.copy-tiny { background: #331010; border: 1px solid var(--gold-2); color: var(--gold-1); font-size: 10px; padding: 2px 6px; border-radius: 5px; }
+.sun-chips-rack {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 5px;
+}
 
-/* LIVE CHAT */
-.live-chat-panel {
-  background: #140505;
-  border: 1.5px solid rgba(212, 175, 55, 0.45);
+.sun-chip {
+  height: 28px;
   border-radius: 14px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.75);
+  font-size: 10.5px;
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+}
+
+.c10k { background: #1e88e5; }
+.c50k { background: #43a047; }
+.c100k { background: #8e24aa; }
+.c500k { background: #fb8c00; }
+.c1m { background: #e53935; }
+.c5m { background: #00897b; }
+.c10m { background: #3949ab; }
+.callin { background: linear-gradient(180deg, #ffd700, #b71c1c); border-style: solid; }
+
+.sun-chip.active {
+  transform: translateY(-2px) scale(1.05);
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 12px #ffd700;
+}
+
+/* ==================== KHUNG CHAT BÊN PHẢI CHUẨN SUNWIN ==================== */
+.sun-chat-dock {
+  background: rgba(18, 3, 1, 0.92);
+  border: 2px solid var(--sun-gold-2);
+  border-radius: 18px;
   display: flex;
   flex-direction: column;
-  height: 175px;
   overflow: hidden;
 }
 
-.chat-head {
+.sun-chat-header {
+  padding: 6px 10px;
+  background: linear-gradient(180deg, #3b0b04, #1c0401);
+  border-bottom: 1px solid rgba(245, 185, 53, 0.3);
   display: flex;
   justify-content: space-between;
-  padding: 5px 10px;
-  background: #260a0a;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
+  color: var(--sun-gold-1);
 }
 
-.live-dot { color: #00e676; font-size: 10px; }
+.online-badge { color: #00e676; font-size: 10px; }
 
-.chat-messages {
+.sun-chat-feed {
   flex: 1;
   overflow-y: auto;
-  padding: 6px 10px;
+  padding: 6px 8px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 12px;
+  font-size: 11px;
 }
 
-.chat-vip {
-  display: inline-block;
-  background: linear-gradient(90deg, #ffd700, #c8961e);
-  color: #220404;
-  font-size: 9px;
-  font-weight: 900;
-  padding: 0 4px;
-  border-radius: 3px;
-  margin-right: 4px;
-}
-
-.chat-user { font-weight: 800; color: #ffca28; margin-right: 4px; }
+.chat-line { line-height: 1.3; word-break: break-word; }
+.chat-user { font-weight: 800; color: #ffd54f; margin-right: 4px; }
 .chat-user.me { color: #00e676; }
 
-.chat-input-row { display: flex; border-top: 1px solid rgba(212, 175, 55, 0.25); }
-.chat-input-row input { flex: 1; background: #0d0303; border: none; color: #fff; padding: 7px 10px; font-size: 12px; outline: none; user-select: text; }
-.send-chat-btn { background: linear-gradient(180deg, #ffe066, #b8860b); color: #250505; border: none; padding: 0 14px; font-weight: 900; font-size: 12px; }
-
-/* XÓC ĐĨA, SLOT, GACHA, BẦU CUA */
-.xd-board, .slot-cabinet, .gacha-stage, .baucua-card, .hilow-card, .rank-card {
-  background: radial-gradient(circle, #3b0d0d, #160404);
-  border: 2px solid var(--gold-2);
-  border-radius: 16px;
-  padding: 10px;
+.sun-chat-form {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  border-top: 1px solid rgba(245, 185, 53, 0.3);
 }
 
-.xd-header, .sub-header { display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: var(--gold-1); font-size: 13px; }
-.xd-cau-strip { display: flex; gap: 3px; }
-.xd-plate-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.xd-plate { width: 124px; height: 124px; border-radius: 50%; background: #260707; border: 4px solid var(--gold-2); position: relative; display: flex; align-items: center; justify-content: center; }
-.xd-coins { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.xd-coin { width: 26px; height: 26px; border-radius: 50%; }
+.sun-chat-form input {
+  flex: 1;
+  background: #0c0200;
+  border: none;
+  color: #fff;
+  padding: 6px 8px;
+  font-size: 11px;
+  outline: none;
+  user-select: text;
+}
+
+.sun-chat-form button {
+  background: linear-gradient(180deg, #fff099, #cf8512);
+  color: #2b0500;
+  border: none;
+  padding: 0 10px;
+  font-weight: 900;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* ==================== CÁC SẢNH GAME NGANG KHÁC ==================== */
+.xd-landscape-board, .slot-landscape-wrap, .gacha-landscape-wrap, .mini-landscape-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  background: rgba(24, 5, 2, 0.85);
+  border: 2px solid var(--sun-gold-2);
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.mini-landscape-grid { grid-template-columns: 1.2fr 1fr; }
+
+.xd-left-zone, .slot-right-ctrl, .gacha-left-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.xd-right-zone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.xd-plate { width: 120px; height: 120px; border-radius: 50%; background: #260707; border: 4px solid var(--sun-gold-2); position: relative; display: flex; align-items: center; justify-content: center; }
+.xd-coins { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.xd-coin { width: 24px; height: 24px; border-radius: 50%; }
 .xd-coin.red { background: radial-gradient(circle, #ff5252, #b71c1c); }
 .xd-coin.white { background: radial-gradient(circle, #ffffff, #bdbdbd); }
-.xd-bowl { position: absolute; inset: 6px; border-radius: 50%; background: radial-gradient(circle, #8e1414, #360505); border: 2px solid var(--gold-1); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; color: var(--gold-1); transition: 0.45s; }
-.xd-bowl.open { transform: translateY(-110px) scale(0.85); opacity: 0.25; }
+.xd-bowl { position: absolute; inset: 5px; border-radius: 50%; background: radial-gradient(circle, #8e1414, #360505); border: 2px solid var(--sun-gold-1); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 11px; color: var(--sun-gold-1); transition: 0.45s; }
+.xd-bowl.open { transform: translateY(-100px) scale(0.85); opacity: 0.2; }
 .xd-grid-doors { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .xd-sub-doors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.xd-door { background: rgba(0, 0, 0, 0.5); border: 1.5px solid rgba(212, 175, 55, 0.45); border-radius: 12px; padding: 7px 4px; text-align: center; cursor: pointer; }
+.xd-door { background: rgba(0, 0, 0, 0.55); border: 1.5px solid rgba(245, 185, 53, 0.45); border-radius: 12px; padding: 8px 4px; text-align: center; cursor: pointer; }
 .xd-door.win-glow { border-color: #fff; box-shadow: 0 0 16px #ffd700; }
-.xd-door-name { font-size: 19px; font-weight: 900; }
+.xd-door-name { font-size: 20px; font-weight: 900; }
 .main-even .xd-door-name { color: #ff5252; }
 .main-odd .xd-door-name { color: #40c4ff; }
 .xd-odds { font-size: 10px; opacity: 0.8; }
-.xd-pool { font-size: 11px; font-weight: 800; color: var(--gold-1); }
-.xd-my { font-size: 10px; color: #69f0ae; font-weight: 700; }
+.xd-pool { font-size: 12px; font-weight: 800; color: #ffd700; }
+.xd-my { font-size: 10.5px; color: #69f0ae; font-weight: 700; }
+.xd-cau-strip { display: flex; gap: 3px; }
 
 /* SLOT & GACHA */
-.jp-big-number { font-size: 25px; font-weight: 900; color: var(--gold-1); text-align: center; }
-.slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: #0e0303; padding: 10px; border-radius: 14px; border: 2px solid var(--gold-2); }
-.slot-cell { height: 70px; background: #260909; border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 36px; }
-.slot-win-msg { font-size: 12px; font-weight: 800; color: #69f0ae; text-align: center; }
-.slot-bet-selector { display: flex; justify-content: center; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 8px; }
-.sbet-btn { background: #2b0a0a; border: 1px solid var(--gold-2); color: var(--gold-1); padding: 5px 10px; border-radius: 8px; font-weight: 800; }
-.sbet-btn.active { background: var(--gold-1); color: #240505; }
-.slot-action-btns, .gacha-btn-row { display: flex; gap: 8px; }
-.spin-main-btn { flex: 2; background: linear-gradient(180deg, #ffe066, #b8860b); color: #240404; border: none; padding: 11px; border-radius: 10px; font-size: 14px; font-weight: 900; }
-.spin-auto-btn { flex: 1; background: #331010; border: 1px solid var(--gold-2); color: var(--gold-1); border-radius: 10px; font-weight: 800; }
+.slot-left-reels { display: flex; align-items: center; justify-content: center; }
+.slot-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #0e0303; padding: 8px; border-radius: 14px; border: 2px solid var(--sun-gold-2); }
+.slot-cell { height: 78px; background: #260909; border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 36px; }
+.jp-big-number { font-size: 24px; font-weight: 900; color: #ffd700; }
+.slot-win-msg { font-size: 12px; font-weight: 800; color: #69f0ae; }
+.slot-bet-selector { display: flex; gap: 5px; }
+.sbet-btn { background: #2b0a0a; border: 1px solid var(--sun-gold-2); color: #ffd700; padding: 5px 10px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+.sbet-btn.active { background: #ffd700; color: #240505; }
+.slot-action-btns, .gacha-btn-row { display: flex; gap: 8px; width: 100%; }
+.spin-main-btn { flex: 2; background: linear-gradient(180deg, #fff099, #b8860b); color: #240404; border: none; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 900; cursor: pointer; }
+.spin-auto-btn { flex: 1; background: #331010; border: 1px solid var(--sun-gold-2); color: #ffd700; border-radius: 10px; font-weight: 800; cursor: pointer; }
 
-.gacha-rates { display: flex; justify-content: center; gap: 6px; font-size: 10px; margin: 5px 0; flex-wrap: wrap; }
-.tier-ur { background: #b71c1c; padding: 2px 6px; border-radius: 6px; font-weight: 800; }
-.tier-ssr { background: #e65100; padding: 2px 6px; border-radius: 6px; font-weight: 800; }
-.tier-sr { background: #4a148c; padding: 2px 6px; border-radius: 6px; font-weight: 800; }
-.pity-track { height: 8px; background: #0d0205; border-radius: 6px; border: 1px solid var(--gold-2); overflow: hidden; margin-top: 4px; }
+.gacha-rates { display: flex; gap: 4px; font-size: 9.5px; flex-wrap: wrap; justify-content: center; }
+.tier-ur { background: #b71c1c; padding: 2px 5px; border-radius: 5px; font-weight: 800; }
+.tier-ssr { background: #e65100; padding: 2px 5px; border-radius: 5px; font-weight: 800; }
+.tier-sr { background: #4a148c; padding: 2px 5px; border-radius: 5px; font-weight: 800; }
+.pity-track { width: 100%; height: 8px; background: #0d0205; border-radius: 6px; border: 1px solid var(--sun-gold-2); overflow: hidden; }
 .pity-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ffd700, #ff1744); }
-.gacha-chest-Showcase { min-height: 160px; background: rgba(0, 0, 0, 0.45); border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 8px; }
-.chest-icon { font-size: 62px; }
+.gacha-chest-Showcase { background: rgba(0, 0, 0, 0.45); border-radius: 14px; display: flex; align-items: center; justify-content: center; padding: 8px; }
+.chest-icon { font-size: 64px; }
 .gacha-results-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 100%; }
-.gacha-card { background: #240814; border: 1.5px solid var(--gold-2); border-radius: 8px; padding: 5px 2px; font-size: 9.5px; font-weight: 800; text-align: center; }
+.gacha-card { background: #240814; border: 1px solid var(--sun-gold-2); border-radius: 8px; padding: 5px 2px; font-size: 9.5px; font-weight: 800; text-align: center; }
 .gacha-card.UR { background: linear-gradient(180deg, #ff1744, #6a0000); border-color: #fff; }
-.gacha-card.SSR { background: linear-gradient(180deg, #ff9100, #663000); border-color: #ffd700; }
-.gold-select { background: #240808; color: var(--gold-1); border: 1px solid var(--gold-2); padding: 5px 10px; border-radius: 8px; font-weight: 700; }
-.gacha-pull-btn { flex: 1; padding: 10px 6px; border-radius: 10px; border: none; font-weight: 900; font-size: 12px; color: #fff; }
+.gacha-card.SSR { background: linear-gradient(180deg, #ff9100, #663000); }
+.gold-select { background: #240808; color: #ffd700; border: 1px solid var(--sun-gold-2); padding: 5px 8px; border-radius: 8px; font-weight: 700; }
+.gacha-pull-btn { flex: 1; padding: 9px 6px; border-radius: 9px; border: none; font-weight: 900; font-size: 11px; color: #fff; cursor: pointer; }
 .gacha-pull-btn.x1 { background: linear-gradient(180deg, #4fc3f7, #0277bd); }
 .gacha-pull-btn.x10 { background: linear-gradient(180deg, #ffd700, #c62828); }
 
-/* BẦU CUA & CAO THẤP */
-.mini-split { display: flex; flex-direction: column; gap: 10px; }
-.gold-action-sm { background: linear-gradient(180deg, #ffe066, #b8860b); border: none; color: #240404; padding: 5px 10px; border-radius: 8px; font-weight: 900; cursor: pointer; }
-.bc-dice-row { display: flex; justify-content: center; gap: 12px; }
-.bc-die { width: 46px; height: 46px; background: #2e0c0c; border: 1.5px solid var(--gold-1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 25px; }
-.bc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.bc-item { background: #2b0b0b; border: 1px solid rgba(212, 175, 55, 0.45); border-radius: 8px; padding: 7px 4px; text-align: center; font-size: 12px; font-weight: 800; }
-.bc-item b { display: block; color: #69f0ae; font-size: 10.5px; }
-.hl-arena { display: flex; align-items: center; justify-content: space-around; gap: 10px; }
-.playing-card { width: 76px; height: 104px; background: #fff; color: #d50000; border-radius: 10px; font-size: 28px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+/* BẦU CUA & TRÊN DƯỚI */
+.baucua-card, .hilow-card, .rank-card { background: rgba(0,0,0,0.45); border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 14px; padding: 8px; display: flex; flex-direction: column; justify-content: space-between; width: 100%; }
+.sub-header { display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: #ffd700; font-size: 12px; }
+.gold-action-sm { background: linear-gradient(180deg, #fff099, #b8860b); border: none; color: #240404; padding: 4px 10px; border-radius: 7px; font-weight: 900; cursor: pointer; }
+.bc-dice-row { display: flex; justify-content: center; gap: 10px; }
+.bc-die { width: 42px; height: 42px; background: #2e0c0c; border: 1.5px solid #ffd700; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.bc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.bc-item { background: #2b0b0b; border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 8px; padding: 5px; text-align: center; font-size: 11px; font-weight: 800; cursor: pointer; }
+.bc-item b { display: block; color: #69f0ae; font-size: 10px; }
+.hl-arena { display: flex; align-items: center; justify-content: space-around; gap: 10px; flex: 1; }
+.playing-card { width: 72px; height: 98px; background: #fff; color: #d50000; border-radius: 9px; font-size: 26px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
 .hl-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.hl-btn { padding: 8px; border: none; border-radius: 8px; font-weight: 900; font-size: 12px; }
+.hl-btn { padding: 7px; border: none; border-radius: 8px; font-weight: 900; font-size: 11px; cursor: pointer; }
 .hl-btn.up { background: #e53935; color: #fff; }
 .hl-btn.down { background: #1e88e5; color: #fff; }
-.hl-btn.cash { background: var(--gold-1); color: #240404; }
+.hl-btn.cash { background: #ffd700; color: #240404; }
+.rank-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; overflow-y: auto; }
+.rank-row { display: flex; justify-content: space-between; background: #290b0b; padding: 7px 10px; border-radius: 8px; font-size: 11px; }
 
-.rank-list { display: flex; flex-direction: column; gap: 6px; }
-.rank-row { display: flex; justify-content: space-between; align-items: center; background: #290b0b; padding: 8px 10px; border-radius: 8px; font-size: 12px; }
+/* ==================== MODALS & JACKPOT OVERLAY ==================== */
+.modal-backdrop, .jp-explosion-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 260;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
 
-/* MODALS & ADMIN ACCOUNT LIST */
-.modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.82); z-index: 250; display: flex; align-items: center; justify-content: center; padding: 12px; }
-.modal-sheet { width: 100%; max-width: 420px; background: #1f0808; border: 2px solid var(--gold-2); border-radius: 16px; padding: 14px; max-height: 88vh; overflow-y: auto; }
-.modal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: var(--gold-1); }
+.jp-explosion-card {
+  width: 100%;
+  max-width: 420px;
+  background: radial-gradient(circle, #7a0e0e 0%, #210303 100%);
+  border: 3px solid #ffd700;
+  border-radius: 20px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 0 50px #ff1744;
+}
+
+.jp-dragon-icon { font-size: 44px; }
+.jp-title-flare { font-size: 22px; font-weight: 900; color: #ffd700; }
+.jp-sub-flare { font-size: 12px; font-weight: 800; color: #fff; margin: 4px 0; }
+.jp-amount-flare { font-size: 26px; font-weight: 900; color: #00e676; margin: 6px 0; }
+.jp-reset-note { font-size: 10.5px; color: #ffe082; margin-bottom: 10px; }
+
+.modal-sheet {
+  width: 100%;
+  max-width: 520px;
+  max-height: 92%;
+  background: #210602;
+  border: 2px solid var(--sun-gold-2);
+  border-radius: 16px;
+  padding: 12px 14px;
+  overflow-y: auto;
+}
+
+.modal-sheet.admin-wide { max-width: 720px; }
+.modal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: #ffd700; font-size: 13px; }
 .close-x { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; }
-.form-group { display: flex; flex-direction: column; gap: 8px; }
-.form-group input { background: #0e0303; border: 1px solid var(--gold-2); color: #fff; padding: 9px; border-radius: 8px; user-select: text; }
-.btn-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.gold-btn { background: linear-gradient(180deg, #ffe066, #b8860b); color: #240404; border: none; padding: 10px; border-radius: 8px; font-weight: 900; cursor: pointer; }
-.outline-btn { background: #2b0b0b; border: 1px solid var(--gold-2); color: var(--gold-1); padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-.divider { border: none; border-top: 1px solid rgba(212, 175, 55, 0.25); margin: 10px 0; }
-.hint-sm { font-size: 11px; color: #ffdf85; }
-.avatar-picker { display: flex; gap: 6px; justify-content: space-between; }
-.av-choice { font-size: 21px; padding: 5px; background: #2c0c0c; border: 1px solid var(--gold-2); border-radius: 8px; }
+.modal-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.vault-info { display: flex; justify-content: space-around; background: #120300; padding: 6px; border-radius: 8px; margin-bottom: 8px; font-size: 12px; color: #ffd700; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group input { background: #0e0200; border: 1px solid var(--sun-gold-3); color: #fff; padding: 7px 10px; border-radius: 8px; font-size: 12px; user-select: text; }
+.btn-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.outline-btn { background: #2b0904; border: 1px solid var(--sun-gold-2); color: #ffd700; padding: 8px; border-radius: 8px; font-weight: 800; font-size: 11px; cursor: pointer; }
+.hint-sm { font-size: 10.5px; color: #ffe082; }
+.avatar-picker { display: flex; gap: 6px; justify-content: center; }
+.av-choice { font-size: 20px; padding: 4px 8px; background: #2c0a04; border: 1px solid var(--sun-gold-2); border-radius: 8px; cursor: pointer; }
 
-.admin-btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin: 6px 0; }
-.adm-opt { background: #2b0c0c; border: 1px solid var(--gold-2); color: #fff; padding: 7px 4px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+.admin-btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin: 4px 0; }
+.adm-opt { background: #2b0a04; border: 1px solid var(--sun-gold-3); color: #fff; padding: 6px 4px; border-radius: 7px; font-size: 10.5px; font-weight: 700; cursor: pointer; }
 .adm-opt.active { background: #00c853; color: #00220b; border-color: #fff; }
-
-.custom-dice-box { display: flex; align-items: center; gap: 5px; background: #140404; padding: 6px; border-radius: 8px; font-size: 11px; margin-top: 6px; }
-.custom-dice-box input { width: 38px; text-align: center; background: #2b0a0a; border: 1px solid var(--gold-2); color: #ffd700; padding: 4px; border-radius: 6px; font-weight: 900; }
-
-.admin-acc-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; max-height: 240px; overflow-y: auto; }
-.acc-item-card { background: #140404; border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 10px; padding: 8px; font-size: 11px; display: flex; flex-direction: column; gap: 5px; }
+.custom-dice-box { display: flex; align-items: center; gap: 4px; background: #140300; padding: 5px; border-radius: 8px; font-size: 10.5px; margin-top: 4px; }
+.custom-dice-box input { width: 34px; text-align: center; background: #2b0a0a; border: 1px solid var(--sun-gold-2); color: #ffd700; padding: 3px; border-radius: 5px; font-weight: 900; }
+.admin-acc-list { display: flex; flex-direction: column; gap: 6px; max-height: 230px; overflow-y: auto; }
+.acc-item-card { background: #140300; border: 1px solid rgba(245, 185, 53, 0.4); border-radius: 8px; padding: 6px; font-size: 10px; display: flex; flex-direction: column; gap: 4px; }
 .acc-item-top { display: flex; justify-content: space-between; font-weight: 800; color: #ffd700; }
-.acc-item-sub { color: #ccc; font-size: 10.5px; }
-.acc-item-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-.acc-mini-btn { padding: 5px 2px; font-size: 10px; font-weight: 800; border-radius: 6px; border: 1px solid var(--gold-2); background: #2d0b0b; color: #fff; cursor: pointer; }
+.acc-item-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+.acc-mini-btn { padding: 4px 2px; font-size: 9.5px; font-weight: 800; border-radius: 5px; border: 1px solid var(--sun-gold-3); background: #2d0b05; color: #fff; cursor: pointer; }
 
 .toast-box {
-  position: fixed;
-  top: 62px;
+  position: absolute;
+  top: 52px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(90deg, #ffd700, #ff8f00);
-  color: #220404;
-  padding: 8px 16px;
+  background: linear-gradient(90deg, #fff099, #f5b935);
+  color: #2b0500;
+  padding: 6px 16px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 900;
   z-index: 400;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.65);
-  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.75);
 }
 
 .hidden { display: none !important; }
